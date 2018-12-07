@@ -46,10 +46,10 @@
         </b-col>
       </b-row>
       <b-row class="justify-content-center text-muted">
-          <b-col md="4">
+          <b-col md="4" style="width:50%" >
               <small>Kaab Inventarios &copy; 2018</small>
           </b-col>
-          <b-col md="4" class="text-right text-muted">
+          <b-col md="4" style="width:50%" class="text-right text-muted">
               <small><a href="http://yei3.com">Yei<b>3 </b>Software</a></small>
           </b-col>
       </b-row>
