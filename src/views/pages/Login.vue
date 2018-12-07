@@ -31,9 +31,9 @@
             <b-card no-body class="text-white bg-warning py-5 d-md-down-none" style="width:44%">
               <b-card-body class="text-center">
                 <div>
-                  <h2>Sign up</h2>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  <b-button variant="dark" class="active mt-3">Register Now!</b-button>
+                  <img src="img/logo_1.png" width="160" height="89" alt="Kaab Logo">
+                  <p>La forma más fácil y práctica de generar y mantener actualizado tu inventario de activos.</p>
+                  <b-button variant="text-white secondary bg-dark" class="active mt-3">Más info</b-button>
                 </div>
               </b-card-body>
             </b-card>
