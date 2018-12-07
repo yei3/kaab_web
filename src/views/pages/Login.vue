@@ -3,7 +3,7 @@
     <div class="container">
       <b-row class="justify-content-center">
           <b-col md="8" class="text-center">
-              <img src="img/logo_1.png" style="max-width: 75%; height: auto;" alt="Kaab Logo">
+              <img src="img/logo.png" style="max-width: 75%; height: auto;" alt="Kaab Logo">
           </b-col>
       </b-row>
       <b-row class="justify-content-center">
@@ -24,7 +24,7 @@
                   </b-input-group>
                   <b-row>
                     <b-col cols="6">
-                      <b-button variant="secondary bg-warning" class="px-4">Login</b-button>
+                      <b-button variant="secondary bg-primary" class="px-4">Login</b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
                       <b-button variant="link" class="px-0">Olvidé mi contraseña</b-button>

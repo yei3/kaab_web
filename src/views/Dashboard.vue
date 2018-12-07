@@ -2,49 +2,57 @@
   <div class="animated fadeIn">
     <b-row>
       <b-col sm="6" lg="3">
-        <b-card no-body class="bg-primary">
-          <b-card-body class="pb-0">
-            <h1 class="float-right" right>100%</h1>
-            <h4 class="mb-0">9.823</h4>
-            <a class="text-white" href="/users">Activos iniciales totales</a>          
-          </b-card-body>
+        <b-card class="bg-dark text-white" style="min-height:7rem">
+            <div class="h2 text-muted text-right mb-4">
+              <h2 class="float-right" right>100%</h2>
+            </div>
+            <div class="h4 mb-0"><a href="users#/users" class="text-white">9,823</a></div>            
+            <small class="text-muted text-uppercase font-weight-bold">Activos de base inicial (2018)</small>
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
-        <b-card no-body class="bg-success">
-          <b-card-body class="pb-0">
-            <h1 class="float-right" right>73.6%</h1>
-            <h4 class="mb-0">7.236</h4>
-            <p>Activos inventariados</p>
-          </b-card-body>
-          <!--<card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/>-->
+        <b-card class="bg-secondary text-white" style="min-height:7rem">
+            <div class="h2 text-muted text-right mb-4">
+              <h2 class="float-right" right>88.4%</h2>
+            </div>
+            <div class="h4 mb-0"><a href="users#/users" class="text-white">8,687</a></div>            
+            <small class="text-muted text-uppercase font-weight-bold">Activos inventariados</small>
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
-        <b-card no-body class="bg-info">
-          <b-card-body class="pb-0">
-            <h1 class="float-right" right>13.4%</h1>
-            <h4 class="mb-0">1,324</h4>
-            <p>Cambios de departamento/ubicación</p>
-          </b-card-body>
+        <b-card class="bg-success text-white" style="min-height:7rem">
+            <div class="h2 text-muted text-right mb-4">
+              <h2 class="float-right" right>73.6%</h2>
+            </div>
+            <div class="h4 mb-0"><a href="users#/users" class="text-white">7,236</a></div>            
+            <small class="text-muted text-uppercase font-weight-bold">Activos conciliados</small>
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
-        <b-card no-body class="bg-warning">
-          <b-card-body class="pb-0">
-            <h1 class="float-right" right>1.2%</h1>
-            <h4 class="mb-0">127</h4>
-            <p>Activos en demasía</p>
-          </b-card-body>
+        <b-card class="bg-info text-white" style="min-height:7rem">
+            <div class="h2 text-muted text-right mb-4">
+              <h2 class="float-right" right>13.4%</h2>
+            </div>
+            <div class="h4 mb-0"><a href="users#/users" class="text-white">1,324</a></div>            
+            <small class="text-muted text-uppercase font-weight-bold">Cambios de depto/ubicación</small>
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
-        <b-card no-body class="bg-danger">
-          <b-card-body class="pb-0">
-            <h1 class="float-right" right>12.8%</h1>
-            <h4 class="mb-0">1,263</h4>
-            <p>Activos no inventariados</p>
-          </b-card-body>
+        <b-card class="bg-warning text-white" style="min-height:7rem">
+            <div class="h2 text-muted text-right mb-4">
+              <h2 class="float-right" right>1.2%</h2>
+            </div>
+            <div class="h4 mb-0"><a href="users#/users" class="text-white">127</a></div>            
+            <small class="text-muted text-uppercase font-weight-bold">Activos en demasía</small>
+        </b-card>
+      </b-col>
+      <b-col sm="6" lg="3">
+        <b-card class="bg-danger text-white" style="min-height:7rem">
+            <div class="h2 text-muted text-right mb-4">
+              <h2 class="float-right" right>12.8%</h2>
+            </div>
+            <div class="h4 mb-0"><a href="users#/users" class="text-white">1,263</a></div>            
+            <small class="text-muted text-uppercase font-weight-bold">Activos no inventariados</small>
         </b-card>
       </b-col>
     </b-row>
@@ -52,16 +60,16 @@
     <b-card>
       <b-row>
         <b-col sm="5">
-          <h4 id="traffic" class="card-title mb-0">Traffic</h4>
-          <div class="small text-muted">November 2017</div>
+          <h4 id="traffic" class="card-title mb-0">Avance del proyecto</h4>
+          <div class="small text-muted">HGM-2019</div>
         </b-col>
         <b-col sm="7" class="d-none d-md-block">
-          <b-button type="button" variant="primary" class="float-right"><i class="icon-cloud-download"></i></b-button>
+          <b-button type="button" variant="primary" class="float-right"><i class="fa fa-cloud-download"></i></b-button>
           <b-button-toolbar class="float-right" aria-label="Toolbar with buttons group">
-            <b-form-radio-group class="mr-3" id="radiosBtn" buttons button-variant="outline-secondary" v-model="selected" name="radiosBtn">
-              <b-form-radio class="mx-0" value="Day">Day</b-form-radio>
-              <b-form-radio class="mx-0" value="Month">Month</b-form-radio>
-              <b-form-radio class="mx-0" value="Year">Year</b-form-radio>
+            <b-form-radio-group class="mr-3" id="radiosBtn" buttons button-variant="outline-primary" v-model="selected" name="radiosBtn">
+              <b-form-radio class="mx-0" value="Day">Día</b-form-radio>
+              <b-form-radio class="mx-0" value="Month">Mes</b-form-radio>
+              <b-form-radio class="mx-0" value="Year">Año</b-form-radio>
             </b-form-radio-group>
           </b-button-toolbar>
         </b-col>
