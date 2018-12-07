@@ -2,9 +2,14 @@
   <div class="app flex-row align-items-center">
     <div class="container">
       <b-row class="justify-content-center">
+          <b-col md="8" class="text-center">
+              <img src="img/logo_1.png" style="max-width: 75%; height: auto;" alt="Kaab Logo">
+          </b-col>
+      </b-row>
+      <b-row class="justify-content-center">
         <b-col md="8">
           <b-card-group>
-            <b-card no-body class="p-4 bg-light">
+            <b-card no-body class="p-3 bg-light">
               <b-card-body>
                 <b-form>
                   <h1>Login</h1>
@@ -28,18 +33,27 @@
                 </b-form>
               </b-card-body>
             </b-card>
-            <b-card no-body class="text-white bg-warning py-5 d-md-down-none" style="width:44%">
+            <b-card no-body class="bg-dark px-2 py-3 d-md-down-none text-secondary">
               <b-card-body class="text-center">
                 <div>
-                  <img src="img/logo_1.png" width="160" height="89" alt="Kaab Logo">
-                  <p>La forma más fácil y práctica de generar y mantener actualizado tu inventario de activos.</p>
-                  <b-button variant="text-white secondary bg-dark" class="active mt-3">Más info</b-button>
+                  <h3>Bienvenido a <b>Kaab</b></h3>
+                  <p>La forma más fácil y práctica para generar y mantener actualizado el inventario de activos de tu empresa o negocio. No necesitas periféricos costosos ni instalaciones complicadas. Es fácil... es simple.</p>
+                  <b-button variant="text-white secondary bg-primary" class="active mt-3">Más info</b-button>
                 </div>
               </b-card-body>
             </b-card>
           </b-card-group>
         </b-col>
       </b-row>
+      <b-row class="justify-content-center text-muted">
+          <b-col md="4">
+              <small>Kaab Inventarios &copy; 2018</small>
+          </b-col>
+          <b-col md="4" class="text-right text-muted">
+              <small><a href="http://yei3.com">Yei<b>3 </b>Software</a></small>
+          </b-col>
+      </b-row>
+
     </div>
   </div>
 </template>
