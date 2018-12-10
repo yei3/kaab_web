@@ -42,7 +42,7 @@
               </b-card-body>
             </b-card>
             <b-card no-body class="bg-gray-700 px-2 py-3 d-md-down-none">
-              <b-card-body class="text-center">
+              <b-card-body class="text-center text-secondary">
                 <div>
                   <img src="img/logo_1.png" style="max-width: 75%; height: auto;" alt="Kaab Logo">
                   <h3>Bienvenido a <b>Kaab</b></h3>
