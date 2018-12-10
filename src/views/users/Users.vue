@@ -30,7 +30,7 @@ export default {
   props: {
     caption: {
       type: String,
-      default: 'Users'
+      default: 'Usuarios'
     },
     hover: {
       type: Boolean,
@@ -64,7 +64,7 @@ export default {
         {key: 'status'}
       ],
       currentPage: 1,
-      perPage: 5,
+      perPage: 10,
       totalRows: 0
     }
   },

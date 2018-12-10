@@ -108,7 +108,7 @@ export default new Router({
         },
         {
           path: 'users',
-          meta: { label: 'Users'},
+          meta: { label: 'Usuarios'},
           component: {
             render (c) { return c('router-view') }
           },

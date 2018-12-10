@@ -3,7 +3,7 @@
     <AppHeader fixed>
       <SidebarToggler class="d-lg-none" display="md" mobile />
       <b-link class="navbar-brand" to="#">
-        <img class="navbar-brand-full" src="img/logo.png" width="88" height="49" alt="Kaab Logo">
+        <img class="navbar-brand-full" src="img/logo_1.png" width="88" height="49" alt="Kaab Logo">
         <img class="navbar-brand-minimized" src="img/logo_symbol.png" width="25" height="25" alt="Kaab Logo">
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
@@ -15,8 +15,8 @@
         <b-nav-form class="px-0">
           <b-form-select id="basicSelect"
             :plain="true"
-            :options="['HGM','INAPESCA', 'VINCOURT']"
-            value="HGM">
+            :options="['HGM-2019','INAPESCA-2019', 'VINCOURT-2019']"
+            value="HGM-2019">
           </b-form-select>
         </b-nav-form>
       </b-navbar-nav>
