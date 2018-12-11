@@ -3,8 +3,8 @@
     <AppHeader fixed>
       <SidebarToggler class="d-lg-none" display="md" mobile />
       <b-link class="navbar-brand" to="#">
-        <img class="navbar-brand-full" src="img/logo_1.png" width="88" height="49" alt="Kaab Logo">
-        <img class="navbar-brand-minimized" src="img/logo_symbol.png" width="25" height="25" alt="Kaab Logo">
+        <img class="navbar-brand-full" src="img/logo.png" width="100" height="40" alt="Kaab Logo">
+        <img class="navbar-brand-minimized" src="img/logo-symbol.png" width="25" height="25" alt="Kaab Logo">
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
       <b-navbar-nav class="d-md-down-none">

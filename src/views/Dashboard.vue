@@ -6,7 +6,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>100%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">9,823</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">9,823</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos de base inicial (2018)</small>
         </b-card>
       </b-col>
@@ -15,7 +15,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>88.4%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">8,687</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">8,687</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos inventariados</small>
         </b-card>
       </b-col>
@@ -24,7 +24,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>73.6%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">7,236</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">7,236</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos conciliados</small>
         </b-card>
       </b-col>
@@ -33,7 +33,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>12.8%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">1,263</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">1,263</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos no inventariados</small>
         </b-card>
       </b-col>
@@ -42,7 +42,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>10.0%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">987</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">987</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Cambios de ubicación</small>
         </b-card>
       </b-col>
@@ -51,7 +51,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>3.2%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">324</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">324</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Cambios de descripción</small>
         </b-card>
       </b-col>
@@ -60,7 +60,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>1.2%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">127</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">127</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos en demasía</small>
         </b-card>
       </b-col>
@@ -69,7 +69,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>0.1%</h4>
             </div>
-            <div class="h2 mb-0"><a href="users#/users" class="text-white">13</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">13</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos con etiqueta erronea</small>
         </b-card>
       </b-col>
@@ -82,9 +82,9 @@
           <div class="small text-muted">HGM-2019</div>
         </b-col>
         <b-col sm="7" class="d-none d-md-block">
-          <b-button type="button" variant="primary" class="float-right"><i class="fa fa-cloud-download"></i></b-button>
+          <b-button type="button" variant="primary" class="float-right" size="sm"><i class="fa fa-cloud-download"></i></b-button>
           <b-button-toolbar class="float-right" aria-label="Toolbar with buttons group">
-            <b-form-radio-group class="mr-3" id="radiosBtn" buttons button-variant="outline-primary" v-model="selected" name="radiosBtn">
+            <b-form-radio-group class="mr-3" id="radiosBtn" buttons button-variant="outline-secondary " v-model="selected" name="radiosBtn" size="sm">
               <b-form-radio class="mx-0" value="Week">Semana</b-form-radio>
               <b-form-radio class="mx-0" value="Month">Mes</b-form-radio>
               <b-form-radio class="mx-0" value="Year">Año</b-form-radio>

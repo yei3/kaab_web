@@ -2,7 +2,15 @@
   <b-row>
     <b-col cols="12" xl="6">
       <transition name="slide">
-      <b-card :header="caption">
+      <b-card>
+        <div slot="header">
+          {{caption}}
+          <div class="card-header-actions">
+            <b-link href="#/users/AddUser" class="card-header-action">
+              <i class="fa fa-plus-square"></i>
+            </b-link>
+          </div>
+        </div>
         <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
           <template slot="id" slot-scope="data">
             <strong>{{data.item.id}}</strong>
@@ -15,13 +23,14 @@
           </template>
         </b-table>
         <nav>
-          <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Prev" next-text="Next" hide-goto-end-buttons/>
+          <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
         </nav>
       </b-card>
       </transition>
     </b-col>
   </b-row>
 </template>
+
 
 <script>
 import usersData from './UsersData'
@@ -46,7 +55,7 @@ export default {
     },
     small: {
       type: Boolean,
-      default: false
+      default: true
     },
     fixed: {
       type: Boolean,
@@ -59,7 +68,7 @@ export default {
       fields: [
         {key: 'id'},
         {key: 'name'},
-        {key: 'registered'},
+        //{key: 'registered'},
         {key: 'role'},
         {key: 'status'}
       ],
@@ -81,7 +90,7 @@ export default {
       return items.length
     },
     userLink (id) {
-      return `users/${id.toString()}`
+      return `users/user/${id.toString()}`
     },
     rowClicked (item) {
       const userLink = this.userLink(item.id)

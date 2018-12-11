@@ -3,7 +3,7 @@
     <div class="container">
       <b-row class="justify-content-center">
           <b-col md="8" class="text-center" style="height: 275px">
-              <img src="img/logo_symbol_w.png" style="width: auto; max-height: 100%;" alt="Kaab Logo-Symbol">
+              <img src="img/logo-symbol_w.png" style="width: auto; max-height: 100%;" alt="Kaab Logo-Symbol">
           </b-col>
       </b-row>
       <b-row class="justify-content-center">
@@ -44,7 +44,7 @@
             <b-card no-body class="bg-gray-700 px-2 py-3 d-md-down-none">
               <b-card-body class="text-center text-secondary">
                 <div>
-                  <img src="img/logo_1.png" style="max-width: 75%; height: auto;" alt="Kaab Logo">
+                  <img src="img/logo.png" style="max-width: 75%; height: auto;" alt="Kaab Logo">
                   <h3>Bienvenido a <b>Kaab</b></h3>
                   <p>La forma más práctica para generar y mantener actualizado el inventario de activos de tu empresa o negocio. ¡Pruébalo! Es fácil.</p>
                   <b-button variant="text-white secondary bg-primary" class="active mt-3">Más info</b-button>
