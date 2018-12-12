@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col cols="12" xl="6">
+    <b-col cols="12">
       <transition name="slide">
       <b-card>
         <div slot="header">
