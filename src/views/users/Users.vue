@@ -13,10 +13,10 @@
         </div>
         <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
           <template slot="id" slot-scope="data">
-            <strong>{{data.item.id}}</strong>
+            {{data.item.id}}
           </template>
           <template slot="name" slot-scope="data">
-            <strong>{{data.item.name}}</strong>
+            {{data.item.name}}
           </template>
           <template slot="status" slot-scope="data">
             <b-badge :variant="getBadge(data.item.status)">{{data.item.status}}</b-badge>
@@ -47,7 +47,7 @@ export default {
     },
     striped: {
       type: Boolean,
-      default: true
+      default: false
     },
     bordered: {
       type: Boolean,
@@ -64,13 +64,12 @@ export default {
   },
   data: () => {
     return {
-      items: usersData.filter((user) => user.id < 42),
+      items: usersData.filter((user) => user.id > 0),
       fields: [
-        {key: 'id'},
-        {key: 'name'},
-        //{key: 'registered'},
-        {key: 'role'},
-        {key: 'status'}
+        {label: 'ID', key: 'id', sortable: true},
+        {label: 'Nombre', key: 'name', sortable: true},
+        {label: 'Rol', key: 'role', sortable: true},
+        {label: 'Estatus', key: 'status', sortable: true}
       ],
       currentPage: 1,
       perPage: 10,
@@ -81,10 +80,10 @@ export default {
   },
   methods: {
     getBadge (status) {
-      return status === 'Active' ? 'success'
-        : status === 'Inactive' ? 'secondary'
-          : status === 'Pending' ? 'warning'
-            : status === 'Banned' ? 'danger' : 'primary'
+      return status === 'Activo' ? 'success'
+        : status === 'Inactivo' ? 'secondary'
+          : status === 'Pendiente' ? 'warning'
+            : status === 'Eliminado' ? 'danger' : 'primary'
     },
     getRowCount (items) {
       return items.length
