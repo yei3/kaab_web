@@ -4,22 +4,22 @@
       <b-col sm="6">
         <b-card>
           <div slot="header">
-            <strong>Usuario </strong><small>Agregar</small>
+            <strong>Usuario </strong><small>Modificar ID: {{items($route.params.id).id }}</small>
           </div>
           <b-form>
             <b-form-group>
               <label for="user">Usuario</label>
-              <b-form-input type="text" id="mail" placeholder="usuario@mi-empresa.com"> de</b-form-input>
+              <b-form-input type="text" id="mail" v-model="items($route.params.id).user" placeholder="usuario@mi-empresa.com"></b-form-input>
             </b-form-group>
             <b-form-group>
               <label for="name">Nombre</label>
-              <b-form-input type="text" id="name" placeholder="Introduce tu nombre">{{ data.items.name }}</b-form-input>
+              <b-form-input type="text" id="name" v-model="items($route.params.id).name" placeholder="Introduce tu nombre"></b-form-input>
             </b-form-group>
             <b-row>
               <b-col sm="6">
                 <b-form-group>
                   <label for="role">Rol</label>
-                  <b-form-select id="role"
+                  <b-form-select id="role" v-model="items($route.params.id).role" 
                     :plain="true"
                     :options="['Admin','Gerente','Coordinador','Operativo','Auditor']"
                     value="Operativo">
@@ -29,7 +29,7 @@
               <b-col sm="6">
                 <b-form-group>
                   <label for="status">Estatus</label>
-                  <b-form-select id="status"
+                  <b-form-select id="status" v-model="items($route.params.id).status  " 
                     :plain="true"
                     :options="['Activo','Inactivo']"
                     value="Activo">
@@ -92,13 +92,15 @@ export default {
 
   data: () => {
     return {
-      //items: usersData.find( (user) => user.id.toString() === id),
-      items: usersData.filter((user) => user.id === 3),
+      items: (id) => {
+        const user = usersData.find( user => user.id.toString() === id)
+        return user
+      },
       fields: [
-        {label: 'ID', key: 'id', sortable: true},
-        {label: 'Nombre', key: 'name', sortable: true},
-        {label: 'Rol', key: 'role', sortable: true},
-        {label: 'Estatus', key: 'status', sortable: true}
+        {label: 'ID', key: 'id'},
+        {label: 'Nombre', key: 'name'},
+        {label: 'Rol', key: 'role'},
+        {label: 'Estatus', key: 'status'}
       ],
       
     }
