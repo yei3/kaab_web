@@ -86,7 +86,7 @@ export default {
         },
         {
           name: 'Sesiones de registro',
-          url: '/registrationsessions',
+          url: '/sessions',
           icon: 'fa fa-barcode'
         },
         {

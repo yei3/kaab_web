@@ -4,7 +4,7 @@
       <b-col sm="6">
         <b-card>
           <div slot="header">
-            <strong>Usuario </strong><small>Modificar ID: {{items($route.params.id).id }}</small>
+            <strong>{{caption}}</strong><small> ID: {{items($route.params.id).id }}</small>
           </div>
           <b-form>
             <b-form-group>
@@ -74,7 +74,7 @@ export default {
   props: {
     caption: {
       type: String,
-      default: 'User id'
+      default: 'Modificar usuario'
     },
   },
   /*data: () => {
