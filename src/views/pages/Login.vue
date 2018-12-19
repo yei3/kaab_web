@@ -27,14 +27,14 @@
                       <b-button variant="secondary bg-primary" class="px-4">Login</b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="link" class="px-0">Olvidé mi contraseña</b-button>
+                      <b-button variant="link" class="px-0">Reestablecer</b-button>
                     </b-col>
                   </b-row>
                   <b-row class="justify-content-center text-muted" style="position:absolute; left:1.25rem; right:1.25rem; bottom:1rem; height:1rem; ">
-                    <b-col cols="6 " style="width:50%" >
+                    <b-col cols="7 " style="width:50%" >
                         <small>Kaab Inventarios &copy; 2018</small>
                     </b-col>
-                    <b-col cols="6" style="width:50%" class="text-right text-white">
+                    <b-col cols="5" style="width:50%" class="text-right text-white">
                         <small><a href="http://yei3.com">Yei<b>3 </b>Software</a></small>
                     </b-col>
                   </b-row>

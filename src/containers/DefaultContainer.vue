@@ -4,13 +4,11 @@
       <SidebarToggler class="d-lg-none" display="md" mobile />
       <b-link class="navbar-brand" to="#">
         <img class="navbar-brand-full" src="img/logo.png" width="100" height="40" alt="Kaab Logo">
-        <img class="navbar-brand-minimized" src="img/logo-symbol.png" width="25" height="25" alt="Kaab Logo">
+        <img class="navbar-brand-minimized" src="img/logo-symbol.png" width="50" height="50" alt="Kaab Logo">
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
-      <b-navbar-nav class="d-md-down-none">
-        <b-nav-item class="px-3" to="/dashboard">Dashboard</b-nav-item>
-        <b-nav-item class="px-3" to="/users" exact>Usuarios</b-nav-item>
-        <b-nav-item class="px-3" to="/config">Configuración</b-nav-item>
+      <b-navbar-nav>
+        <!--<b-nav-item class="px-3" to="/dashboard">Dashboard</b-nav-item>
         <b-nav-text class="px-3">Proyecto:</b-nav-text>
         <b-nav-form class="px-0">
           <b-form-select id="basicSelect"
@@ -18,7 +16,7 @@
             :options="['HGM-2019','INAPESCA-2019', 'VINCOURT-2019']"
             value="HGM-2019">
           </b-form-select>
-        </b-nav-form>
+        </b-nav-form>-->
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <DefaultHeaderDropdownAccnt/>
