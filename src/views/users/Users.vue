@@ -11,19 +11,22 @@
             </b-link>
           </div>
         </div>
-        <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
+        <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="usuarios" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
           <template slot="id" slot-scope="data">
             {{data.item.id}}
           </template>
           <template slot="name" slot-scope="data">
             {{data.item.name}}
           </template>
-          <template slot="status" slot-scope="data">
-            <b-badge :variant="getBadge(data.item.status)">{{data.item.status}}</b-badge>
+          <template slot="role" slot-scope="data">
+            {{data.item.role ==  'roltst' ? 'Test':'New'}}
+          </template>
+          <template slot="statusID" slot-scope="data">
+            <b-badge :variant="getBadge(data.item.statusID)">{{data.item.statusID ==1 ? 'Activo' : 'Inactivo'}}</b-badge>
           </template>
         </b-table>
-        <nav>
-          <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+         <nav>
+          <b-pagination size="sm" :total-rows="getRowCount(usuarios)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
         </nav>
       </b-card>
       </transition>
@@ -32,8 +35,10 @@
 </template>
 
 
+
 <script>
 import usersData from './UsersData'
+import axios from 'axios'
 export default {
   name: 'Users',
   props: {
@@ -64,24 +69,26 @@ export default {
   },
   data: () => {
     return {
-      items: usersData.filter((user) => user.id > 0),
-      fields: [
+     fields: [
         {label: 'ID', key: 'id', sortable: true},
-        {label: 'Nombre', key: 'name', sortable: true},
+        {label: 'User', key: 'user', sortable: true},
+        {label: 'Nombre', key: 'names', sortable: true},
+        {label: 'Apellido', key: 'lastname', sortable: true},
         {label: 'Rol', key: 'role', sortable: true},
-        {label: 'Estatus', key: 'status', sortable: true}
+        {label: 'Estatus', key: 'statusID', sortable: true}
       ],
       currentPage: 1,
       perPage: 10,
-      totalRows: 0
+      totalRows: 0,
+      usuarios: []
     }
   },
   computed: {
   },
   methods: {
     getBadge (status) {
-      return status === 'Activo' ? 'success'
-        : status === 'Inactivo' ? 'secondary'
+      return status === 1 ? 'success'
+        : status === '0' ? 'secondary'
           : status === 'Pendiente' ? 'warning'
             : status === 'Eliminado' ? 'danger' : 'primary'
     },
@@ -96,6 +103,13 @@ export default {
       this.$router.push({path: regLink})
     }
 
+  },
+  created(){
+    axios
+      .get('https://so2ut5rylh.execute-api.us-west-2.amazonaws.com/Prod/getAllUsers')
+      
+      .then(response => (this.usuarios = response.data.users))
+      .catch(error => console.log(error))
   }
 }
 </script>
