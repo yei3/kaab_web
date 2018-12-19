@@ -49,6 +49,9 @@
                   <p>La forma más práctica para generar y mantener actualizado el inventario de activos de tu empresa o negocio. ¡Pruébalo! Es fácil.</p>
                   <b-button variant="text-white secondary bg-primary" class="active mt-3">Más info</b-button>
                 </div>
+                <div id="app">
+                  {{ info.data.address.municipality }}
+                </div>
               </b-card-body>
             </b-card>
           </b-card-group>
@@ -57,9 +60,26 @@
     </div>
   </div>
 </template>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
 <script>
+import axios from 'axios'
+
 export default {
-  name: 'Login'
+  name: 'login',
+  
+  data: function () {
+    return {
+      info: null
+    }
+  },
+  mounted () {
+    
+    axios
+      .get('https://so2ut5rylh.execute-api.us-west-2.amazonaws.com/Prod/getAddressById?id=1')
+      
+      .then(response => (this.info = response))
+      .catch(error => console.log(error))
+  }
 }
+
 </script>
