@@ -2,7 +2,7 @@ const assetsData = [
   {id: 1, keyfield: 'HGM0012345', asset: 'Silla', description: 'Silla de madera', cost: '180.00', assetType: 'Mobiliario', status: 'Conciliado'},
   {id: 2, keyfield: 'HGM0012346', asset: 'Silla', description: 'Silla de madera', cost: '180.00', assetType: 'Mobiliario', status: 'Conciliado'},
   {id: 3, keyfield: 'HGM0012347', asset: 'Silla', description: 'Silla de madera', cost: '180.00', assetType: 'Mobiliario', status: 'Conciliado'},
-  {id: 4, keyfield: 'HGM0012348', asset: 'Escritorio', description: 'Escritorio de metal', cost: '180.00', assetType: 'Mobiliario', status: 'Cambio de ubicación'},
+  {id: 4, keyfield: 'HGM0012348', asset: 'Escritorio', description: 'Escritorio de metal', cost: '1250.00', assetType: 'Mobiliario', status: 'Cambio de ubicación'},
   {id: 5, keyfield: 'HGM0012349', asset: 'Silla', description: 'Silla de madera', cost: '180.00', assetType: 'Mobiliario', status: 'Conciliado'},
   {id: 6, keyfield: 'HGM0012350', asset: 'Silla', description: 'Silla de madera', cost: '180.00', assetType: 'Mobiliario', status: 'Conciliado'},
   {id: 7, keyfield: 'HGM0012351', asset: 'Silla', description: 'Silla de madera', cost: '180.00', assetType: 'Mobiliario', status: 'Conciliado'},
