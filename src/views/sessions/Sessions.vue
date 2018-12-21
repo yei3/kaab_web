@@ -34,6 +34,7 @@
 
 <script>
 import sessionsData from './SessionsData'
+import { URLSearchParams } from 'url';
 export default {
   name: 'Sessions',
   props: {

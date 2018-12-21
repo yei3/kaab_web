@@ -62,6 +62,7 @@ const AddUser = () => import('@/views/users/AddUser')
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
 const Session = () => import('@/views/sessions/Session')
+const Asset = () => import('@/views/sessions/Asset')
 const AddSession = () => import('@/views/sessions/AddSession')
 
 Vue.use(Router)
@@ -140,19 +141,13 @@ export default new Router({
         {
           path: 'sessions',
           meta: { label: 'Sesiones de registro'},
-          component: {
+            component: {
             render (c) { return c('router-view') }
-          },
+            },
           children: [
             {
               path: '',
               component: Sessions
-            },
-            {
-              path: 'session/:id',
-              meta: { label: 'Detalle de sesión'},
-              name: 'Session',
-              component: Session
             },
             {
               path: 'addsession',
@@ -160,7 +155,26 @@ export default new Router({
               name: 'AddSession',
               component: AddSession
             },
-          ]
+            {
+              path: 'session/:idsession',
+              meta: { label: 'Detalle de sesión' },
+              component: {
+                render (c) { return c('router-view') }
+              },         
+              children: [
+                {
+                  path: '',
+                  component: Session
+                },
+                {
+                  path: 'asset/:idasset',
+                  meta: { label: 'Detalle de activo'},
+                  name: 'Asset',
+                  component: Asset 
+                }
+              ]
+            },
+          ],
         },
         {
           path: 'base',
