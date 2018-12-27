@@ -11,39 +11,73 @@
           </div>
           <b-form>
             <b-form-group>
-              <label for="user">Usuario</label>
-              <b-form-input type="text" id="mail" v-model="items($route.params.idasset).keyfield" placeholder="usuario@mi-empresa.com"></b-form-input>
+              <label for="user">Clave</label>
+              <b-form-input type="text" id="keyfield" v-model="items($route.params.idasset).keyfield" :disabled="true" placeholder="Introduce la clave"></b-form-input>
             </b-form-group>
             <b-form-group>
-              <label for="name">Nombre</label>
-              <b-form-input type="text" id="name" v-model="items($route.params.idasset).asset" placeholder="Introduce tu nombre"></b-form-input>
+              <label for="name">Activo</label>
+              <b-form-input type="text" id="asset" v-model="items($route.params.idasset).asset" :disabled="true" placeholder="Introduce el activo"></b-form-input>
+            </b-form-group>
+            <b-form-group>
+              <label for="name">Descripción</label>
+              <b-form-input type="text" id="description" v-model="items($route.params.idasset).description" :disabled="true" placeholder="Introduce la descripción"></b-form-input>
             </b-form-group>
             <b-row>
               <b-col sm="6">
                 <b-form-group>
-                  <label for="role">Rol</label>
-                  <b-form-select id="role" v-model="items($route.params.idasset).asset" 
-                    :plain="true"
-                    :options="['Admin','Gerente','Coordinador','Operativo','Auditor']"
-                    value="Operativo">
-                  </b-form-select>
-              </b-form-group>
+                  <label for="brand">Marca</label>
+                  <b-form-input type="text" id="brand" v-model="items($route.params.idasset).brand" :disabled="true" placeholder="Introduce la marca"></b-form-input>
+                </b-form-group>
               </b-col>
               <b-col sm="6">
                 <b-form-group>
-                  <label for="status">Estatus</label>
-                  <b-form-select id="status" v-model="items($route.params.idasset).status  " 
+                  <label for="model">Modelo</label>
+                  <b-form-input type="text" id="model" v-model="items($route.params.idasset).model" :disabled="true" placeholder="Introduce el modelo"></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col sm="6">
+                <b-form-group>
+                  <label for="serial">Serie</label>
+                  <b-form-input type="text" id="brand" v-model="items($route.params.idasset).serial" :disabled="true" placeholder="Introduce el número de serie"></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col sm="6">
+                <b-form-group>
+                  <label for="cost">Costo</label>
+                  <b-form-input type="text" id="cost" v-model="items($route.params.idasset).cost" :disabled="true" placeholder="Introduce el costo"></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-form-group>
+              <label for="assetType">Tipo de activo</label>
+              <b-form-input type="text" id="assetType" v-model="items($route.params.idasset).assetType" :disabled="true" placeholder="Introdude el tipo de activo"></b-form-input>
+            </b-form-group>
+            <!--<b-row>
+              <b-col>
+                <b-form-group>
+                  <label for="assetType">Tipo de activo</label>
+                  <b-form-select id="assetType" v-model="items($route.params.id).assetType" 
                     :plain="true"
-                    :options="['Activo','Inactivo']"
-                    value="Activo">
+                    :options="['Tipo de activo...', 'Mobiliario','Equipo','Maquinaria','Instrumental','Vehículo', 'Inmueble', 'Terreno', 'Bien natural', 'Otro']"
+                    value="Tipo de activo...">
                   </b-form-select>
               </b-form-group>
               </b-col>
-            </b-row>
+            </b-row>-->
+            <b-form-group>
+              <label for="comments">Comentarios</label>
+              <b-form-input type="text" id="comments" v-model="items($route.params.idasset).comments" :disabled="true" placeholder="Introdude los comentarios"></b-form-input>
+            </b-form-group>
+            <b-form-group>
+              <label for="status">Estatus</label>
+              <b-form-input type="text" id="status" v-model="items($route.params.idasset).status" :disabled="true" placeholder="Introdude el estatus"></b-form-input>
+            </b-form-group>
           </b-form>
           <div slot="footer">
-            <b-button type="submit" size="sm" variant="success"><i class="fa fa-save"></i> Guardar</b-button>
-            <b-button type="reset" size="sm" variant="danger" @click="goBack"><i class="fa fa-ban"></i> Cancelar</b-button>
+            <!--<b-button type="submit" size="sm" variant="success"><i class="fa fa-save"></i> Guardar</b-button>-->
+            <b-button type="reset" size="sm" variant="secondary" @click="goBack"><i class="fa fa-chevron-left"></i> Atras</b-button>
           </div>
         </b-card>
       </b-col>
