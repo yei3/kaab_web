@@ -115,7 +115,7 @@ export default new Router({
         },
         {
           path: 'users',
-          meta: { label: 'Usuarios'},
+          meta: { label: 'Usuarios' },
           component: {
             render (c) { return c('router-view') }
           },
@@ -126,13 +126,13 @@ export default new Router({
             },
             {
               path: 'user/:id',
-              meta: { label: 'Detalles de usuario'},
+              meta: { label: 'Detalle de usuario' },
               name: 'User',
               component: User
             },
             {
               path: 'adduser',
-              meta: { label: 'Agregar usuario'},
+              meta: { label: 'Agregar usuario' },
               name: 'AddUser',
               component: AddUser
             },
@@ -140,7 +140,7 @@ export default new Router({
         },
         {
           path: 'sessions',
-          meta: { label: 'Sesiones de registro'},
+          meta: { label: 'Sesiones de registro' },
             component: {
             render (c) { return c('router-view') }
             },
@@ -151,29 +151,22 @@ export default new Router({
             },
             {
               path: 'addsession',
-              meta: { label: 'Agregar sesión'},
+              meta: { label: 'Nueva sesión de registro' },
               name: 'AddSession',
               component: AddSession
             },
             {
               path: 'session/:idsession',
               meta: { label: 'Detalle de sesión' },
-              component: {
-                render (c) { return c('router-view') }
-              },         
-              children: [
-                {
-                  path: '',
-                  component: Session
-                },
-                {
-                  path: 'asset/:idasset',
-                  meta: { label: 'Detalle de activo'},
-                  name: 'Asset',
-                  component: Asset 
-                }
-              ]
-            },
+              name: 'Session',
+              component: Session
+            },  
+            {
+              path: 'session/:idsession/asset/:idasset',
+              meta: { label: 'Detalle de activo' },
+              name: 'Asset',
+              component: Asset 
+            }
           ],
         },
         {

@@ -81,10 +81,52 @@
           </div>
         </b-card>
       </b-col>
+
+      <b-col md="6" >
+        <b-card
+          header-tag="header"
+          footer-tag="footer">
+          <div slot="header">
+            <i class="fa fa-align-justify"></i><strong> Imágenes del activo</strong>
+            <div class="card-header-actions">
+              <b-button type="button" variant="primary" class="float-right" size="sm"><i class="fa fa-cloud-download"></i></b-button>
+            </div>
+          </div>
+          <div>
+            <b-carousel id="carousel1"
+                        style="text-shadow: 1px 1px 2px #333;"
+                        controls
+                        indicators
+                        background="#ababab"
+                        :interval="4000"
+                        img-width="1024"
+                        img-height="768"
+                        v-model="slide"
+                        @sliding-start="onSlideStart"
+                        @sliding-end="onSlideEnd"
+            >
+
+              <!-- Text slides with image -->
+              <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/2/"
+              ></b-carousel-slide>
+
+              <!-- Slides with custom text -->
+              <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/4/">
+              </b-carousel-slide>
+
+              <!-- Slides with image only -->
+              <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/8/">
+              </b-carousel-slide>
+            </b-carousel>
+
+            <p class="mt-4">
+              Imagen: {{ slide + 1 }}
+            </p>
+
+          </div>
+        </b-card>
+      </b-col>
     </b-row>
-
-
-    {id: 30, keyfield: 'HGM0012374', asset: 'Silla', description: 'Silla de madera', brand: 'ND', model: 'ND', serial:'ND', cost: '180.00', assetType: 'Mobiliario', locationDetail: '', comments: 'No tiene una pata',  status: 'Cambio de departamento'}
 
     <!--<b-row>
       <b-col cols="12" lg="6">
@@ -142,7 +184,7 @@ export default {
         {label: 'Activo', key: 'asset'},
         {label: 'Estatus', key: 'status'}
       ],
-      
+      slide: 0
     }
   },
   methods: {
