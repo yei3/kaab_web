@@ -41,7 +41,7 @@
                       </b-form-select>
                   </b-input-group>
                   <div class="small text-danger" v-if="!roleValidationRequired">Campo requerido</div>
-              </b-form-group>
+                </b-form-group>
               </b-col>
               <b-col lg="6">
                 <b-form-group>
@@ -56,8 +56,7 @@
                       </b-form-select>
                   </b-input-group>
                   <div class="small text-danger" v-if="!statusValidationRequired">Campo requerido</div>
-                  </b-form-select>
-              </b-form-group>
+                </b-form-group>
               </b-col>
             </b-row>
           </b-form>
