@@ -6,9 +6,7 @@
         <div slot="header">
           {{caption}}
           <div class="card-header-actions">
-            <b-link href="#/users/adduser" class="card-header-action">
-              <i class="fa fa-plus-square"></i>
-            </b-link>
+            <b-button type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
           </div>
         </div>
         <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
@@ -94,6 +92,9 @@ export default {
     rowClicked (item) {
       const regLink = this.regLink(item.id)
       this.$router.push({path: regLink})
+    },
+    addClick () {
+      this.$router.push({path: `users/adduser`})
     }
 
   }
