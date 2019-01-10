@@ -3,8 +3,8 @@
     <b-row>
       <b-col sm="12">
         <b-card>
-          <b-form validated novalidate>
-            <div slot="header">
+          <div slot="header">
+            <b-form>
               <strong>{{ caption }}</strong><small> ID: 17</small>
                 <small class="float-right text-muted">
                   2019/01/09 11:12:06 - Vigente
@@ -27,17 +27,14 @@
                         <b-input-group-text><i class="fa fa-sitemap" ></i></b-input-group-text>
                       </b-input-group-prepend>
                       <!--<b-form-input type="text" id="sessionDepartmentName" :disabled="true" v-model="items($route.params.idsession).sessionDepartmentName" placeholder="Departamento"></b-form-input>-->
-                      <b-form-select id="sessionDepartmentName"
-                        v-model="sessionDepartmentName"
-                        :options="sessionDepartmentOptions"
-                        :required="true"
-                        @change="selectClicked"
+                      <b-form-select id="department"
+                        v-model="department"
+                        class="form-control" :class="{ 'is-invalid': departmentValidationError }"
+                        :options="departmentOptions"
                         value="Departamento...">
                       </b-form-select>
-                      <b-form-invalid-feedback>
-                        Por favor, seleccione un departamento.
-                      </b-form-invalid-feedback>
                     </b-input-group>
+                    <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
                   </b-form-group>
                 </b-col>
                 <b-col sm="4">
@@ -47,30 +44,37 @@
                         <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
                       </b-input-group-prepend>
                       <!--<b-form-input type="text" id="sessionLocationName" :disabled="true" v-model="items($route.params.idsession).sessionLocationName" placeholder="Ubicación"></b-form-input>-->
-                      <b-form-select id="sessionLocationName"
-                        v-model="sessionLocationName"
-                        :options="sessionLocationOptions"
-                        :required="true"
-                        @change="selectClicked"
+                      <b-form-select id="sessionLocation"
+                        v-model="location"
+                        class="form-control" :class="{ 'is-invalid': locationValidationError }"
+                        :options="locationOptions"
                         value="Ubicación...">
                       </b-form-select>
-                      <b-form-invalid-feedback>
-                        Por favor, seleccione una ubicación.
-                      </b-form-invalid-feedback>
                     </b-input-group>
+                    <div class="small text-danger" v-if="!locationValidationRequired">Campo requerido</div>
                   </b-form-group>
                 </b-col>
               </b-row>
               <b-row>
                 <b-col>
-                  <b-button v-show="validateSelectsVar" type="submit" size="sm" variant="success" @click="addSessionClicked"><i class="fa fa-play"></i> Iniciar</b-button>
-                  <b-button v-show="!addSessionVar" type="reset" size="sm" variant="danger" @click="goBack"><i class="fa fa-ban"></i> Cancelar</b-button>
+                  <div class="pull-right">
+                    <b-button v-show="!addSessionVar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
+                    <b-button v-show="!addSessionVar" type="button" size="sm" variant="primary" @click="addSessionClicked" :disabled="!formValidated"><i class="fa fa-play"></i> Iniciar</b-button>
+                  </div>
                 </b-col>
               </b-row>
-            </div>
-          </b-form>
-          
-          <b-table v-show="addSessionVar" :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="tableitems" :fields="tablefields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
+            </b-form>
+          </div>
+
+          <b-row>
+            <b-col>
+              <div class="text-center mb-4">
+                <b-button v-show="addSessionVar" type="button" size="lg" variant="success" @click="scan" ><i class="fa fa-barcode"></i> REGISTRAR</b-button>
+              </div>
+            </b-col>
+          </b-row>
+
+          <b-table v-show="addSessionVar" :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="tableitems" :fields="tablefields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
@@ -86,7 +90,10 @@
           </nav>
 
           <div slot="footer" v-show="addSessionVar">
-            <b-button type="reset" size="sm" variant="secondary" @click="goBack"><i class="fa fa-chevron-left"></i> Atras</b-button>
+            <div class="pull-right">
+              <b-button type="reset" size="sm" variant="secondary" @click="goBack" class="mr-1"><i class="fa fa-chevron-left"></i> Atras</b-button>
+              <b-button v-show="addSessionVar" type="button" size="sm" variant="primary" @click="saveSession" :disabled="!formValidated"><i class="fa fa-stop"></i> Terminar</b-button>
+            </div>
           </div>
         </b-card>
       </b-col>
@@ -131,8 +138,8 @@ export default {
       validateSelectsVar: false,
       userName: 'Ana Sánchez',
       addSessionVar: false,
-      sessionDepartmentName: null,
-      sessionDepartmentOptions: [
+      department: null,
+      departmentOptions: [
         {value: null, text: 'Departamento...', disabled: true},
         {value: 1001, text: 'Cancerología'},
         {value: 1002, text: 'Dirección General'},
@@ -145,8 +152,8 @@ export default {
         {value: 4001, text: 'Seguridad'},
         {value: 4002, text: 'Soporte'}
       ],
-      sessionLocationName: null,
-      sessionLocationOptions: [
+      location: null,
+      locationOptions: [
         {value: null, text: 'Ubicación...', disabled: true},
         {value: 116, text: 'Edificio 16'},
         {value: 123, text: 'Edificio 23'},
@@ -187,6 +194,43 @@ export default {
       
     }
   },
+  computed: {
+  	formValidated: function() {
+      var form_validate = false
+      if (this.departmentValidationRequired && this.locationValidationRequired) {
+        form_validate = true
+      }
+      return form_validate
+    },
+    departmentValidationError: function() {
+      var department_error = true
+      if (this.department) {
+        department_error = false
+      }
+      return department_error
+    },
+    departmentValidationRequired: function() {
+      var department_required = false
+      if (this.department) {
+        department_required = true
+      }
+      return department_required
+    },
+    locationValidationError: function() {
+      var location_error = true
+      if (this.location) {
+        location_error = false
+      }
+      return location_error
+    },
+    locationValidationRequired: function() {
+      var location_required = false
+      if (this.location) {
+        location_required = true
+      }
+      return location_required
+    }
+  },
   methods: {
     goBack() {
       this.$router.go(-1)
@@ -210,18 +254,15 @@ export default {
       this.$router.push({ path: regLink })
     },
     addSessionClicked () {
-      this.addSessionVar = true
+      this.addSessionVar = true     
     },
-    selectClicked () {
-      if (this.sessionDepartmentName && this.sessionLocationName) {
-        this.validateSelectsVar = true
-      }
+    scan () {
 
-      
+    },
+    saveSession () {
+
     }
   }
-
-
 }
 </script>
 

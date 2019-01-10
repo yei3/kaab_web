@@ -1,7 +1,7 @@
 <template>
   <div class="animated fade-in">
     <b-row>
-      <b-col md="6">
+      <b-col lg="6">
         <b-card>
           <div slot="header">
             <strong>{{caption}}</strong><small> ID: {{items($route.params.id).id }}</small>
@@ -74,7 +74,7 @@
           <template slot="header">
             User id:  {{ $route.params.id }}
           </template>
-          <b-table striped small fixed responsive="sm" :items="items($route.params.id)" :fields="fields">
+          <b-table striped small fixed responsive="lg" :items="items($route.params.id)" :fields="fields">
             <template slot="value" slot-scope="data">
               <strong>{{data.item.value}}</strong>
             </template>

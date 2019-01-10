@@ -13,7 +13,7 @@
       <b-col sm="6" lg="3">
         <b-card class="bg-secondary text-white" style="min-height:7rem">
             <div class="h4 text-muted text-right mb-4">
-              <h4 class="float-right" right>88.4%</h4>
+              <h4 class="float-right" right>82.9%</h4>
             </div>
             <div class="h2 mb-0"><a href="#/users" class="text-white">8,687</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos inventariados</small>
@@ -22,9 +22,9 @@
       <b-col sm="6" lg="3">
         <b-card class="bg-success text-white" style="min-height:7rem">
             <div class="h4 text-muted text-right mb-4">
-              <h4 class="float-right" right>73.6%</h4>
+              <h4 class="float-right" right>68.4%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">7,236</a></div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">6,723</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos conciliados</small>
         </b-card>
       </b-col>
@@ -35,6 +35,15 @@
             </div>
             <div class="h2 mb-0"><a href="#/users" class="text-white">1,263</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos no inventariados</small>
+        </b-card>
+      </b-col>
+      <b-col sm="6" lg="3">
+        <b-card class="bg-info text-white" style="min-height:7rem">
+            <div class="h4 text-muted text-right mb-4">
+              <h4 class="float-right" right>5.6%</h4>
+            </div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">502</a></div>
+            <small class="text-muted text-uppercase font-weight-bold">Cambios de departamento</small>
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
@@ -70,7 +79,16 @@
               <h4 class="float-right" right>0.1%</h4>
             </div>
             <div class="h2 mb-0"><a href="#/users" class="text-white">13</a></div>
-            <small class="text-muted text-uppercase font-weight-bold">Activos con etiqueta erronea</small>
+            <small class="text-muted text-uppercase font-weight-bold">Activos con etiqueta duplicada</small>
+        </b-card>
+      </b-col>
+      <b-col sm="6" lg="3">
+        <b-card class="bg-warning text-white" style="min-height:7rem">
+            <div class="h4 text-muted text-right mb-4">
+              <h4 class="float-right" right>0.1%</h4>
+            </div>
+            <div class="h2 mb-0"><a href="#/users" class="text-white">11</a></div>
+            <small class="text-muted text-uppercase font-weight-bold">Activos con etiqueta sin datos</small>
         </b-card>
       </b-col>
     </b-row>
@@ -95,35 +113,25 @@
       <main-chart-example chartId="main-chart-01" class="chart-wrapper" style="height:300px;margin-top:40px;" height="300"></main-chart-example>
       <div slot="footer">
         <b-row class="text-center">
-          <b-col class="mb-sm-2 mb-2" sm="6" lg="2">
+          <b-col class="mb-sm-2 mb-2" sm="6" lg="3">
             <div class="text-muted">Inventariados</div>
             <strong>8,687 (100%)</strong>
             <b-progress height={} class="progress-xs mt-2" :precision="1" variant="secondary" :value="100"></b-progress>
           </b-col>
-          <b-col class="mb-sm-2 mb-2" sm="6" lg="2">
+          <b-col class="mb-sm-2 mb-2" sm="6" lg="3">
             <div class="text-muted">Conciliados</div>
-            <strong>7,236 (83.3%)</strong>
+            <strong>6,723 (77.4%)</strong>
             <b-progress height={} class="progress-xs mt-2" :precision="1" variant="success" :value="84"></b-progress>
           </b-col>
-          <b-col class="mb-sm-2 mb-2" sm="6" lg="2">
-            <div class="text-muted">Cambios de ubicación</div>
-            <strong>987 (11.4%)</strong>
+          <b-col class="mb-sm-2 mb-2" sm="6" lg="3">
+            <div class="text-muted">Cambios (Depto, Ubic, Desc)</div>
+            <strong>1,813 (20.8%)</strong>
             <b-progress height={} class="progress-xs mt-2" :precision="1" variant="info" :value="12"></b-progress>
           </b-col>
-          <b-col class="mb-sm-2 mb-2" sm="6" lg="2">
-            <div class="text-muted">Cambios de descripción</div>
-            <strong>324 (3.7%)</strong>
-            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="info" :value="4"></b-progress>
-          </b-col>
-          <b-col class="mb-sm-2 mb-2" sm="6" lg="2">
-            <div class="text-muted">Demasía</div>
-            <strong>127 (1.5%)</strong>
-            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="warning" :value="2"></b-progress>
-          </b-col>
-          <b-col class="mb-sm-2 mb-2" sm="6" lg="2">
-            <div class="text-muted">Etiqueta erronea</div>
-            <strong>13 (0.1%)</strong>
-            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="warning" :value="1"></b-progress>
+          <b-col class="mb-sm-2 mb-2" sm="6" lg="3">
+            <div class="text-muted">En demasía y otros</div>
+            <strong>151 (1.7%)</strong>
+            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="warning" :value="12"></b-progress>
           </b-col>
         </b-row>
       </div>
@@ -218,7 +226,7 @@
             </b-col>
           </b-row>
           <br/>
-          <b-table class="mb-0 table-outline" responsive="sm" hover :items="tableItems" :fields="tableFields" head-variant="light">
+          <b-table class="mb-0 table-outline" responsive="lg" hover :items="tableItems" :fields="tableFields" head-variant="light">
             <div slot="avatar" class="avatar" slot-scope="item">
               <img :src="item.value.url" class="img-avatar" alt="">
               <span class="avatar-status" v-bind:class="{ 'bg-success': item.value.status == 'success',  'bg-secondary': item.value.status == '' }"></span>

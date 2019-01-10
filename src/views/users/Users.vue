@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col cols="12">
+    <b-col lg="12">
       <transition name="slide">
       <b-card>
         <div slot="header">
@@ -9,7 +9,7 @@
             <b-button type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
           </div>
         </div>
-        <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
+        <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
           <template slot="id" slot-scope="data">
             {{data.item.id}}
           </template>
@@ -96,7 +96,6 @@ export default {
     addClick () {
       this.$router.push({path: `users/adduser`})
     }
-
   }
 }
 </script>

@@ -52,23 +52,29 @@
             </b-row>
           </div>
           
-          <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="sm" :items="tableitems" :fields="tablefields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
-            <template slot="id" slot-scope="data">
-              {{data.item.id}}
-            </template>
-            <template slot="keyfield" slot-scope="data">
-              {{data.item.keyfield}}
-            </template>
-            <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.status)">{{data.item.status}}</b-badge>
-            </template>
-          </b-table>
-          <nav>
-            <b-pagination size="sm" :total-rows="getRowCount(tableitems)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
-          </nav>
+          <b-row>
+            <b-col sm="12">
+              <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="tableitems" :fields="tablefields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
+                <template slot="id" slot-scope="data">
+                  {{data.item.id}}
+                </template>
+                <template slot="keyfield" slot-scope="data">
+                  {{data.item.keyfield}}
+                </template>
+                <template slot="status" slot-scope="data">
+                  <b-badge :variant="getBadge(data.item.status)">{{data.item.status}}</b-badge>
+                </template>
+              </b-table>
+              <nav>
+                <b-pagination size="sm" :total-rows="getRowCount(tableitems)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+              </nav>
+            </b-col>
+          </b-row>
 
           <div slot="footer">
-            <b-button type="reset" size="sm" variant="secondary" @click="goBack"><i class="fa fa-chevron-left"></i> Atras</b-button>
+            <div class="pull-right">
+              <b-button type="reset" size="sm" variant="secondary" @click="goBack"><i class="fa fa-chevron-left"></i> Atras</b-button>
+            </div>
           </div>
         </b-card>
       </b-col>

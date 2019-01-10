@@ -1,7 +1,7 @@
 <template>
   <div class="animated fade-in">
     <b-row>
-      <b-col sm="6">
+      <b-col lg="6">
         <b-card>         
           <div slot="header">
             <strong>Usuario </strong><small>Agregar</small>
@@ -37,7 +37,8 @@
                       <b-form-select id="role"
                         v-model.trim="role"
                         class="form-control" :class="{ 'is-invalid': roleValidationError }"
-                        :options="roleOptions">
+                        :options="roleOptions"
+                        value="Rol...">
                       </b-form-select>
                   </b-input-group>
                   <div class="small text-danger" v-if="!roleValidationRequired">Campo requerido</div>
@@ -52,7 +53,8 @@
                       <b-form-select id="status"
                         v-model.trim="status"
                         class="form-control" :class="{ 'is-invalid': statusValidationError }"
-                        :options="statusOptions">
+                        :options="statusOptions"
+                        value="Estatus...">
                       </b-form-select>
                   </b-input-group>
                   <div class="small text-danger" v-if="!statusValidationRequired">Campo requerido</div>
@@ -62,7 +64,7 @@
           </b-form>
           <div slot="footer" class="pull-right">
             <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
-            <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="!formValidated"><i class="fa fa-save"></i> Guardar</b-button>
+            <b-button id="btn-guardar" type="submit" size="sm" variant="primary" :disabled="!formValidated"><i class="fa fa-save"></i> Guardar</b-button>
           </div>
         </b-card>
       </b-col>
@@ -71,7 +73,6 @@
 </template>
 
 <script>
-import { required, minLength, email } from 'vuelidate/lib/validators'
 export default {
   name: 'AddUser',
   data: () => {
@@ -81,7 +82,7 @@ export default {
       role: null,
       status: null,
       roleOptions: [
-        {value: null, text: 'Rol...'},
+        {value: null, text: 'Rol...', disabled: true},
         {value: 'Admin', text: 'Admin'},
         {value: 'Gerente', text: 'Gerente'},
         {value: 'Coordinador', text: 'Coordinador'},
@@ -89,7 +90,7 @@ export default {
         {value: 'Auditor', text: 'Auditor'}
       ],
       statusOptions: [
-        {value: null, text: 'Estatus...'},
+        {value: null, text: 'Estatus...', disabled: true},
         {value: 'Activo', text: 'Activo'},
         {value: 'Inactivo', text: 'Inactivo'}
       ]
