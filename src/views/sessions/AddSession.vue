@@ -31,6 +31,7 @@
                         v-model="department"
                         class="form-control" :class="{ 'is-invalid': departmentValidationError }"
                         :options="departmentOptions"
+                        :disabled="addSessionVar"
                         value="Departamento...">
                       </b-form-select>
                     </b-input-group>
@@ -48,6 +49,7 @@
                         v-model="location"
                         class="form-control" :class="{ 'is-invalid': locationValidationError }"
                         :options="locationOptions"
+                        :disabled="addSessionVar"
                         value="Ubicación...">
                       </b-form-select>
                     </b-input-group>
