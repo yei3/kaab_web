@@ -5,7 +5,7 @@
         <b-card>
           <div slot="header">
             <b-form>
-              <strong>{{ caption }}</strong><small> ID: 17</small>
+              <strong>{{ caption }}</strong><small> ID: {{ sessionID }}</small>
                 <small class="float-right text-muted">
                   2019/01/09 11:12:06 - Vigente
                 </small>
@@ -100,7 +100,7 @@
     </b-row>
 
     <!--MODAL-->
-    <b-modal title="Registrar activo" class="modal-success" v-model="scanModal" @ok="scanAsset" ok-variant="primary" cancel-title="Cancelar" ok-title="Guardar">
+    <b-modal title="Registrar activo" class="modal-success" v-model="scanModal" @ok="scanAsset" ok-variant="primary" @cancel="cancelScan" cancel-title="Cancelar" ok-title="Guardar">
       <div>
         <b-row>
           <b-col>
@@ -110,13 +110,13 @@
           </b-col>
         </b-row>
         <b-row v-show="scanBarcode">
-          <b-col md="12" lg="6">
+          <b-col lg="12">
             <b-card>
               <div slot="header">
                 <label class="small muted" for="keyfield">Estatus</label>
                 <strong> {{nuevo.status}} </strong>
                 <small class="float-right text-muted">
-                  ID Sesión: 17
+                  ID Sesión: {{ sessionID }}
                 </small>
               </div>
               <b-form>
@@ -130,8 +130,13 @@
                   <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
                 </b-form-group>
                 <b-form-group>
-                  <label class="small muted" for="asset">Activo</label>
-                  <b-form-input type="text" id="asset" v-model="nuevo.asset" placeholder="Introduce el activo"></b-form-input>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-cube" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input type="text" id="asset" v-model="nuevo.asset" placeholder="Introduce el activo"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="description">Descripción</label>
@@ -203,17 +208,17 @@
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
-                  <b-form-input type="text" id="locationDetail" v-model="nuevo.locationDetail" placeholder="Introduce de detalle de la ubicación"></b-form-input>
+                  <b-form-input type="text" id="locationDetail" v-model="nuevo.locationDetail" placeholder="Introduce el detalle de la ubicación"></b-form-input>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="comments">Comentarios</label>
-                  <b-form-input type="text" id="comments" v-model="nuevo.comments" placeholder="Introduce los comentarios"></b-form-input>
+                  <b-form-input type="text" id="comments" v-model="nuevo.comments" placeholder="Introduce comentarios adicionales"></b-form-input>
                 </b-form-group>
               </b-form>
             </b-card>
           </b-col>
 
-          <b-col md="12" lg="6">
+          <b-col lg="12">
             <b-card
               header-tag="header"
               footer-tag="footer">
@@ -229,7 +234,7 @@
                             controls
                             indicators
                             background="#ababab"
-                            :interval="4000"
+                            :interval="0"
                             img-width="1024"
                             img-height="768"
                             v-model="slide"
@@ -258,9 +263,165 @@
             </b-card>
           </b-col>
         </b-row>
-
       </div>
     </b-modal>
+
+    <!--MODAL-->
+    <b-modal title="Detalle de activo" v-model="assetModal" ok-only ok-variant="secondary" ok-title="Cerrar">
+      <div>
+        <b-row>
+          <b-col lg="12">
+            <b-card>
+              <div slot="header">
+                <strong> {{ nuevo.status }} </strong>
+                <small> ID: {{ nuevo.id }} </small>
+                <small class="float-right text-muted">
+                  ID Sesión: {{ sessionID }}
+                </small>
+              </div>
+              <b-form>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-barcode" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input type="text" id="keyfield" v-model="nuevo.keyfield" :disabled="true"></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-cube" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input type="text" id="asset" v-model="nuevo.asset" :disabled="true"></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="description">Descripción</label>
+                  <b-form-input type="text" id="description" v-model="nuevo.description" :disabled="true"></b-form-input>
+                </b-form-group>
+                <b-row>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="brand">Marca</label>
+                      <b-form-input type="text" id="brand" v-model="nuevo.brand" :disabled="true"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="model">Modelo</label>
+                      <b-form-input type="text" id="model" v-model="tableitems.model" :disabled="true"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="serial">Serie</label>
+                      <b-form-input type="text" id="brand" v-model="nuevo.serial" :disabled="true"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="cost">Costo</label>
+                      <b-form-input type="text" id="cost" v-model="nuevo.cost" :disabled="true"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
+                    <b-form-group>
+                      <label class="small muted" for="cost">Tipo de activo</label>
+                      <b-form-input type="text" id="assetType" v-model="nuevo.assetType" :disabled="true"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-sitemap" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="department"
+                      v-model="nuevo.department"
+                      class="form-control"
+                      :disabled="true"
+                      :options="departmentOptions">
+                    </b-form-select>
+                  </b-input-group>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="location"
+                      v-model="nuevo.location"
+                      class="form-control"
+                      :disabled="true"
+                      :options="locationOptions">
+                    </b-form-select>
+                  </b-input-group>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
+                  <b-form-input type="text" id="locationDetail" v-model="nuevo.locationDetail" :disabled="true"></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="comments">Comentarios</label>
+                  <b-form-input type="text" id="comments" v-model="nuevo.comments" :disabled="true"></b-form-input>
+                </b-form-group>
+              </b-form>
+            </b-card>
+          </b-col>
+
+          <b-col lg="12">
+            <b-card
+              header-tag="header"
+              footer-tag="footer">
+              <div slot="header">
+                <i class="fa fa-align-justify"></i><strong> Imágenes del activo</strong>
+                <div class="card-header-actions">
+                  <b-button type="button" variant="primary" class="float-right" size="sm"><i class="fa fa-cloud-download"></i></b-button>
+                </div>
+              </div>
+              <div>
+                <b-carousel id="carousel1"
+                            style="text-shadow: 1px 1px 2px #333;"
+                            controls
+                            indicators
+                            background="#ababab"
+                            :interval="0"
+                            img-width="1024"
+                            img-height="768"
+                            v-model="slide"
+                            @sliding-start="onSlideStart"
+                            @sliding-end="onSlideEnd"
+                >
+
+                  <!-- Text slides with image -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/2/"
+                  ></b-carousel-slide>
+
+                  <!-- Slides with custom text -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/4/">
+                  </b-carousel-slide>
+
+                  <!-- Slides with image only -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/8/">
+                  </b-carousel-slide>
+                </b-carousel>
+
+                <p class="small muted mt-4">
+                  Imagen: {{ slide + 1 }}
+                </p>
+
+              </div>
+            </b-card>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
+
   </div>
   
 </template>
@@ -300,6 +461,9 @@ export default {
     return {
       validateSelectsVar: false,
       scanModal: false,
+      assetModal: false,
+      itemSelected: 0,
+      sessionID: 17,
       slide: 0,
       userName: 'Ana Sánchez',
       addSessionVar: false,
@@ -347,7 +511,9 @@ export default {
       nuevo: {
         id: 1, keyfield: 'HGM0012345', asset: 'Silla', description: 'Silla de madera', brand: 'ND', model: 'ND', serial:'ND', cost: '180.00', assetType: 'Mobiliario', locationDetail: '', comments: '', status: 'Conciliado'
       },
-      tableitems: [],
+      tableitems:  [ 
+        //id, keyfield, asset, description, brand, model, serial, cost, assetType, locationDetail, comments, status 
+      ],
       tablefields: [
         {label: 'ID', key: 'id', sortable: true},
         {label: 'Clave', key: 'keyfield', sortable: true},
@@ -415,11 +581,13 @@ export default {
       return item.length
     },
     regLink (idsession,id) {
-      return `${idsession.toString()}/asset/${id.toString()}`
+      return `session/sessionID/asset/${id.toString()}`
     },
     rowClicked (item) {
-      const regLink = this.regLink(this.$route.params.idsession,item.id)
-      this.$router.push({ path: regLink })
+      //const regLink = this.regLink(this.$route.params.idsession,item.id)
+      //this.$router.push({ path: regLink })
+      this.itemSelected = item.id - 1
+      this.assetModal = true
     },
     addSessionClicked () {
       this.addSessionVar = true
@@ -431,6 +599,10 @@ export default {
     },
     scanAsset () {
       this.tableitems.push(this.nuevo)
+      this.scanBarcode = false
+    },
+    cancelScan () {
+      this.scanBarcode = false
     },
     closeSession () {
 
