@@ -66,6 +66,10 @@
               </b-col>
             </b-row>-->
             <b-form-group>
+              <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
+              <b-form-input type="text" id="locationDetail" v-model="items($route.params.idasset).locationDetail" :disabled="true" placeholder="Introduce de detalle de la ubicación"></b-form-input>
+            </b-form-group>
+            <b-form-group>
               <label class="small muted" for="comments">Comentarios</label>
               <b-form-input type="text" id="comments" v-model="items($route.params.idasset).comments" :disabled="true" placeholder="Introduce los comentarios"></b-form-input>
             </b-form-group>

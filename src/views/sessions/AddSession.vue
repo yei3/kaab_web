@@ -69,7 +69,7 @@
           <b-row>
             <b-col>
               <div class="text-center mb-4">
-                <b-button v-show="addSessionVar" type="button" size="lg" variant="success" @click="scan" ><i class="fa fa-barcode"></i> REGISTRAR</b-button>
+                <b-button v-show="addSessionVar" type="button" size="lg" variant="success" @click="scanModal = true" ><i class="fa fa-barcode"></i> REGISTRAR </b-button>
               </div>
             </b-col>
           </b-row>
@@ -92,12 +92,175 @@
           <div slot="footer" v-show="addSessionVar">
             <div class="pull-right">
               <b-button type="reset" size="sm" variant="secondary" @click="goBack" class="mr-1"><i class="fa fa-chevron-left"></i> Atras</b-button>
-              <b-button v-show="addSessionVar" type="button" size="sm" variant="primary" @click="saveSession" :disabled="!formValidated"><i class="fa fa-stop"></i> Terminar</b-button>
+              <b-button v-show="addSessionVar" type="button" size="sm" variant="primary" @click="closeSession" :disabled="!formValidated"><i class="fa fa-stop"></i> Terminar</b-button>
             </div>
           </div>
         </b-card>
       </b-col>
     </b-row>
+
+    <!--MODAL-->
+    <b-modal title="Registrar activo" class="modal-success" v-model="scanModal" @ok="scanAsset" ok-variant="primary" cancel-title="Cancelar" ok-title="Guardar">
+      <div>
+        <b-row>
+          <b-col>
+            <div class="text-center mb-4">
+              <b-button v-show="!scanBarcode" type="button" variant="success" @click="scaner" ><i class="fa fa-camera"></i> Cámara para scanear código de barras </b-button>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row v-show="scanBarcode">
+          <b-col md="12" lg="6">
+            <b-card>
+              <div slot="header">
+                <label class="small muted" for="keyfield">Estatus</label>
+                <strong> {{nuevo.status}} </strong>
+                <small class="float-right text-muted">
+                  ID Sesión: 17
+                </small>
+              </div>
+              <b-form>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-barcode" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input type="text" id="keyfield" v-model="nuevo.keyfield" :disabled="true" placeholder="Introduce la clave"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="asset">Activo</label>
+                  <b-form-input type="text" id="asset" v-model="nuevo.asset" placeholder="Introduce el activo"></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="description">Descripción</label>
+                  <b-form-input type="text" id="description" v-model="nuevo.description" placeholder="Introduce la descripción"></b-form-input>
+                </b-form-group>
+                <b-row>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="brand">Marca</label>
+                      <b-form-input type="text" id="brand" v-model="nuevo.brand" placeholder="Introduce la marca"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="model">Modelo</label>
+                      <b-form-input type="text" id="model" v-model="nuevo.model" placeholder="Introduce el modelo"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="serial">Serie</label>
+                      <b-form-input type="text" id="brand" v-model="nuevo.serial" placeholder="Introduce el número de serie"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="cost">Costo</label>
+                      <b-form-input type="text" id="cost" v-model="nuevo.cost" placeholder="Introduce el costo"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
+                    <b-form-group>
+                      <label class="small muted" for="assetType">Tipo de activo</label>
+                      <b-form-select id="assetType" v-model="nuevo.assetType" 
+                        :options="['Tipo de activo...', 'Mobiliario','Equipo','Maquinaria','Instrumental','Vehículo', 'Inmueble', 'Terreno', 'Bien natural', 'Otro']">
+                      </b-form-select>
+                  </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-sitemap" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="department"
+                      v-model="nuevo.department"
+                      class="form-control" :class="{ 'is-invalid': departmentValidationError }"
+                      :options="departmentOptions">
+                    </b-form-select>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="sessionLocation"
+                      v-model="nuevo.location"
+                      class="form-control" :class="{ 'is-invalid': locationValidationError }"
+                      :options="locationOptions">
+                    </b-form-select>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!locationValidationRequired">Campo requerido</div>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
+                  <b-form-input type="text" id="locationDetail" v-model="nuevo.locationDetail" placeholder="Introduce de detalle de la ubicación"></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="comments">Comentarios</label>
+                  <b-form-input type="text" id="comments" v-model="nuevo.comments" placeholder="Introduce los comentarios"></b-form-input>
+                </b-form-group>
+              </b-form>
+            </b-card>
+          </b-col>
+
+          <b-col md="12" lg="6">
+            <b-card
+              header-tag="header"
+              footer-tag="footer">
+              <div slot="header">
+                <i class="fa fa-align-justify"></i><strong> Imágenes del activo</strong>
+                <div class="card-header-actions">
+                  <b-button type="button" variant="primary" class="float-right" size="sm"><i class="fa fa-plus"></i></b-button>
+                </div>
+              </div>
+              <div>
+                <b-carousel id="carousel1"
+                            style="text-shadow: 1px 1px 2px #333;"
+                            controls
+                            indicators
+                            background="#ababab"
+                            :interval="4000"
+                            img-width="1024"
+                            img-height="768"
+                            v-model="slide"
+                            @sliding-start="onSlideStart"
+                            @sliding-end="onSlideEnd"
+                >
+
+                  <!-- Text slides with image -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/2/"
+                  ></b-carousel-slide>
+
+                  <!-- Slides with custom text -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/4/">
+                  </b-carousel-slide>
+
+                  <!-- Slides with image only -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/8/">
+                  </b-carousel-slide>
+                </b-carousel>
+
+                <p class="small muted mt-4">
+                  Imagen: {{ slide + 1 }}
+                </p>
+
+              </div>
+            </b-card>
+          </b-col>
+        </b-row>
+
+      </div>
+    </b-modal>
   </div>
   
 </template>
@@ -136,8 +299,11 @@ export default {
   data: () => {
     return {
       validateSelectsVar: false,
+      scanModal: false,
+      slide: 0,
       userName: 'Ana Sánchez',
       addSessionVar: false,
+      scanBarcode: false,
       department: null,
       departmentOptions: [
         {value: null, text: 'Departamento...', disabled: true},
@@ -178,7 +344,10 @@ export default {
         {label: 'Ubicación', key: 'sessionLocationName', sortable: true},
         {label: 'Estatus', key: 'status', sortable: true}
       ],
-      tableitems: assetsData.filter((asset) => asset.id > 0),
+      nuevo: {
+        id: 1, keyfield: 'HGM0012345', asset: 'Silla', description: 'Silla de madera', brand: 'ND', model: 'ND', serial:'ND', cost: '180.00', assetType: 'Mobiliario', locationDetail: '', comments: '', status: 'Conciliado'
+      },
+      tableitems: [],
       tablefields: [
         {label: 'ID', key: 'id', sortable: true},
         {label: 'Clave', key: 'keyfield', sortable: true},
@@ -191,7 +360,6 @@ export default {
       currentPage: 1,
       perPage: 5,
       totalRows: 0
-      
     }
   },
   computed: {
@@ -254,13 +422,26 @@ export default {
       this.$router.push({ path: regLink })
     },
     addSessionClicked () {
-      this.addSessionVar = true     
+      this.addSessionVar = true
+      this.nuevo.department = this.department
+      this.nuevo.location = this.location
     },
-    scan () {
+    scaner () {
+      this.scanBarcode = true
+    },
+    scanAsset () {
+      this.tableitems.push(this.nuevo)
+    },
+    closeSession () {
 
     },
-    saveSession () {
-
+    onSlideStart (slide) {
+      console.log('onSlideStart', slide)
+      this.sliding = true
+    },
+    onSlideEnd (slide) {
+      console.log('onSlideEnd', slide)
+      this.sliding = false
     }
   }
 }
