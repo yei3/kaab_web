@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col lg="12">
+    <b-col>
       <transition name="slide">
       <b-card>
         <div slot="header">
@@ -31,13 +31,14 @@
 
 
 <script>
-import usersData from './UsersData'
+import sessionsData from './SessionsData'
+import { URLSearchParams } from 'url';
 export default {
-  name: 'Users',
+  name: 'Sessions',
   props: {
     caption: {
       type: String,
-      default: 'Usuarios'
+      default: 'Sesiones de registro'
     },
     hover: {
       type: Boolean,
@@ -62,11 +63,13 @@ export default {
   },
   data: () => {
     return {
-      items: usersData.filter((user) => user.id > 0),
+      items: sessionsData.filter((session) => session.id > 0),
       fields: [
         {label: 'ID', key: 'id', sortable: true},
-        {label: 'Nombre', key: 'name', sortable: true},
-        {label: 'Rol', key: 'role', sortable: true},
+        {label: 'Inicio', key: 'creationDateTime', sortable: true},
+        {label: 'Usuario', key: 'userName', sortable: true},
+        {label: 'Departamento', key: 'sessionDepartmentName', sortable: true},
+        {label: 'Ubicación', key: 'sessionLocationName', sortable: true},
         {label: 'Estatus', key: 'status', sortable: true}
       ],
       currentPage: 1,
@@ -78,8 +81,8 @@ export default {
   },
   methods: {
     getBadge (status) {
-      return status === 'Activo' ? 'success'
-        : status === 'Inactivo' ? 'secondary'
+      return status === 'Activa' ? 'success'
+        : status === 'Terminada' ? 'secondary'
           : status === 'Pendiente' ? 'warning'
             : status === 'Eliminado' ? 'danger' : 'primary'
     },
@@ -87,14 +90,14 @@ export default {
       return items.length
     },
     regLink (id) {
-      return `users/user/${id.toString()}`
+      return `sessions/session/${id.toString()}`
     },
     rowClicked (item) {
       const regLink = this.regLink(item.id)
       this.$router.push({path: regLink})
     },
     addClick () {
-      this.$router.push({path: `users/adduser`})
+      this.$router.push({path: `sessions/addsession`})
     }
   }
 }

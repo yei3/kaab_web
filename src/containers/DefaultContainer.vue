@@ -3,29 +3,24 @@
     <AppHeader fixed>
       <SidebarToggler class="d-lg-none" display="md" mobile />
       <b-link class="navbar-brand" to="#">
-        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="CoreUI Logo">
-        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">
+        <img class="navbar-brand-full" src="img/logo.png" width="100" height="40" alt="Kaab Logo">
+        <img class="navbar-brand-minimized" src="img/logo-symbol.png" width="50" height="50" alt="Kaab Logo">
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
-      <b-navbar-nav class="d-md-down-none">
-        <b-nav-item class="px-3" to="/dashboard">Dashboard</b-nav-item>
-        <b-nav-item class="px-3" to="/users" exact>Usuarios</b-nav-item>
-        <b-nav-item class="px-3">Configuración</b-nav-item>
+      <b-navbar-nav>
+        <!--<b-nav-item class="px-3" to="/dashboard">Dashboard</b-nav-item>
+        <b-nav-text class="px-3">Proyecto:</b-nav-text>
+        <b-nav-form class="px-0">
+          <b-form-select id="basicSelect"
+            :plain="true"
+            :options="['HGM-2019','INAPESCA-2019', 'VINCOURT-2019']"
+            value="HGM-2019">
+          </b-form-select>
+        </b-nav-form>-->
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item class="d-md-down-none">
-          <i class="icon-bell"></i>
-          <b-badge pill variant="danger">5</b-badge>
-        </b-nav-item>
-        <b-nav-item class="d-md-down-none">
-          <i class="icon-list"></i>
-        </b-nav-item>
-        <b-nav-item class="d-md-down-none">
-          <i class="icon-location-pin"></i>
-        </b-nav-item>
         <DefaultHeaderDropdownAccnt/>
       </b-navbar-nav>
-      <AsideToggler class="d-none d-lg-block" />
       <!--<AsideToggler class="d-lg-none" mobile />-->
     </AppHeader>
     <div class="app-body">
@@ -51,7 +46,7 @@
       <!--footer-->
       <div>
         <a href="http://yei3.com/kaab">Kaab Inventarios</a>
-        <span class="ml-1">&copy; 2018 Yei3 Software.</span>
+        <span class="ml-1">&copy; 2018</span>
       </div>
       <div class="ml-auto">
         <span class="mr-1">Hecho con <i class="fa fa-heart"></i> por</span>

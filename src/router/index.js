@@ -54,9 +54,16 @@ const Page500 = () => import('@/views/pages/Page500')
 const Login = () => import('@/views/pages/Login')
 const Register = () => import('@/views/pages/Register')
 
-// Users
+// Users *
 const Users = () => import('@/views/users/Users')
 const User = () => import('@/views/users/User')
+const AddUser = () => import('@/views/users/AddUser')
+
+// Sessions *
+const Sessions = () => import('@/views/sessions/Sessions')
+const Session = () => import('@/views/sessions/Session')
+const Asset = () => import('@/views/sessions/Asset')
+const AddSession = () => import('@/views/sessions/AddSession')
 
 Vue.use(Router)
 
@@ -108,22 +115,59 @@ export default new Router({
         },
         {
           path: 'users',
-          meta: { label: 'Users'},
+          meta: { label: 'Usuarios' },
           component: {
             render (c) { return c('router-view') }
           },
           children: [
             {
               path: '',
-              component: Users,
+              component: Users
             },
             {
-              path: ':id',
-              meta: { label: 'User Details'},
+              path: 'user/:id',
+              meta: { label: 'Detalle de usuario' },
               name: 'User',
-              component: User,
+              component: User
+            },
+            {
+              path: 'adduser',
+              meta: { label: 'Agregar usuario' },
+              name: 'AddUser',
+              component: AddUser
             },
           ]
+        },
+        {
+          path: 'sessions',
+          meta: { label: 'Sesiones de registro' },
+            component: {
+            render (c) { return c('router-view') }
+            },
+          children: [
+            {
+              path: '',
+              component: Sessions
+            },
+            {
+              path: 'addsession',
+              meta: { label: 'Nueva sesión de registro' },
+              name: 'AddSession',
+              component: AddSession
+            },
+            {
+              path: 'session/:idsession',
+              meta: { label: 'Detalle de sesión' },
+              name: 'Session',
+              component: Session
+            },  
+            {
+              path: 'session/:idsession/asset/:idasset',
+              meta: { label: 'Detalle de activo' },
+              name: 'Asset',
+              component: Asset 
+            }
+          ],
         },
         {
           path: 'base',

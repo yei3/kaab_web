@@ -3,15 +3,15 @@ export default {
     {
       name: 'Dashboard',
       url: '/dashboard',
-      icon: 'icon-speedometer',
-      badge: {
+      icon: 'fa fa-dashboard',
+      /*badge: {
         variant: 'primary',
         text: 'NEW'
-      }
+      }*/
     },
     {
       title: true,
-      name: 'Theme',
+      name: 'General',
       class: '',
       wrapper: {
         element: '',
@@ -19,18 +19,50 @@ export default {
       }
     },
     {
-      name: 'Colors',
-      url: '/theme/colors',
-      icon: 'icon-drop'
-    },
-    {
-      name: 'Typography',
-      url: '/theme/typography',
-      icon: 'icon-pencil'
+    name: 'Inicio',
+      url: '/home',
+      icon: 'fa fa-home',
+      children: [
+      {
+        name: 'Usuarios',
+        url: '/users',
+        icon: 'fa fa-user'
+      },
+      {
+        name: 'Empresas',
+        url: '/companies',
+        icon: 'fa fa-industry'
+      },
+      {
+        name: 'Contactos',
+        url: '/contacts',
+        icon: 'fa fa-address-book'
+      },
+      {
+        name: 'Departamentos',
+        url: '/departments',
+        icon: 'fa fa-sitemap'
+      },
+      {
+        name: 'Ubicaciones',
+        url: '/locations',
+        icon: 'fa fa-building'
+      },
+      {
+        name: 'Centros de Costo',
+        url: '/costcenters',
+        icon: 'fa fa-cc'
+      },
+      {
+        name: 'Cuentas contables',
+        url: '/accountingaccounts',
+        icon: 'fa fa-usd'
+      }
+    ]
     },
     {
       title: true,
-      name: 'Components',
+      name: 'Inventarios',
       class: '',
       wrapper: {
         element: '',
@@ -38,236 +70,73 @@ export default {
       }
     },
     {
-      name: 'Base',
-      url: '/base',
-      icon: 'icon-puzzle',
+      name: 'Operación',
+      url: '/op',
+      icon: 'fa fa-cogs',
       children: [
         {
-          name: 'Breadcrumbs',
-          url: '/base/breadcrumbs',
-          icon: 'icon-puzzle'
+          name: 'Proyectos',
+          url: '/projects',
+          icon: 'fa fa-book'
         },
         {
-          name: 'Cards',
-          url: '/base/cards',
-          icon: 'icon-puzzle'
+          name: 'Base inicial',
+          url: '/assets',
+          icon: 'fa fa-database'
         },
         {
-          name: 'Carousels',
-          url: '/base/carousels',
-          icon: 'icon-puzzle'
+          name: 'Sesiones de registro',
+          url: '/sessions',
+          icon: 'fa fa-barcode'
         },
         {
-          name: 'Collapses',
-          url: '/base/collapses',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Forms',
-          url: '/base/forms',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Jumbotrons',
-          url: '/base/jumbotrons',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'List Groups',
-          url: '/base/list-groups',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Navs',
-          url: '/base/navs',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Navbars',
-          url: '/base/navbars',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Paginations',
-          url: '/base/paginations',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Popovers',
-          url: '/base/popovers',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Progress Bars',
-          url: '/base/progress-bars',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Switches',
-          url: '/base/switches',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Tables',
-          url: '/base/tables',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Tabs',
-          url: '/base/tabs',
-          icon: 'icon-puzzle'
-        },
-        {
-          name: 'Tooltips',
-          url: '/base/tooltips',
-          icon: 'icon-puzzle'
+          name: 'Activos',
+          url: '/finalassets',
+          icon: 'fa fa-cubes'
         }
       ]
     },
     {
-      name: 'Buttons',
-      url: '/buttons',
-      icon: 'icon-cursor',
+      name: 'Reportes',
+      url: '/reports',
+      icon: 'fa fa-file-text',
       children: [
         {
-          name: 'Buttons',
-          url: '/buttons/standard-buttons',
-          icon: 'icon-cursor'
+          name: 'Inventariados',
+          url: '/reports/registered',
+          icon: 'fa fa-file-text'
         },
         {
-          name: 'Button Dropdowns',
-          url: '/buttons/dropdowns',
-          icon: 'icon-cursor'
+          name: 'Conciliados',
+          url: '/reports/reconciled',
+          icon: 'fa fa-file-text'
         },
         {
-          name: 'Button Groups',
-          url: '/buttons/button-groups',
-          icon: 'icon-cursor'
+          name: 'No inventariados',
+          url: '/reports/notregistered',
+          icon: 'fa fa-file-text'
         },
         {
-          name: 'Brand Buttons',
-          url: '/buttons/brand-buttons',
-          icon: 'icon-cursor'
+          name: 'C. de ubicación',
+          url: '/reports/locationchanges',
+          icon: 'fa fa-file-text'
+        },
+        {
+          name: 'C. de activo',
+          url: '/reports/assetchanges',
+          icon: 'fa fa-file-text'
+        },
+        {
+          name: 'Activos en demasía',
+          url: '/reports/excess',
+          icon: 'fa fa-file-text'
+        },
+        {
+          name: 'Etiqueta erronea',
+          url: '/reports/wronglabel',
+          icon: 'fa fa-file-text'
         }
       ]
-    },
-    {
-      name: 'Charts',
-      url: '/charts',
-      icon: 'icon-pie-chart'
-    },
-    {
-      name: 'Icons',
-      url: '/icons',
-      icon: 'icon-star',
-      children: [
-        {
-          name: 'CoreUI Icons',
-          url: '/icons/coreui-icons',
-          icon: 'icon-star',
-          badge: {
-            variant: 'info',
-            text: 'NEW'
-          }
-        },
-        {
-          name: 'Flags',
-          url: '/icons/flags',
-          icon: 'icon-star'
-        },
-        {
-          name: 'Font Awesome',
-          url: '/icons/font-awesome',
-          icon: 'icon-star',
-          badge: {
-            variant: 'secondary',
-            text: '4.7'
-          }
-        },
-        {
-          name: 'Simple Line Icons',
-          url: '/icons/simple-line-icons',
-          icon: 'icon-star'
-        }
-      ]
-    },
-    {
-      name: 'Notifications',
-      url: '/notifications',
-      icon: 'icon-bell',
-      children: [
-        {
-          name: 'Alerts',
-          url: '/notifications/alerts',
-          icon: 'icon-bell'
-        },
-        {
-          name: 'Badges',
-          url: '/notifications/badges',
-          icon: 'icon-bell'
-        },
-        {
-          name: 'Modals',
-          url: '/notifications/modals',
-          icon: 'icon-bell'
-        }
-      ]
-    },
-    {
-      name: 'Widgets',
-      url: '/widgets',
-      icon: 'icon-calculator',
-      badge: {
-        variant: 'primary',
-        text: 'NEW'
-      }
-    },
-    {
-      divider: true
-    },
-    {
-      title: true,
-      name: 'Extras'
-    },
-    {
-      name: 'Pages',
-      url: '/pages',
-      icon: 'icon-star',
-      children: [
-        {
-          name: 'Login',
-          url: '/pages/login',
-          icon: 'icon-star'
-        },
-        {
-          name: 'Register',
-          url: '/pages/register',
-          icon: 'icon-star'
-        },
-        {
-          name: 'Error 404',
-          url: '/pages/404',
-          icon: 'icon-star'
-        },
-        {
-          name: 'Error 500',
-          url: '/pages/500',
-          icon: 'icon-star'
-        }
-      ]
-    },
-    {
-      name: 'Download CoreUI',
-      url: 'http://coreui.io/vue/',
-      icon: 'icon-cloud-download',
-      class: 'mt-auto',
-      variant: 'success'
-    },
-    {
-      name: 'Try CoreUI PRO',
-      url: 'http://coreui.io/pro/vue/',
-      icon: 'icon-layers',
-      variant: 'danger'
     }
   ]
 }
