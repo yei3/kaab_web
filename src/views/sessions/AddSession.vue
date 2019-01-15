@@ -71,7 +71,12 @@
           <b-row>
             <b-col>
               <div class="text-center mb-4">
-                <b-button v-show="addSessionVar" type="button" size="lg" variant="success" @click="scanModal = true" ><i class="fa fa-barcode"></i> REGISTRAR </b-button>
+                <b-button v-show="addSessionVar" type="button" size="lg" variant="primary" @click="scanModal = true" ><i class="fa fa-barcode"></i> ESCANEAR </b-button>
+              </div>
+            </b-col>
+            <b-col>
+              <div class="text-center mb-4">
+                <b-button v-show="addSessionVar" type="button" size="lg" variant="primary" @click="addModal = true" ><i class="fa fa-cube"></i> AGREGAR SIN ETIQUETA </b-button>
               </div>
             </b-col>
           </b-row>
@@ -102,16 +107,188 @@
     </b-row>
 
     <!--MODAL-->
-    <b-modal title="Registrar activo" class="modal-success" v-model="scanModal" @ok="scanAsset" ok-variant="primary" @cancel="cancelScan" cancel-title="Cancelar" ok-title="Guardar">
+    <b-modal title="Escanear activo" v-model="scanModal" @ok="scanAsset" ok-variant="primary" @cancel="cancelScan" cancel-title="Cancelar" ok-title="Guardar" ref="scanModal" @hide="cancelScan">
       <div>
         <b-row>
           <b-col>
             <div class="text-center mb-4">
-              <b-button v-show="!scanBarcode" type="button" variant="success" @click="scaner" ><i class="fa fa-camera"></i> Cámara para scanear código de barras </b-button>
+              <b-button v-show="!scanBarcode" type="button" variant="primary" @click="scaner" ><i class="fa fa-camera"></i> Cámara para scanear código de barras </b-button>
             </div>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col>
+            <b-input-group v-show="!scanBarcode">
+              <b-input-group-prepend>
+                <b-input-group-text><i class="fa fa-barcode" ></i></b-input-group-text>
+              </b-input-group-prepend>
+              <b-form-input type="text" id="keyfield" v-model="find.keyfield" placeholder="Introduce la clave"></b-form-input>
+              <b-button type="button" variant="primary" @click="scaner" ><i class="fa fa-search"></i> Buscar </b-button>
+            </b-input-group>
+            <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
+          </b-col>
+        </b-row>
         <b-row v-show="scanBarcode">
+          <b-col lg="12">
+            <b-card>
+              <div slot="header">
+                <label class="small muted" for="keyfield">Estatus</label>
+                <strong> {{find.status}} </strong>
+                <small class="float-right text-muted">
+                  ID Sesión: {{ sessionID }}
+                </small>
+              </div>
+              <b-form>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-barcode" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input type="text" id="keyfield" v-model="find.keyfield" :disabled="true" placeholder="Introduce la clave"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-cube" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input type="text" id="asset" v-model="find.asset" placeholder="Introduce el activo"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="description">Descripción</label>
+                  <b-form-input type="text" id="description" v-model="find.description" placeholder="Introduce la descripción"></b-form-input>
+                </b-form-group>
+                <b-row>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="brand">Marca</label>
+                      <b-form-input type="text" id="brand" v-model="find.brand" placeholder="Introduce la marca"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="model">Modelo</label>
+                      <b-form-input type="text" id="model" v-model="find.model" placeholder="Introduce el modelo"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="serial">Serie</label>
+                      <b-form-input type="text" id="brand" v-model="find.serial" placeholder="Introduce el número de serie"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col sm="6">
+                    <b-form-group>
+                      <label class="small muted" for="cost">Costo</label>
+                      <b-form-input type="text" id="cost" v-model="find.cost" placeholder="Introduce el costo"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
+                    <b-form-group>
+                      <label class="small muted" for="assetType">Tipo de activo</label>
+                      <b-form-select id="assetType" v-model="find.assetType" 
+                        :options="['Tipo de activo...', 'Mobiliario','Equipo','Maquinaria','Instrumental','Vehículo', 'Inmueble', 'Terreno', 'Bien natural', 'Otro']">
+                      </b-form-select>
+                  </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-sitemap" ></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="department"
+                      v-model="find.department"
+                      class="form-control" :class="{ 'is-invalid': departmentValidationError }"
+                      :options="departmentOptions">
+                    </b-form-select>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="sessionLocation"
+                      v-model="find.location"
+                      class="form-control" :class="{ 'is-invalid': locationValidationError }"
+                      :options="locationOptions">
+                    </b-form-select>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!locationValidationRequired">Campo requerido</div>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
+                  <b-form-input type="text" id="locationDetail" v-model="find.locationDetail" placeholder="Introduce el detalle de la ubicación"></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <label class="small muted" for="comments">Comentarios</label>
+                  <b-form-input type="text" id="comments" v-model="find.comments" placeholder="Introduce comentarios adicionales"></b-form-input>
+                </b-form-group>
+              </b-form>
+            </b-card>
+          </b-col>
+
+          <b-col lg="12">
+            <b-card
+              header-tag="header"
+              footer-tag="footer">
+              <div slot="header">
+                <i class="fa fa-align-justify"></i><strong> Imágenes del activo</strong>
+                <div class="card-header-actions">
+                  <b-button type="button" variant="primary" class="float-right" size="sm"><i class="fa fa-plus"></i></b-button>
+                </div>
+              </div>
+              <div>
+                <b-carousel id="carousel1"
+                            style="text-shadow: 1px 1px 2px #333;"
+                            controls
+                            indicators
+                            background="#ababab"
+                            :interval="0"
+                            img-width="1024"
+                            img-height="768"
+                            v-model="slide"
+                            @sliding-start="onSlideStart"
+                            @sliding-end="onSlideEnd"
+                >
+
+                  <!-- Text slides with image -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/2/"
+                  ></b-carousel-slide>
+
+                  <!-- Slides with custom text -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/4/">
+                  </b-carousel-slide>
+
+                  <!-- Slides with image only -->
+                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/8/">
+                  </b-carousel-slide>
+                </b-carousel>
+
+                <p class="small muted mt-4">
+                  Imagen: {{ slide + 1 }}
+                </p>
+
+              </div>
+            </b-card>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
+
+    <!--MODAL-->
+    <b-modal title="Agregar activo sin etiqueta" v-model="addModal" @ok="addAsset" ok-variant="primary" cancel-title="Cancelar" ok-title="Guardar" ref="addModal" @hide="cancelAdd">
+      <div>
+        <b-row>
           <b-col lg="12">
             <b-card>
               <div slot="header">
@@ -127,7 +304,7 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-barcode" ></i></b-input-group-text>
                     </b-input-group-prepend>
-                    <b-form-input type="text" id="keyfield" v-model="nuevo.keyfield" :disabled="true" placeholder="Introduce la clave"></b-form-input>
+                    <b-form-input type="text" id="keyfield" v-model="nuevo.keyfield" :disabled="true" placeholder="Sin clave"></b-form-input>
                   </b-input-group>
                   <div class="small text-danger" v-if="!departmentValidationRequired">Campo requerido</div>
                 </b-form-group>
@@ -245,20 +422,10 @@
                 >
 
                   <!-- Text slides with image -->
-                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/2/"
-                  ></b-carousel-slide>
-
-                  <!-- Slides with custom text -->
-                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/4/">
-                  </b-carousel-slide>
-
-                  <!-- Slides with image only -->
-                  <b-carousel-slide img-src="https://lorempixel.com/1024/768/technics/8/">
-                  </b-carousel-slide>
                 </b-carousel>
 
                 <p class="small muted mt-4">
-                  Imagen: {{ slide + 1 }}
+                  Imagen: {{ slide }}
                 </p>
 
               </div>
@@ -275,8 +442,8 @@
           <b-col lg="12">
             <b-card>
               <div slot="header">
-                <strong> {{ nuevo.status }} </strong>
-                <small> ID: {{ nuevo.id }} </small>
+                <strong> {{ current.status }} </strong>
+                <small> ID: {{ current.id }} </small>
                 <small class="float-right text-muted">
                   ID Sesión: {{ sessionID }}
                 </small>
@@ -287,7 +454,7 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-barcode" ></i></b-input-group-text>
                     </b-input-group-prepend>
-                    <b-form-input type="text" id="keyfield" v-model="nuevo.keyfield" :disabled="true"></b-form-input>
+                    <b-form-input type="text" id="keyfield" v-model="current.keyfield" :disabled="true"></b-form-input>
                   </b-input-group>
                 </b-form-group>
                 <b-form-group>
@@ -295,24 +462,24 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-cube" ></i></b-input-group-text>
                     </b-input-group-prepend>
-                    <b-form-input type="text" id="asset" v-model="nuevo.asset" :disabled="true"></b-form-input>
+                    <b-form-input type="text" id="asset" v-model="current.asset" :disabled="true"></b-form-input>
                   </b-input-group>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="description">Descripción</label>
-                  <b-form-input type="text" id="description" v-model="nuevo.description" :disabled="true"></b-form-input>
+                  <b-form-input type="text" id="description" v-model="current.description" :disabled="true"></b-form-input>
                 </b-form-group>
                 <b-row>
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="brand">Marca</label>
-                      <b-form-input type="text" id="brand" v-model="nuevo.brand" :disabled="true"></b-form-input>
+                      <b-form-input type="text" id="brand" v-model="current.brand" :disabled="true"></b-form-input>
                     </b-form-group>
                   </b-col>
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="model">Modelo</label>
-                      <b-form-input type="text" id="model" v-model="tableitems.model" :disabled="true"></b-form-input>
+                      <b-form-input type="text" id="model" v-model="current.model" :disabled="true"></b-form-input>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -320,13 +487,13 @@
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="serial">Serie</label>
-                      <b-form-input type="text" id="brand" v-model="nuevo.serial" :disabled="true"></b-form-input>
+                      <b-form-input type="text" id="brand" v-model="current.serial" :disabled="true"></b-form-input>
                     </b-form-group>
                   </b-col>
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="cost">Costo</label>
-                      <b-form-input type="text" id="cost" v-model="nuevo.cost" :disabled="true"></b-form-input>
+                      <b-form-input type="text" id="cost" v-model="current.cost" :disabled="true"></b-form-input>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -334,7 +501,7 @@
                   <b-col>
                     <b-form-group>
                       <label class="small muted" for="cost">Tipo de activo</label>
-                      <b-form-input type="text" id="assetType" v-model="nuevo.assetType" :disabled="true"></b-form-input>
+                      <b-form-input type="text" id="assetType" v-model="current.assetType" :disabled="true"></b-form-input>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -344,7 +511,7 @@
                       <b-input-group-text><i class="fa fa-sitemap" ></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="department"
-                      v-model="nuevo.department"
+                      v-model="current.department"
                       class="form-control"
                       :disabled="true"
                       :options="departmentOptions">
@@ -357,7 +524,7 @@
                       <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="location"
-                      v-model="nuevo.location"
+                      v-model="current.location"
                       class="form-control"
                       :disabled="true"
                       :options="locationOptions">
@@ -366,11 +533,11 @@
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
-                  <b-form-input type="text" id="locationDetail" v-model="nuevo.locationDetail" :disabled="true"></b-form-input>
+                  <b-form-input type="text" id="locationDetail" v-model="current.locationDetail" :disabled="true"></b-form-input>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="comments">Comentarios</label>
-                  <b-form-input type="text" id="comments" v-model="nuevo.comments" :disabled="true"></b-form-input>
+                  <b-form-input type="text" id="comments" v-model="current.comments" :disabled="true"></b-form-input>
                 </b-form-group>
               </b-form>
             </b-card>
@@ -461,9 +628,9 @@ export default {
   },
   data: () => {
     return {
-      validateSelectsVar: false,
-      scanModal: false,
-      assetModal: false,
+      scanModal: false,   //Modal para escanear
+      addModal: false,    //Modal para agregar sin etiqueta
+      assetModal: false,  //Modal para detalle de activo
       itemSelected: 0,
       sessionID: 17,
       slide: 0,
@@ -510,12 +677,16 @@ export default {
         {label: 'Ubicación', key: 'sessionLocationName', sortable: true},
         {label: 'Estatus', key: 'status', sortable: true}
       ],
-      nuevo: {
-        id: 1, keyfield: 'HGM0012345', asset: 'Silla', description: 'Silla de madera', brand: 'ND', model: 'ND', serial:'ND', cost: '180.00', assetType: 'Mobiliario', locationDetail: '', comments: '', status: 'Conciliado'
+      find: {
+        id: 0, keyfield: 'HGM0012345', asset: 'Silla', description: 'Silla de madera', brand: 'ND', model: 'ND', serial:'ND', cost: '180.00', assetType: 'Mobiliario', locationDetail: '', comments: '', status: 'Conciliado'
       },
-      tableitems:  [ 
-        //id, keyfield, asset, description, brand, model, serial, cost, assetType, locationDetail, comments, status 
-      ],
+      nuevo: {
+        id: 0, keyfield: '', asset: '', description: '', brand: '', model: '', serial:'', cost: '', assetType: '', locationDetail: '', comments: '', status: 'En demasía'
+      },
+      current: {
+        id: 0, keyfield: '', asset: '', description: '', brand: '', model: '', serial:'', cost: '', assetType: '', locationDetail: '', comments: '', status: ''
+      },
+      tableitems:  [],
       tablefields: [
         {label: 'ID', key: 'id', sortable: true},
         {label: 'Clave', key: 'keyfield', sortable: true},
@@ -575,7 +746,7 @@ export default {
       return status === 'Conciliado' ? 'success'
       : status === 'Cambio de despartamento' ? 'primary'
       : status === 'Cambio de ubicación' ? 'primary'
-      : status === 'Cambio de descripción' ? 'primary'
+      : status === 'Cambio de activo' ? 'primary'
       : status === 'En demasía' ? 'warning'
       : status === 'No inventariado' ? 'danger' : 'primary'
     },
@@ -586,13 +757,14 @@ export default {
       return `session/sessionID/asset/${id.toString()}`
     },
     rowClicked (item) {
-      //const regLink = this.regLink(this.$route.params.idsession,item.id)
-      //this.$router.push({ path: regLink })
       this.itemSelected = item.id - 1
+      this.current = this.tableitems[this.itemSelected]
       this.assetModal = true
     },
     addSessionClicked () {
       this.addSessionVar = true
+      this.find.department = this.department
+      this.find.location = this.location
       this.nuevo.department = this.department
       this.nuevo.location = this.location
     },
@@ -600,11 +772,66 @@ export default {
       this.scanBarcode = true
     },
     scanAsset () {
-      this.tableitems.push(this.nuevo)
+      this.find.id = this.tableitems.length + 1
+      this.tableitems.push(
+        {
+          id : this.find.id,
+          keyfield : this.find.keyfield,
+          asset : this.find.asset,
+          description : this.find.description,
+          brand : this.find.brand,
+          model : this.find.model,
+          serial : this.find.serial,
+          cost : this.find.cost,
+          assetType : this.find.assetType,
+          department : this.find.department,
+          location : this.find.location,
+          locationDetail : this.find.locationDetail,
+          comments : this.find.comments,
+          status : this.find.status
+        }
+      )
       this.scanBarcode = false
+    },
+    addAsset () {
+      this.nuevo.id = this.tableitems.length + 1
+      this.tableitems.push(
+        {
+          id : this.nuevo.id,
+          asset : this.nuevo.asset,
+          description : this.nuevo.description,
+          brand : this.nuevo.brand,
+          model : this.nuevo.model,
+          serial : this.nuevo.serial,
+          cost : this.nuevo.cost,
+          assetType : this.nuevo.assetType,
+          department : this.nuevo.department,
+          location : this.nuevo.location,
+          locationDetail : this.nuevo.locationDetail,
+          comments : this.nuevo.comments,
+          status : this.nuevo.status
+        }
+      )
+      this.scanBarcode = false
+      this.nuevo.id = '',
+      this.nuevo.asset = '',
+      this.nuevo.description = '',
+      this.nuevo.brand = '',
+      this.nuevo.model = '',
+      this.nuevo.serial = '',
+      this.nuevo.cost = '',
+      this.nuevo.assetType = '',
+      this.nuevo.department = this.department,
+      this.nuevo.location = this.location,
+      this.nuevo.locationDetail = '',
+      this.nuevo.comments = '',
+      this.nuevo.status = 'En demasía'
     },
     cancelScan () {
       this.scanBarcode = false
+    },
+    cancelAdd () {
+      
     },
     closeSession () {
 

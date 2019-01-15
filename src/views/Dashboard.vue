@@ -61,7 +61,7 @@
               <h4 class="float-right" right>3.2%</h4>
             </div>
             <div class="h2 mb-0"><a href="#/users" class="text-white">324</a></div>
-            <small class="text-muted text-uppercase font-weight-bold">Cambios de descripción</small>
+            <small class="text-muted text-uppercase font-weight-bold">Cambios de activo</small>
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">

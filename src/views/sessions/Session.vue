@@ -302,7 +302,7 @@ export default {
       return status === 'Conciliado' ? 'success'
       : status === 'Cambio de despartamento' ? 'primary'
       : status === 'Cambio de ubicación' ? 'primary'
-      : status === 'Cambio de descripción' ? 'primary'
+      : status === 'Cambio de activo' ? 'primary'
       : status === 'En demasía' ? 'warning'
       : status === 'No inventariado' ? 'danger' : 'primary'
     },
