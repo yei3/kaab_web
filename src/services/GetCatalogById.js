@@ -1,61 +1,61 @@
 import Api from './Api'
 
 export default {
-  getAllAccountingAccounts () {
-    return Api.getAllCatalog().get('/getAllAccountingAccounts')
+  getAccountingAccountById (id){
+    return Api.getCatalogById().get('/getAccountingAccountById?id=' + id)
   },
-  getAllAddresses () {
-    return Api.getAllCatalog().get('/getAllAddresses')
+  getAddressById (id){
+    return Api.getCatalogById().get('/getAddressById?id=' + id)
   },
-  getAllAssets () {
-    return Api.getAllCatalog().get('/getAllAssets')
+  getAssetById (id){
+    return Api.getCatalogById().get('/getAssetById?id=' + id)
   },
-  getAllAssetFiles () {
-    return Api.getAllCatalog().get('/getAllAssetFiles')
+  getAssetFileById (id){
+    return Api.getCatalogById().get('/getAssetFileById?id=' + id)
   },
-  getAllCompanies () {
-    return Api.getAllCatalog().get('/getAllCompanies')
+  getCompanyById (id){
+    return Api.getCatalogById().get('/getCompanyById?id=' + id)
   },
-  getAllCompanyAccounts () {
-    return Api.getAllCatalog().get('/getAllCompanyAccounts')
+  getCompanyAccountById (id){
+    return Api.getCatalogById().get('/getCompanyAccountById?id=' + id)
   },
-  getAllContacts () {
-    return Api.getAllCatalog().get('/getAllContacts')
+  getContactById (id){
+    return Api.getCatalogById().get('/getContactById?id=' + id)
   },
-  getAllCostCenters () {
-    return Api.getAllCatalog().get('/getAllCostCenters')
+  getCostCenterById (id){
+    return Api.getCatalogById().get('/getCostCenterById?id=' + id)
   },
-  getAllDepartments () {
-    return Api.getAllCatalog().get('/getAllDepartments')
+  getDepartmentById (id){
+    return Api.getCatalogById().get('/getDepartmentById?id=' + id)
   },
-  getAllFiles () {
-    return Api.getAllCatalog().get('/getAllFiles')
+  getFileById (id){
+    return Api.getCatalogById().get('/getFileById?id=' + id)
   },
-  getAllFinalAssets () {
-    return Api.getAllCatalog().get('/getAllFinalAssets')
+  getFinalAssetById (id){
+    return Api.getCatalogById().get('/getFinalAssetById?id=' + id)
   },
-  getAllLocationAddresses () {
-    return Api.getAllCatalog().get('/getAllLocationAddresses')
+  getLocationAddressById (id){
+    return Api.getCatalogById().get('/getLocationAddressById?id=' + id)
   },
-  getAllMenus () {
-    return Api.getAllCatalog().get('/getAllMenus')
+  getMenuById (id){
+    return Api.getCatalogById().get('/getMenuById?id=' + id)
   },
-  getAllMenuRoles () {
-    return Api.getAllCatalog().get('/getAllMenuRoles')
+  getMenuRolById (id){
+    return Api.getCatalogById().get('/getMenuRolById?id=' + id)
   },
-  getAllLocations () {
-    return Api.getAllCatalog().get('/getAllLocations')
+  getLocationById (id){
+    return Api.getCatalogById().get('/getLocationById?id=' + id)
   },
-  getAllProjects () {
-    return Api.getAllCatalog().get('/getAllProjects')
+  getProjectById (id){
+    return Api.getCatalogById().get('/getProjectById?id=' + id)
   },
-  getAllRegistrationSessions () {
-    return Api.getAllCatalog().get('/getAllRegistrationSessions')
+  getRegistrationSessionById (id){
+    return Api.getCatalogById().get('/getRegistrationSessionById?id=' + id)
   },
-  getAllStatus () {
-    return Api.getAllCatalog().get('/getAllStatus')
+  getStatusById (id){
+    return Api.getCatalogById().get('/getStatusById?id=' + id)
   },
-  getAllUsers () {
-    return Api.getAllCatalog().get('/getAllUsers')
+  getUserById (id){
+    return Api.getCatalogById().get('/getUserById?id=' + id)
   }
 }

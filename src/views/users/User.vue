@@ -4,28 +4,28 @@
       <b-col lg="6">
         <b-card>
           <div slot="header">
-            <strong>{{caption}}</strong><small> ID: {{items($route.params.id).id }}</small>
+            <strong>{{caption}}</strong><small> ID: {{$route.params.id }}</small>
           </div>
-          <b-form>
+          <form @submit.prevent="submit">
             <b-form-group>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'is-invalid': userValidationError }" type="text" id="mail" v-model="items($route.params.id).user" placeholder="usuario@mi-empresa.com"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.user.$error }" type="text" id="user" v-model="$v.user.$model" placeholder="usuario@mi-empresa.com"></b-form-input>
               </b-input-group>
-              <div class="small text-danger" v-if="!userValidationRequired">Campo requerido</div>
-              <div class="small text-danger" v-if="!userValidationEmail">Introduzca un correo válido</div>
+              <div class="small text-danger" v-if="!$v.user.required">Campo requerido</div>
+              <div class="small text-danger" v-if="!$v.user.minLength">El usuario debe contener 3 letras mínimo</div>
             </b-form-group>
             <b-form-group>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'is-invalid': nameValidationError }" type="text" id="name" v-model="items($route.params.id).name" placeholder="Nombre"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.names.$error }" type="text" id="name" v-model="$v.names.$model" placeholder="Nombre"></b-form-input>
               </b-input-group>
-              <div class="small text-danger" v-if="!nameValidationRequired">Campo requerido</div>
-              <div class="small text-danger" v-if="!nameValidationMinLength">El nombre debe contener 3 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.names.required">Campo requerido</div>
+              <div class="small text-danger" v-if="!$v.names.minLength">El nombre debe contener 3 letras mínimo</div>
             </b-form-group>
             <b-row>
               <b-col lg="6">
@@ -34,13 +34,13 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
                     </b-input-group-prepend>
-                      <b-form-select id="role"
-                        v-model.trim="items($route.params.id).role"
-                        class="form-control" :class="{ 'is-invalid': roleValidationError }"
-                        :options="roleOptions">
-                      </b-form-select>
+                    <b-form-select id="role"
+                                   v-model.trim="$v.role.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.role.$error }"
+                                   :options="roleOptions">
+                    </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!roleValidationRequired">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.role.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
@@ -49,48 +49,34 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
                     </b-input-group-prepend>
-                      <b-form-select id="status"
-                        v-model.trim="items($route.params.id).status"
-                        class="form-control" :class="{ 'is-invalid': statusValidationError }"
-                        :options="statusOptions">
-                      </b-form-select>
+                    <b-form-select id="status"
+                                   v-model.trim="$v.status.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.status.$error }"
+                                   :options="statusOptions">
+                    </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!statusValidationRequired">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.status.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
             </b-row>
-          </b-form>
-          <div slot="footer" class="pull-right">
-            <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
-            <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="!formValidated"><i class="fa fa-save"></i> Guardar</b-button>
-          </div>
+            <div slot="footer" class="pull-right">
+              <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
+              <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="submitStatus === 'PENDING'"><i class="fa fa-save"></i> Guardar</b-button>
+              <p class="small text-success" v-if="submitStatus === 'OK'">Usuario actualizado satisfactoriamente.</p>
+              <p class="small text-danger" v-if="submitStatus === 'ERROR'">Por favor revisa que los datos sean correctos.</p>
+              <p class="small text-dark" v-if="submitStatus === 'PENDING'">Guardando...</p>
+            </div>
+          </form>
         </b-card>
       </b-col>
     </b-row>
-
-    <!--<b-row>
-      <b-col cols="12" lg="6">
-        <b-card no-header>
-          <template slot="header">
-            User id:  {{ $route.params.id }}
-          </template>
-          <b-table striped small fixed responsive="lg" :items="items($route.params.id)" :fields="fields">
-            <template slot="value" slot-scope="data">
-              <strong>{{data.item.value}}</strong>
-            </template>
-          </b-table>
-          <template slot="footer">
-            <b-button @click="goBack">Back</b-button>
-          </template>
-        </b-card>
-      </b-col>
-    </b-row>-->
   </div>
-  
+
 </template>
 
 <script>
-import usersData from './UsersData'
+import getById from '../../services/GetCatalogById'
+import { required, minLength } from 'vuelidate/lib/validators'
 export default {
   name: 'User',
   props: {
@@ -114,14 +100,15 @@ export default {
 
   data: () => {
     return {
-      items: (id) => {
-        const user = usersData.find( user => user.id.toString() === id)
-        return user
-      },
+      user: '',
+      names:'',
+      role:'',
+      status: '',
+      submitStatus: null,
       fields: [
         {label: 'ID', key: 'id'},
         {label: 'Usuario', key: 'user'},
-        {label: 'Nombre', key: 'name'},
+        {label: 'Nombre', key: 'names'},
         {label: 'Rol', key: 'role'},
         {label: 'Estatus', key: 'status'}
       ],
@@ -140,86 +127,54 @@ export default {
       ]
     }
   },
-  computed: {
-  	formValidated: function() {
-      var form_validate = false
-      if (this.userValidationRequired && this.userValidationEmail && this.nameValidationRequired && this.nameValidationMinLength && this.roleValidationRequired && this.statusValidationRequired) {
-        form_validate = true
-      }
-      return form_validate
-    },
-    userValidationError: function() {
-      var user_error = true
-      if (this.items(this.$route.params.id).user && this.userValidationEmail) {
-        user_error = false
-      }
-      return user_error
-    },
-    userValidationRequired: function() {
-      var user_required = false
-      if (this.items(this.$route.params.id).user) {
-        user_required = true
-      }
-      return user_required
-    },
-    userValidationEmail: function() {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return re.test(this.items(this.$route.params.id).user)
-    },
-    nameValidationError: function() {
-      var name_error = true
-      if (this.items(this.$route.params.id).name && this.nameValidationMinLength) {
-        name_error = false
-      }
-      return name_error
-    },
-    nameValidationRequired: function() {
-      var name_required = false
-      if (this.items(this.$route.params.id).name) {
-        name_required = true
-      }
-      return name_required
-    },
-    nameValidationMinLength: function() {
-      var name_min_length = false
-      if (this.items(this.$route.params.id).name.length >= 3) {
-        name_min_length = true
-      }
-      return name_min_length
-    },
-    roleValidationError: function() {
-      var role_error = true
-      if (this.items(this.$route.params.id).role) {
-        role_error = false
-      }
-      return role_error
-    },
-    roleValidationRequired: function() {
-      var role_required = false
-      if (this.items(this.$route.params.id).role) {
-        role_required = true
-      }
-      return role_required
-    },
-    statusValidationError: function() {
-      var status_error = true
-      if (this.items(this.$route.params.id).status) {
-        status_error = false
-      }
-      return status_error
-    },
-    statusValidationRequired: function() {
-      var status_required = false
-      if (this.items(this.$route.params.id).status) {
-        status_required = true
-      }
-      return status_required
+  beforeCreate: function () {
+    if (!this.$session.exists()) {
+      this.$router.push('/pages/login')
     }
+  },
+  async mounted() {
+    const usr = await getById.getUserById(this.$route.params.id)
+    this.user = usr.data.user.user;
+    this.names = usr.data.user.names;
+    this.role = usr.data.user.role;
+    this.status = usr.data.user.statusID;
+  },
+  validations: {
+    names: {
+      required,
+      minLength: minLength(4)
+    },
+    user: {
+      required,
+      minLength: minLength(4)
+    },
+    role: {
+      required
+    },
+    status: {
+      required
+    }
+  },
+  computed: {
   },
   methods: {
     goBack() {
       this.$router.go(-1)
       // this.$router.replace({path: '/users'})
+    },
+    submit() {
+      console.log('submit!')
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR'
+        console.info(this.$v)
+      } else {
+        // do your submit logic here
+        this.submitStatus = 'PENDING'
+        setTimeout(() => {
+          this.submitStatus = 'OK'
+        }, 500)
+      }
     }
   }
 }

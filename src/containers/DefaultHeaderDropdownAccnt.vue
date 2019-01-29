@@ -35,13 +35,14 @@
       </b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item><i class="fa fa-shield" /> Lock Account</b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-lock" /> Logout</b-dropdown-item>
+      <b-dropdown-item @click="logout"><i class="fa fa-lock" /> Logout</b-dropdown-item>
     </template>
   </AppHeaderDropdown>
 </template>
 
 <script>
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
+import CognitoAuth from '../cognito/cognito'
 export default {
   name: 'DefaultHeaderDropdownAccnt',
   components: {
@@ -49,6 +50,14 @@ export default {
   },
   data: () => {
     return { itemsCount: 42 }
+  },
+  methods: {
+    logout: function () {
+      this.$session.destroy();
+      let cog = new CognitoAuth();
+      cog.logout();
+      this.$router.push('/pages/login');
+    }
   }
 }
 </script>

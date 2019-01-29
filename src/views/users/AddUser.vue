@@ -6,27 +6,53 @@
           <div slot="header">
             <strong>Usuario </strong><small>Agregar</small>
           </div>
-          <b-form>
+          <form @submit.prevent="submit">
             <b-form-group>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'is-invalid': userValidationError }" type="text" id="mail" v-model.trim="user" placeholder="usuario@mi-empresa.com"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.user.$error }" type="email" id="user" v-model="$v.user.$model" placeholder="usuario@mi-empresa.com"></b-form-input>
               </b-input-group>
-              <div class="small text-danger" v-if="!userValidationRequired">Campo requerido</div>
-              <div class="small text-danger" v-if="!userValidationEmail">Introduzca un correo válido</div>
+              <div class="small text-danger" v-if="!$v.user.required">Campo requerido</div>
+              <div class="small text-danger" v-if="!$v.user.email">El correo electrónico debe ser válido.</div>
             </b-form-group>
             <b-form-group>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'is-invalid': nameValidationError }" type="text" id="name" v-model.trim="name" placeholder="Nombre"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.names.$error }" type="text" id="name" v-model="$v.names.$model" placeholder="Nombre"></b-form-input>
               </b-input-group>
-              <div class="small text-danger" v-if="!nameValidationRequired">Campo requerido</div>
-              <div class="small text-danger" v-if="!nameValidationMinLength">El nombre debe contener 3 letras mínimo</div>              
+              <div class="small text-danger" v-if="!$v.names.required">Campo requerido</div>
+              <div class="small text-danger" v-if="!$v.names.minLength">El nombre debe contener 4 letras mínimo</div>
             </b-form-group>
+            <b-row>
+              <b-col lg="6">
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.middlename.$error }" type="text" id="name" v-model="$v.middlename.$model" placeholder="Apellido Paterno"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.middlename.required">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.middlename.minLength">El apellido debe contener 4 letras mínimo</div>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.lastname.$error }" type="text" id="name" v-model="$v.lastname.$model" placeholder="Apellido Materno"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.lastname.required">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.lastname.minLength">El apellido debe contener 4 letras mínimo</div>
+                </b-form-group>
+              </b-col>
+            </b-row>
             <b-row>
               <b-col lg="6">
                 <b-form-group>
@@ -34,14 +60,13 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
                     </b-input-group-prepend>
-                      <b-form-select id="role"
-                        v-model.trim="role"
-                        class="form-control" :class="{ 'is-invalid': roleValidationError }"
-                        :options="roleOptions"
-                        value="Rol...">
-                      </b-form-select>
+                    <b-form-select id="role"
+                                   v-model.trim="$v.role.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.role.$error }"
+                                   :options="roleOptions">
+                    </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!roleValidationRequired">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.role.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
@@ -50,22 +75,24 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
                     </b-input-group-prepend>
-                      <b-form-select id="status"
-                        v-model.trim="status"
-                        class="form-control" :class="{ 'is-invalid': statusValidationError }"
-                        :options="statusOptions"
-                        value="Estatus...">
-                      </b-form-select>
+                    <b-form-select id="status"
+                                   v-model.trim="$v.status.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.status.$error }"
+                                   :options="statusOptions">
+                    </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!statusValidationRequired">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.status.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
             </b-row>
-          </b-form>
-          <div slot="footer" class="pull-right">
-            <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
-            <b-button id="btn-guardar" type="submit" size="sm" variant="primary" :disabled="!formValidated"><i class="fa fa-save"></i> Guardar</b-button>
-          </div>
+            <div slot="footer" class="pull-right">
+              <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
+              <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="submitStatus === 'PENDING'"><i class="fa fa-save"></i> Guardar</b-button>
+              <p class="small text-success" v-if="submitStatus === 'OK'">Usuario actualizado satisfactoriamente.</p>
+              <p class="small text-danger" v-if="submitStatus === 'ERROR'">Por favor revisa que los datos sean correctos.</p>
+              <p class="small text-dark" v-if="submitStatus === 'PENDING'">Guardando...</p>
+            </div>
+          </form>
         </b-card>
       </b-col>
     </b-row>
@@ -73,14 +100,20 @@
 </template>
 
 <script>
+  import createCatalog from '../../services/CreateCatalogService'
+  import { required, minLength, email } from 'vuelidate/lib/validators'
+  import CognitoAuth from '../../cognito/cognito'
 export default {
   name: 'AddUser',
   data: () => {
     return {
       user: '',
-      name: '',
+      names: '',
+      middlename: '',
+      lastname: '',
       role: null,
       status: null,
+      submitStatus: null,
       roleOptions: [
         {value: null, text: 'Rol...', disabled: true},
         {value: 'Admin', text: 'Admin'},
@@ -91,91 +124,83 @@ export default {
       ],
       statusOptions: [
         {value: null, text: 'Estatus...', disabled: true},
-        {value: 'Activo', text: 'Activo'},
-        {value: 'Inactivo', text: 'Inactivo'}
+        {value: 2, text: 'Activo'},
+        {value: 3, text: 'Inactivo'}
       ]
     }
   },
-  computed: {
-  	formValidated: function() {
-      var form_validate = false
-      if (this.userValidationRequired && this.userValidationEmail && this.nameValidationRequired && this.nameValidationMinLength && this.roleValidationRequired && this.statusValidationRequired) {
-        form_validate = true
-      }
-      return form_validate
-    },
-    userValidationError: function() {
-      var user_error = true
-      if (this.user && this.userValidationEmail) {
-        user_error = false
-      }
-      return user_error
-    },
-    userValidationRequired: function() {
-      var user_required = false
-      if (this.user) {
-        user_required = true
-      }
-      return user_required
-    },
-    userValidationEmail: function() {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return re.test(this.user)
-    },
-    nameValidationError: function() {
-      var name_error = true
-      if (this.name && this.nameValidationMinLength) {
-        name_error = false
-      }
-      return name_error
-    },
-    nameValidationRequired: function() {
-      var name_required = false
-      if (this.name) {
-        name_required = true
-      }
-      return name_required
-    },
-    nameValidationMinLength: function() {
-      var name_min_length = false
-      if (this.name.length >= 3) {
-        name_min_length = true
-      }
-      return name_min_length
-    },
-    roleValidationError: function() {
-      var role_error = true
-      if (this.role) {
-        role_error = false
-      }
-      return role_error
-    },
-    roleValidationRequired: function() {
-      var role_required = false
-      if (this.role) {
-        role_required = true
-      }
-      return role_required
-    },
-    statusValidationError: function() {
-      var status_error = true
-      if (this.status) {
-        status_error = false
-      }
-      return status_error
-    },
-    statusValidationRequired: function() {
-      var status_required = false
-      if (this.status) {
-        status_required = true
-      }
-      return status_required
+  beforeCreate: function () {
+    if (!this.$session.exists()) {
+      this.$router.push('/pages/login')
     }
+  },
+  validations: {
+    names: {
+      required,
+      minLength: minLength(4)
+    },
+    middlename: {
+      required,
+      minLength: minLength(4)
+    },
+    lastname: {
+      required,
+      minLength: minLength(4)
+    },
+    user: {
+      required,
+      email
+    },
+    role: {
+      required
+    },
+    status: {
+      required
+    }
+  },
+  computed: {
   },
   methods: {
     goBack() {
       this.$router.go(-1)
       // this.$router.replace({path: '/users'})
+    },
+    async submit() {
+      let cog = new CognitoAuth();
+      cog.signup(this.user,this.names,this.middlename,this.lastname,this.role,this.status,(err, result) =>{
+        if (err.statusCode !== 200) {
+          console.log(err);
+          this.error = err
+        } else {
+          console.log(result);
+          //this.$router.replace('/profile')
+        }
+      });
+/*
+      console.log('submit!')
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR'
+        console.info(this.$v)
+      } else {
+        // do your submit logic here
+        this.submitStatus = 'PENDING'
+        const usr = {
+          "role": this.role,
+          "user": this.user,
+          "companyAccountID": 3,
+          "names": this.names,
+          "lastname": 'test',
+          "middlename": 'tst',
+          "statusID": 2,
+          "userId": 2
+        };
+          await createCatalog.createUser(usr).then(response => {
+            console.info(response);
+            this.submitStatus = 'OK';
+            this.$router.go(-1);
+          })
+      }*/
     }
   }
 }
