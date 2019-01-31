@@ -8,12 +8,18 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
+import Vuelidate from 'vuelidate'
+import VueSession from 'vue-session'
+import Toaster from 'v-toaster'
+import 'v-toaster/dist/v-toaster.css'
+
 
 // todo
 // cssVars()
-
-Vue.use(BootstrapVue)
-
+Vue.use(Vuelidate);
+Vue.use(BootstrapVue);
+Vue.use(VueSession,{persist: true});
+Vue.use(Toaster, {timeout: 5000});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -22,4 +28,4 @@ new Vue({
   components: {
     App
   }
-})
+});

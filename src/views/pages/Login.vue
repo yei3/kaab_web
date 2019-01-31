@@ -11,20 +11,20 @@
           <b-card-group>
             <b-card no-body class="p-3 bg-light">
               <b-card-body>
-                <b-form>
+                <b-form @submit.prevent="login">
                   <h2>Login</h2>
                   <p class="text-muted">Iniciar sesión</p>
                   <b-input-group class="mb-3">
                     <b-input-group-prepend><b-input-group-text><i class="icon-user"></i></b-input-group-text></b-input-group-prepend>
-                    <b-form-input type="text" class="form-control" placeholder="Usuario" autocomplete="username email" />
+                    <b-form-input id="username" type="text" class="form-control" placeholder="Usuario" v-model="username" autocomplete="username email" />
                   </b-input-group>
                   <b-input-group class="mb-4">
                     <b-input-group-prepend><b-input-group-text><i class="icon-lock"></i></b-input-group-text></b-input-group-prepend>
-                    <b-form-input type="password" class="form-control" placeholder="Contraseña" autocomplete="current-password" />
+                    <b-form-input id="password" type="password" class="form-control" placeholder="Contraseña" v-model="pass" autocomplete="current-password" />
                   </b-input-group>
                   <b-row>
                     <b-col cols="6">
-                      <b-button variant="secondary bg-primary" class="px-4">Login</b-button>
+                      <b-button type="submit" variant="secondary bg-primary" class="px-4">Login</b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
                       <b-button variant="link" class="px-0">Reestablecer</b-button>
@@ -49,9 +49,6 @@
                   <p>La forma más práctica para generar y mantener actualizado el inventario de activos de tu empresa o negocio. ¡Pruébalo! Es fácil.</p>
                   <b-button variant="text-white secondary bg-primary" class="active mt-3">Más info</b-button>
                 </div>
-                <div id="app">
-                  {{ info.data.address.municipality }}
-                </div>
               </b-card-body>
             </b-card>
           </b-card-group>
@@ -60,26 +57,64 @@
     </div>
   </div>
 </template>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
 <script>
-import axios from 'axios'
+  import CognitoAuth from '../../cognito/cognito'
+  import gets from '../../services/Gets'
+  export default {
+    name: 'Login',
+    data () {
+      return {
+        username: '',
+        pass: '',
+        error: null,
+        loading: false
+      }
+    },
+    beforeCreate: function () {
+      if (this.$session.exists()) {
+        this.$router.push('/dashboard')
+      }
+    },
+    methods: {
+      async login () {
+        console.info("Login start")
+        this.loading = true;
+        let cog = new CognitoAuth();
+         cog.authenticate(this.username, this.pass, async (err, result) => {
+          if (err) {
+            console.info("Login succesful");
+            await gets.getUserByEmail(this.username).then(response => {
+              console.info(response);
+              if (response.data.error.errorCode === 0){
+                this.$session.start();
+                this.$session.set('jwt', result.getAccessToken().getJwtToken());
+                this.$session.set('userId', response.data.user.id);
+                this.$session.set('companyAccountId', response.data.user.companyAccountID);
+                //this.Vue.http.headers.common['Authorization'] = 'Bearer ' + result.getAccessToken().getJwtToken();
+                this.$router.push('/dashboard');
+              }else{
+                this.$toaster.error(response.data.error.message);
+              }
+            })
+           // this.$session.set('userId', result.getAccessToken().getJwtToken());
+           // this.$session.set('', result.getAccessToken().getJwtToken());
+           // Vue.http.headers.common['Authorization'] = 'Bearer ' + response.body.token;
+           // this.$router.push('/panel/search');
+          }else{
+            console.info(result.message);
+            this.$toaster.error(result.message);
 
-export default {
-  name: 'login',
-  
-  data: function () {
-    return {
-      info: null
+          }
+         /* if (err.statusCode !== 200) {
+            console.log(err);
+            this.error = err
+          } else {
+            console.log(result);
+            //this.$router.replace('/profile')
+          }*/
+        });
+      }
     }
-  },
-  mounted () {
-    
-    axios
-      .get('https://so2ut5rylh.execute-api.us-west-2.amazonaws.com/Prod/getAddressById?id=1')
-      
-      .then(response => (this.info = response))
-      .catch(error => console.log(error))
   }
-}
 
 </script>
