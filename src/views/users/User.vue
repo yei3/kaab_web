@@ -1,8 +1,14 @@
 <template>
+
   <div class="animated fade-in">
+
     <b-row>
       <b-col lg="6">
-        <b-card>
+        <code-loader v-if="!status"
+                     :speed="2"
+                     :animate="true"
+        ></code-loader>
+        <b-card v-else>
           <div slot="header">
             <strong>{{caption}}</strong><small> ID: {{$route.params.id }}</small>
           </div>
@@ -104,6 +110,7 @@
 import getById from '../../services/GetCatalogById'
 import updateCatalog from '../../services/UpdateCatalogService'
 import { required, minLength } from 'vuelidate/lib/validators'
+import { CodeLoader } from 'vue-content-loader';
 export default {
   name: 'User',
   props: {
@@ -155,6 +162,9 @@ export default {
         {value: 3, text: 'Inactivo'}
       ]
     }
+  },
+  components: {
+    CodeLoader
   },
   beforeCreate: function () {
     if (!this.$session.exists()) {
