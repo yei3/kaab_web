@@ -11,8 +11,7 @@ export default{
   },
   updateCatalog(){
     return axios.create({
-      baseURL: `http://api.pearson.com/v2/dictionaries`,
-      withCredentials: false,
+      baseURL: `https://lmsmxjcrrj.execute-api.us-west-2.amazonaws.com/Prod`,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

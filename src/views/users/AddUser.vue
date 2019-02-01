@@ -167,40 +167,40 @@ export default {
     },
     async submit() {
       let cog = new CognitoAuth();
-      cog.signup(this.user,this.names,this.middlename,this.lastname,this.role,this.status,(err, result) =>{
-        if (err.statusCode !== 200) {
-          console.log(err);
-          this.error = err
-        } else {
-          console.log(result);
-          //this.$router.replace('/profile')
-        }
-      });
-/*
-      console.log('submit!')
-      this.$v.$touch()
+      this.$v.$touch();
       if (this.$v.$invalid) {
-        this.submitStatus = 'ERROR'
-        console.info(this.$v)
+        this.submitStatus = 'ERROR';
+        console.info(this.$v);
       } else {
-        // do your submit logic here
-        this.submitStatus = 'PENDING'
+        this.submitStatus = 'PENDING';
         const usr = {
           "role": this.role,
           "user": this.user,
-          "companyAccountID": 3,
+          "companyAccountID": this.$session.get('companyAccountId'),
           "names": this.names,
-          "lastname": 'test',
-          "middlename": 'tst',
-          "statusID": 2,
-          "userId": 2
+          "lastname": this.lastname,
+          "middlename": this.middlename,
+          "statusID": this.status,
+          "userId": this.$session.get('userId')
         };
-          await createCatalog.createUser(usr).then(response => {
-            console.info(response);
-            this.submitStatus = 'OK';
-            this.$router.go(-1);
-          })
-      }*/
+        await cog.signup(this.user,this.names,this.middlename,this.lastname,this.role,this.status, async(err, result) =>{
+          if (err == null){
+            await createCatalog.createUser(usr).then(response => {
+              console.info(response);
+              if (response.data.error.errorCode === 0){
+                this.submitStatus = 'OK';
+                this.$router.push('/users');
+              }else{
+                this.$toaster.error(response.data.error.message);
+                this.submitStatus = 'ERROR';
+              }
+            });
+          }else{
+            this.$toaster.error(err.message);
+            this.submitStatus = 'ERROR';
+          }
+        });
+      }
     }
   }
 }
