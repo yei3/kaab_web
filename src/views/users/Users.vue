@@ -9,7 +9,11 @@
               <b-button type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
             </div>
           </div>
-          <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
+          <code-loader v-if="!items.length"
+                          :speed="2"
+                          :animate="true"
+          ></code-loader>
+          <b-table v-else :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
@@ -32,6 +36,7 @@
 
 <script>
   import getAll from '../../services/GetAllCatalog'
+  import { CodeLoader } from 'vue-content-loader';
   //import usersData from './UsersData'
   export default {
     name: 'Users',
@@ -60,6 +65,9 @@
         type: Boolean,
         default: false
       }
+    },
+    components: {
+      CodeLoader
     },
     data: () => {
       return {

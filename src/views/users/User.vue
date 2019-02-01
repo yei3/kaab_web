@@ -1,8 +1,14 @@
 <template>
+
   <div class="animated fade-in">
+
     <b-row>
       <b-col lg="6">
-        <b-card>
+        <code-loader v-if="!status"
+                     :speed="2"
+                     :animate="true"
+        ></code-loader>
+        <b-card v-else>
           <div slot="header">
             <strong>{{caption}}</strong><small> ID: {{$route.params.id }}</small>
           </div>
@@ -12,7 +18,7 @@
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'form-group--error': $v.user.$error }" type="text" id="user" v-model="$v.user.$model" placeholder="usuario@mi-empresa.com"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.user.$error }" type="email" id="user" v-model="$v.user.$model" placeholder="usuario@mi-empresa.com" disabled></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.user.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.user.minLength">El usuario debe contener 3 letras mínimo</div>
@@ -27,6 +33,32 @@
               <div class="small text-danger" v-if="!$v.names.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.names.minLength">El nombre debe contener 3 letras mínimo</div>
             </b-form-group>
+            <b-row>
+              <b-col lg="6">
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.middlename.$error }" type="text" id="name" v-model="$v.middlename.$model" placeholder="Apellido Paterno"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.middlename.required">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.middlename.minLength">El apellido debe contener 4 letras mínimo</div>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.lastname.$error }" type="text" id="name" v-model="$v.lastname.$model" placeholder="Apellido Materno"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.lastname.required">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.lastname.minLength">El apellido debe contener 4 letras mínimo</div>
+                </b-form-group>
+              </b-col>
+            </b-row>
             <b-row>
               <b-col lg="6">
                 <b-form-group>
@@ -76,7 +108,9 @@
 
 <script>
 import getById from '../../services/GetCatalogById'
+import updateCatalog from '../../services/UpdateCatalogService'
 import { required, minLength } from 'vuelidate/lib/validators'
+import { CodeLoader } from 'vue-content-loader';
 export default {
   name: 'User',
   props: {
@@ -101,9 +135,11 @@ export default {
   data: () => {
     return {
       user: '',
-      names:'',
-      role:'',
-      status: '',
+      names: '',
+      middlename: '',
+      lastname: '',
+      role: null,
+      status: null,
       submitStatus: null,
       fields: [
         {label: 'ID', key: 'id'},
@@ -122,10 +158,13 @@ export default {
       ],
       statusOptions: [
         {value: null, text: 'Estatus...'},
-        {value: 'Activo', text: 'Activo'},
-        {value: 'Inactivo', text: 'Inactivo'}
+        {value: 2, text: 'Activo'},
+        {value: 3, text: 'Inactivo'}
       ]
     }
+  },
+  components: {
+    CodeLoader
   },
   beforeCreate: function () {
     if (!this.$session.exists()) {
@@ -133,14 +172,24 @@ export default {
     }
   },
   async mounted() {
-    const usr = await getById.getUserById(this.$route.params.id)
+    const usr = await getById.getUserById(this.$route.params.id);
     this.user = usr.data.user.user;
     this.names = usr.data.user.names;
+    this.middlename = usr.data.user.middlename;
+    this.lastname = usr.data.user.lastname;
     this.role = usr.data.user.role;
     this.status = usr.data.user.statusID;
   },
   validations: {
     names: {
+      required,
+      minLength: minLength(4)
+    },
+    middlename: {
+      required,
+      minLength: minLength(4)
+    },
+    lastname: {
       required,
       minLength: minLength(4)
     },
@@ -159,21 +208,37 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.go(-1)
-      // this.$router.replace({path: '/users'})
+      this.$router.go(-1);
+      this.$router.push('/users');
     },
-    submit() {
-      console.log('submit!')
-      this.$v.$touch()
+    async submit() {
+      console.log('submit!');
+      this.$v.$touch();
       if (this.$v.$invalid) {
-        this.submitStatus = 'ERROR'
+        this.submitStatus = 'ERROR';
         console.info(this.$v)
       } else {
-        // do your submit logic here
-        this.submitStatus = 'PENDING'
-        setTimeout(() => {
-          this.submitStatus = 'OK'
-        }, 500)
+        this.submitStatus = 'PENDING';
+        const usr = {
+          "role": this.role,
+          "user": this.user,
+          "companyAccountID": this.$session.get('companyAccountId'),
+          "names": this.names,
+          "lastname": this.lastname,
+          "middlename": this.middlename,
+          "statusID": this.status,
+          "userId": this.$session.get('userId')
+        };
+        await updateCatalog.updateUser(usr).then(response => {
+          console.info(response);
+          if (response.data.error.errorCode === 0){
+            this.$toaster.success(response.data.error.message);
+            this.submitStatus = 'OK';
+          }else{
+            this.$toaster.error(response.data.error.message);
+            this.submitStatus = 'ERROR';
+          }
+        });
       }
     }
   }
