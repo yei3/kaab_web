@@ -5,7 +5,7 @@ export default {
     return Api.createCatalog().post()
   },
   createAddress (params) {
-    return Api.createCatalog().post()
+    return Api.createCatalog().post('/createAddress', params)
   },
   createAsset (params) {
     return Api.createCatalog().post()
@@ -14,7 +14,7 @@ export default {
     return Api.createCatalog().post()
   },
   createCompany (params) {
-    return Api.createCatalog().post()
+    return Api.createCatalog().post('/createCompany', params)
   },
   createCompanyAccount (params) {
     return Api.createCatalog().post()

@@ -59,6 +59,11 @@ const Users = () => import('@/views/users/Users')
 const User = () => import('@/views/users/User')
 const AddUser = () => import('@/views/users/AddUser')
 
+// Companies *
+const Companies = () => import('@/views/companies/Companies')
+const Company = () => import('@/views/companies/Company')
+const AddCompany = () => import('@/views/companies/AddCompany')
+
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
 const Session = () => import('@/views/sessions/Session')
@@ -135,6 +140,31 @@ export default new Router({
               meta: { label: 'Agregar usuario' },
               name: 'AddUser',
               component: AddUser
+            },
+          ]
+        },
+        {
+          path: 'companies',
+          meta: { label: 'Empresas' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Companies
+            },
+            {
+              path: 'company/:id',
+              meta: { label: 'Detalle de empresa' },
+              name: 'Company',
+              component: Company
+            },
+            {
+              path: 'addCompany',
+              meta: { label: 'Agregar empresa' },
+              name: 'AddCompany',
+              component: AddCompany
             },
           ]
         },

@@ -5,7 +5,7 @@ export default {
     return Api.updateCatalog().post()
   },
   updateAddress (params) {
-    return Api.updateCatalog().post()
+    return Api.updateCatalog().post('/updateAddress', params)
   },
   updateAsset (params) {
     return Api.updateCatalog().post()
@@ -14,7 +14,7 @@ export default {
     return Api.updateCatalog().post()
   },
   updateCompany (params) {
-    return Api.updateCatalog().post()
+    return Api.updateCatalog().post('/updateCompany', params)
   },
   updateCompanyAccount (params) {
     return Api.updateCatalog().post()

@@ -220,6 +220,7 @@ export default {
       } else {
         this.submitStatus = 'PENDING';
         const usr = {
+          "id": parseInt(this.$route.params.id),
           "role": this.role,
           "user": this.user,
           "companyAccountID": this.$session.get('companyAccountId'),
