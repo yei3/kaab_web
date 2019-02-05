@@ -64,6 +64,11 @@ const Companies = () => import('@/views/companies/Companies')
 const Company = () => import('@/views/companies/Company')
 const AddCompany = () => import('@/views/companies/AddCompany')
 
+// Contacts *
+const Contacts = () => import('@/views/contacts/Contacts')
+const Contact = () => import('@/views/contacts/Contact')
+const AddContact = () => import('@/views/contacts/AddContact')
+
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
 const Session = () => import('@/views/sessions/Session')
@@ -165,6 +170,31 @@ export default new Router({
               meta: { label: 'Agregar empresa' },
               name: 'AddCompany',
               component: AddCompany
+            },
+          ]
+        },
+        {
+          path: 'contacts',
+          meta: { label: 'Contactos' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Contacts
+            },
+            {
+              path: 'contact/:id',
+              meta: { label: 'Detalle de contacto' },
+              name: 'Contact',
+              component: Contact
+            },
+            {
+              path: 'addContact',
+              meta: { label: 'Agregar contacto' },
+              name: 'AddContact',
+              component: AddContact
             },
           ]
         },

@@ -370,7 +370,7 @@
           {value: 'Otro', text: 'Otro'}
         ],
         phoneTypeOptions: [
-          {value: null, text: 'Tipo de dirección...'},
+          {value: null, text: 'Tipo de Teléfono...'},
           {value: 'Celular', text: 'Celular'},
           {value: 'Casa', text: 'Casa'},
           {value: 'Trabajo', text: 'Trabajo'},
