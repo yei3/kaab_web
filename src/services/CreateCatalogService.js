@@ -23,7 +23,7 @@ export default {
     return Api.createCatalog().post()
   },
   createCostCenter (params) {
-    return Api.createCatalog().post()
+    return Api.createCatalog().post('/createCostCenter', params)
   },
   createDepartment (params) {
     return Api.createCatalog().post()

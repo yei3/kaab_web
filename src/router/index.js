@@ -59,6 +59,11 @@ const Users = () => import('@/views/users/Users')
 const User = () => import('@/views/users/User')
 const AddUser = () => import('@/views/users/AddUser')
 
+// Cost Centers *
+const CostCenters = () => import('@/views/cost_centers/CostCenters')
+const CostCenter = () => import('@/views/cost_centers/CostCenter')
+const AddCostCenter = () => import('@/views/cost_centers/AddCostCenter')
+
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
 const Session = () => import('@/views/sessions/Session')
@@ -135,6 +140,31 @@ export default new Router({
               meta: { label: 'Agregar usuario' },
               name: 'AddUser',
               component: AddUser
+            },
+          ]
+        },
+        {
+          path: 'costcenters',
+          meta: { label: 'Centros de Costo' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: CostCenters
+            },
+            {
+              path: 'costcenter/:id',
+              meta: { label: 'Detalle de centro de costo' },
+              name: 'CostCenter',
+              component: CostCenter
+            },
+            {
+              path: 'addcostcenter',
+              meta: { label: 'Agregar centro de costo' },
+              name: 'AddCostCenter',
+              component: AddCostCenter
             },
           ]
         },
