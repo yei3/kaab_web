@@ -2,7 +2,7 @@ import Api from './Api'
 
 export default {
   updateAccountingAccount (params) {
-    return Api.updateCatalog().post()
+    return Api.updateCatalog().post('/updateAccountingAccount', params)
   },
   updateAddress (params) {
     return Api.updateCatalog().post()
@@ -23,7 +23,7 @@ export default {
     return Api.updateCatalog().post()
   },
   updateCostCenter (params) {
-    return Api.updateCatalog().post()
+    return Api.updateCatalog().post('/updateCostCenter', params)
   },
   updateDepartment (params) {
     return Api.updateCatalog().post()

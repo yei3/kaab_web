@@ -17,14 +17,14 @@
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
+            <template slot="companyID" slot-scope="data">
+              {{data.item.companyID}}
+            </template>
             <template slot="name" slot-scope="data">
               {{data.item.name}}
             </template>
-            <template slot="description" slot-scope="data">
-              {{data.item.description}}
-            </template>
-            <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.status)">{{data.item.status}}</b-badge>
+            <template slot="statusID" slot-scope="data">
+              <b-badge :variant="getBadge(data.item.statusID)">{{data.item.statusID}}</b-badge>
             </template>
           </b-table>
           <nav>
@@ -79,8 +79,7 @@
           {label: 'ID', key: 'id', sortable: true},
           {label: 'Empresa', key: 'companyID', sortable: true},
           {label: 'Nombre', key: 'name', sortable: true},
-          {label: 'Descripción', key: 'description', sortable: true},
-          {label: 'Estatus', key: 'status', sortable: true}
+          {label: 'Estatus', key: 'statusID', sortable: true}
         ],
         currentPage: 1,
         perPage: 10,
@@ -100,11 +99,11 @@
     computed: {
     },
     methods: {
-      getBadge (status) {
-        return status === 'Activo' ? 'success'
-          : status === 'Inactivo' ? 'secondary'
-            : status === 'Pendiente' ? 'warning'
-              : status === 'Eliminado' ? 'danger' : 'primary'
+      getBadge (statusID) {
+        return statusID === 2 ? 'success' //activo
+          : statusID === 3 ? 'secondary' //inactivo
+            : statusID === 'Pendiente' ? 'warning'
+              : statusID === 'Eliminado' ? 'danger' : 'primary'
       },
       getRowCount (items) {
         return items ? items.length : 0
