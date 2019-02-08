@@ -29,7 +29,7 @@
             <b-form-group>
               <label class="small muted" for="key">Clave</label>
               <b-input-group>
-                <b-form-input class="form-control" :class="{ 'form-group--error': $v.key.$error }" type="text" id="key" v-model="$v.key.$model" placeholder="Introduce la clave"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.key.$error }" type="text" id="key" v-model="$v.key.$model" placeholder="Clave"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.key.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.key.minLength">El campo debe contener 4 letras mínimo</div>
@@ -49,7 +49,7 @@
             <b-form-group>
               <label class="small muted" for="description">Descripción</label>
               <b-input-group>
-                <b-form-input class="form-control" :class="{ 'form-group--error': $v.description.$error }" type="text" id="description" v-model="$v.description.$model" placeholder="Introduce la descripción"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.description.$error }" type="text" id="description" v-model="$v.description.$model" placeholder="Descripción"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.description.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.description.minLength">El campo debe contener 4 letras mínimo</div>

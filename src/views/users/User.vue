@@ -21,7 +21,8 @@
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.user.$error }" type="email" id="user" v-model="$v.user.$model" placeholder="usuario@mi-empresa.com" disabled></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.user.required">Campo requerido</div>
-              <div class="small text-danger" v-if="!$v.user.minLength">El usuario debe contener 3 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.user.email">El correo electrónico debe ser válido.</div>
+              <div class="small text-danger" v-if="!$v.user.maxLength">El campo debe contener 16 letras máximo</div>
             </b-form-group>
             <b-form-group>
               <b-input-group>
@@ -31,7 +32,8 @@
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.names.$error }" type="text" id="name" v-model="$v.names.$model" placeholder="Nombre"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.names.required">Campo requerido</div>
-              <div class="small text-danger" v-if="!$v.names.minLength">El nombre debe contener 3 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.names.minLength">El campo debe contener 3 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.names.maxLength">El campo debe contener 64 letras máximo</div>
             </b-form-group>
             <b-row>
               <b-col lg="6">
@@ -44,6 +46,7 @@
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.middlename.required">Campo requerido</div>
                   <div class="small text-danger" v-if="!$v.middlename.minLength">El apellido debe contener 4 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.middlename.maxLength">El campo debe contener 64 letras máximo</div>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
@@ -56,6 +59,7 @@
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.lastname.required">Campo requerido</div>
                   <div class="small text-danger" v-if="!$v.lastname.minLength">El apellido debe contener 4 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.lastname.maxLength">El campo debe contener 64 letras máximo</div>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -94,8 +98,8 @@
             <div slot="footer" class="pull-right">
               <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
               <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="submitStatus === 'PENDING'"><i class="fa fa-save"></i> Guardar</b-button>
-              <p class="small text-success" v-if="submitStatus === 'OK'">Usuario actualizado satisfactoriamente.</p>
-              <p class="small text-danger" v-if="submitStatus === 'ERROR'">Por favor revisa que los datos sean correctos.</p>
+              <p class="small text-success" v-if="submitStatus === 'OK'">Registro actualizado satisfactoriamente</p>
+              <p class="small text-danger" v-if="submitStatus === 'ERROR'">Por favor revisa que los datos sean correctos</p>
               <p class="small text-dark" v-if="submitStatus === 'PENDING'">Guardando...</p>
             </div>
           </form>
@@ -109,7 +113,7 @@
 <script>
 import getById from '../../services/GetCatalogById'
 import updateCatalog from '../../services/UpdateCatalogService'
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
 import { CodeLoader } from 'vue-content-loader';
 export default {
   name: 'User',
@@ -183,19 +187,23 @@ export default {
   validations: {
     names: {
       required,
-      minLength: minLength(4)
+      minLength: minLength(4),
+      maxLength: maxLength(64)
     },
     middlename: {
       required,
-      minLength: minLength(4)
+      minLength: minLength(4),
+      maxLength: maxLength(64)
     },
     lastname: {
       required,
-      minLength: minLength(4)
+      minLength: minLength(4),
+      maxLength: maxLength(64)
     },
     user: {
       required,
-      minLength: minLength(4)
+      email,
+      maxLength: maxLength(16)
     },
     role: {
       required

@@ -9,7 +9,7 @@
               <b-button type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
             </div>
           </div>
-          <code-loader v-if="!items.length"
+          <code-loader v-if="!flag"
                           :speed="2"
                           :animate="true"
           ></code-loader>
@@ -21,7 +21,7 @@
               {{data.item.name}}
             </template>
             <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.status)">{{data.item.status}}</b-badge>
+              <b-badge :variant="getBadge(data.item.status)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
@@ -72,6 +72,7 @@
     data: () => {
       return {
         items: [],
+        flag: false,
         fields: [
           {label: 'ID', key: 'id', sortable: true},
           {label: 'Nombre', key: 'names', sortable: true},
@@ -91,18 +92,25 @@
     async mounted() {
       const usrs = await getAll.getAllUsers();
       this.items = usrs.data.users;
+      this.flag = true;
     },
     computed: {
     },
     methods: {
-      getBadge (status) {
-        return status === 'Activo' ? 'success'
-          : status === 'Inactivo' ? 'secondary'
-            : status === 'Pendiente' ? 'warning'
-              : status === 'Eliminado' ? 'danger' : 'primary'
+      getBadge (statusID) {
+        return statusID === 2 ? 'success' //activo
+          : statusID === 3 ? 'secondary' //inactivo
+            : statusID === 'Pendiente' ? 'warning'
+              : statusID === 'Eliminado' ? 'danger' : 'primary'
+      },
+      getStatus (statusID) {
+        return statusID === 2 ? 'Activo'
+          : statusID === 3 ? 'Inactivo' //
+            : statusID === 'Pendiente' ? 'Pendiente'
+              : statusID === 'Eliminado' ? 'Eliminado' : 'primary'
       },
       getRowCount (items) {
-        return items.length
+        return items ? items.length : 0
       },
       regLink (id) {
         return `users/user/${id.toString()}`
