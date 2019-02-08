@@ -20,6 +20,9 @@
             <template slot="companyID" slot-scope="data">
               {{data.item.companyID}}
             </template>
+            <template slot="key" slot-scope="data">
+              {{data.item.key}}
+            </template>
             <template slot="name" slot-scope="data">
               {{data.item.name}}
             </template>
@@ -41,11 +44,11 @@
   import getAll from '../../services/GetAllCatalog'
   import { CodeLoader } from 'vue-content-loader';
   export default {
-    name: 'CostCenters',
+    name: 'AccountingAccounts',
     props: {
       caption: {
         type: String,
-        default: 'Centros de Costo'
+        default: 'Cuentas Contables'
       },
       hover: {
         type: Boolean,
@@ -78,6 +81,7 @@
         fields: [
           {label: 'ID', key: 'id', sortable: true},
           {label: 'Empresa', key: 'companyID', sortable: true},
+          {label: 'Clave', key: 'key', sortable: true},
           {label: 'Nombre', key: 'name', sortable: true},
           {label: 'Estatus', key: 'statusID', sortable: true}
         ],
@@ -92,8 +96,8 @@
       }
     },
     async mounted() {
-      const cstcntrs = await getAll.getAllCostCenters();
-      this.items = cstcntrs.data.costCenters;
+      const accacc = await getAll.getAllAccountingAccounts();
+      this.items = accacc.data.accountingAccounts;
       this.flag = true;
     },
     computed: {
@@ -115,14 +119,14 @@
         return items ? items.length : 0
       },
       regLink (id) {
-        return `costcenters/costcenter/${id.toString()}`
+        return `accountingaccounts/accountingaccount/${id.toString()}`
       },
       rowClicked (item) {
         const regLink = this.regLink(item.id)
         this.$router.push({path: regLink})
       },
       addClick () {
-        this.$router.push({path: `costcenters/addcostcenter`})
+        this.$router.push({path: `accountingaccounts/addaccountingaccount`})
       }
     }
   }

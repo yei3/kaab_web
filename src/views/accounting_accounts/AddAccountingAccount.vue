@@ -4,7 +4,7 @@
       <b-col lg="6">
         <b-card>         
           <div slot="header">
-            <strong>Centro de Costo </strong><small>Agregar</small>
+            <strong>Cuenta Contable </strong><small>Agregar</small>
           </div>
           <form @submit.prevent="submit">
             <b-form-group>
@@ -21,9 +21,18 @@
               <div class="small text-danger" v-if="!$v.companyID.required">Campo requerido</div>
             </b-form-group>
             <b-form-group>
+              <label class="small muted" for="key">Clave</label>
+              <b-input-group>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.key.$error }" type="text" id="key" v-model="$v.key.$model" placeholder="Introduce la clave"></b-form-input>
+              </b-input-group>
+              <div class="small text-danger" v-if="!$v.key.required">Campo requerido</div>
+              <div class="small text-danger" v-if="!$v.key.minLength">El campo debe contener 4 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.key.maxLength">El campo debe contener 16 letras máximo</div>
+            </b-form-group>
+            <b-form-group>
               <b-input-group>
                 <b-input-group-prepend>
-                  <b-input-group-text><i class="fa fa-cc"></i></b-input-group-text>
+                  <b-input-group-text><i class="fa fa-usd"></i></b-input-group-text>
                 </b-input-group-prepend>
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Introduce el nombre"></b-form-input>
               </b-input-group>
@@ -76,9 +85,10 @@
   import createCatalog from '../../services/CreateCatalogService'
   import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 export default {
-  name: 'AddCostCenter',
+  name: 'AddAccountingAccount',
   data: () => {
     return {
+      key: '',
       name: '',
       description: '',
       companyID: null,
@@ -112,6 +122,11 @@ export default {
     companyID: {
       required
     },
+    key: {
+      required,
+      minLength: minLength(4),
+      maxLength: maxLength(16)
+    },
     name: {
       required,
       minLength: minLength(4),
@@ -140,19 +155,20 @@ export default {
         console.info(this.$v)
       } else {
         this.submitStatus = 'PENDING';
-        const cstcntr = {
+        const accacc = {
         "companyID": this.companyID,
+        "key": this.key,
         "name": this.name,
         "description": this.description,
         "statusID": this.status,
         "userId": this.$session.get('userId')
       };
-        await createCatalog.createCostCenter(cstcntr).then(response => {
+        await createCatalog.createAccountingAccount(accacc).then(response => {
           console.info(response);
           if (response.data.error.errorCode === 0){
             this.$toaster.success(response.data.error.message);
             this.submitStatus = 'OK';
-            this.$router.push('/costcenters');
+            this.$router.push('/accountingaccounts');
           }else{
             this.$toaster.error(response.data.error.message);
             this.submitStatus = 'ERROR';

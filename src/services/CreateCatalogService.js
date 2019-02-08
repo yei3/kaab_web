@@ -2,7 +2,7 @@ import Api from './Api'
 
 export default {
   createAccountingAccount (params) {
-    return Api.createCatalog().post()
+    return Api.createCatalog().post('/createAccountingAccount', params)
   },
   createAddress (params) {
     return Api.createCatalog().post()

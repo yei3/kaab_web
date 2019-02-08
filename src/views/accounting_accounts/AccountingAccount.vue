@@ -1,10 +1,16 @@
 <template>
+
   <div class="animated fade-in">
+
     <b-row>
       <b-col lg="6">
-        <b-card>         
+        <code-loader v-if="!status"
+                     :speed="2"
+                     :animate="true"
+        ></code-loader>
+        <b-card v-else>
           <div slot="header">
-            <strong>Centro de Costo </strong><small>Agregar</small>
+            <strong>{{caption}}</strong><small> ID: {{$route.params.id }}</small>
           </div>
           <form @submit.prevent="submit">
             <b-form-group>
@@ -21,11 +27,20 @@
               <div class="small text-danger" v-if="!$v.companyID.required">Campo requerido</div>
             </b-form-group>
             <b-form-group>
+              <label class="small muted" for="key">Clave</label>
+              <b-input-group>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.key.$error }" type="text" id="key" v-model="$v.key.$model" placeholder="Introduce la clave"></b-form-input>
+              </b-input-group>
+              <div class="small text-danger" v-if="!$v.key.required">Campo requerido</div>
+              <div class="small text-danger" v-if="!$v.key.minLength">El campo debe contener 4 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.key.maxLength">El campo debe contener 16 letras máximo</div>
+            </b-form-group>
+            <b-form-group>
               <b-input-group>
                 <b-input-group-prepend>
-                  <b-input-group-text><i class="fa fa-cc"></i></b-input-group-text>
+                  <b-input-group-text><i class="fa fa-usd"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Introduce el nombre"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.name.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.name.minLength">El campo debe contener 4 letras mínimo</div>
@@ -69,14 +84,23 @@
       </b-col>
     </b-row>
   </div>
+
 </template>
 
 <script>
-  import getAll from '../../services/GetAllCatalog'
-  import createCatalog from '../../services/CreateCatalogService'
-  import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import getAll from '../../services/GetAllCatalog'
+import getById from '../../services/GetCatalogById'
+import updateCatalog from '../../services/UpdateCatalogService'
+import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import { CodeLoader } from 'vue-content-loader';
 export default {
-  name: 'AddCostCenter',
+  name: 'AccountingAccount',
+  props: {
+    caption: {
+      type: String,
+      default: 'Modificar cuenta contable'
+    },
+  },
   data: () => {
     return {
       name: '',
@@ -84,13 +108,24 @@ export default {
       companyID: null,
       status: null,
       submitStatus: null,
+      fields: [
+          {label: 'ID', key: 'id', sortable: true},
+          {label: 'Empresa', key: 'companyID', sortable: true},
+          {label: 'Nombre', key: 'name', sortable: true},
+          {label: 'Clave', key: 'key', sortable: true},
+          {label: 'Descripción', key: 'description', sortable: true},
+          {label: 'Estatus', key: 'statusID', sortable: true}
+        ],
       statusOptions: [
-        {value: null, text: 'Estatus...', disabled: true},
+        {value: null, text: 'Estatus...'},
         {value: 2, text: 'Activo'},
         {value: 3, text: 'Inactivo'}
       ],
       companyIDOptions: []
     }
+  },
+  components: {
+    CodeLoader
   },
   beforeCreate: function () {
     if (!this.$session.exists()) {
@@ -107,10 +142,22 @@ export default {
       tmp.push(dt);
     });
     this.companyIDOptions = tmp;
+    //
+    const accacc = await getById.getAccountingAccountById(this.$route.params.id);
+    this.key = accacc.data.accountingAccount.key;
+    this.name = accacc.data.accountingAccount.name;
+    this.description = accacc.data.accountingAccount.description;
+    this.companyID = accacc.data.accountingAccount.companyID;
+    this.status = accacc.data.accountingAccount.statusID;
   },
   validations: {
     companyID: {
       required
+    },
+    key: {
+      required,
+      minLength: minLength(4),
+      maxLength: maxLength(16)
     },
     name: {
       required,
@@ -130,7 +177,8 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.go(-1)
+      this.$router.go(-1);
+      //this.$router.push('/accountingaccounts');
     },
     async submit() {
       console.log('submit!');
@@ -140,19 +188,20 @@ export default {
         console.info(this.$v)
       } else {
         this.submitStatus = 'PENDING';
-        const cstcntr = {
-        "companyID": this.companyID,
-        "name": this.name,
-        "description": this.description,
-        "statusID": this.status,
-        "userId": this.$session.get('userId')
-      };
-        await createCatalog.createCostCenter(cstcntr).then(response => {
+        const accacc = {
+          "id": parseInt(this.$route.params.id,10),
+          "companyID": this.companyID,
+          "key": this.key,
+          "name": this.name,
+          "description": this.description,
+          "statusID": this.status,
+          "userId": this.$session.get('userId')
+        };
+        await updateCatalog.updateAccountingAccount(accacc).then(response => {
           console.info(response);
           if (response.data.error.errorCode === 0){
             this.$toaster.success(response.data.error.message);
             this.submitStatus = 'OK';
-            this.$router.push('/costcenters');
           }else{
             this.$toaster.error(response.data.error.message);
             this.submitStatus = 'ERROR';

@@ -31,7 +31,7 @@
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-cc"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Introduce el nombre"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.name.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.name.minLength">El campo debe contener 4 letras mínimo</div>
@@ -99,6 +99,13 @@ export default {
       companyID: null,
       status: null,
       submitStatus: null,
+      fields: [
+          {label: 'ID', key: 'id', sortable: true},
+          {label: 'Empresa', key: 'companyID', sortable: true},
+          {label: 'Nombre', key: 'name', sortable: true},
+          {label: 'Descripción', key: 'description', sortable: true},
+          {label: 'Estatus', key: 'statusID', sortable: true}
+        ],
       statusOptions: [
         {value: null, text: 'Estatus...'},
         {value: 2, text: 'Activo'},
@@ -166,6 +173,7 @@ export default {
       } else {
         this.submitStatus = 'PENDING';
         const cstcntr = {
+          "id": parseInt(this.$route.params.id,10),
           "companyID": this.companyID,
           "name": this.name,
           "description": this.description,
