@@ -26,7 +26,7 @@
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.names.$error }" type="text" id="name" v-model="$v.names.$model" placeholder="Nombre"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.names.required">Campo requerido</div>
-              <div class="small text-danger" v-if="!$v.names.minLength">El campo debe contener 4 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.names.minLength">El campo debe contener 3 letras mínimo</div>
               <div class="small text-danger" v-if="!$v.names.maxLength">El campo debe contener 64 letras máximo</div>
             </b-form-group>
             <b-row>
@@ -141,7 +141,7 @@ export default {
   validations: {
     names: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(3),
       maxLength: maxLength(64)
     },
     middlename: {

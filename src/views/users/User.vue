@@ -29,7 +29,7 @@
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input class="form-control" :class="{ 'form-group--error': $v.names.$error }" type="text" id="name" v-model="$v.names.$model" placeholder="Nombre"></b-form-input>
+                <b-form-input class="form-control" :class="{ 'form-group--error': $v.names.$error }" type="text" id="names" v-model="$v.names.$model" placeholder="Nombre"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.names.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.names.minLength">El campo debe contener 3 letras mínimo</div>
@@ -42,7 +42,7 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
-                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.middlename.$error }" type="text" id="name" v-model="$v.middlename.$model" placeholder="Apellido Paterno"></b-form-input>
+                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.middlename.$error }" type="text" id="middlename" v-model="$v.middlename.$model" placeholder="Apellido Paterno"></b-form-input>
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.middlename.required">Campo requerido</div>
                   <div class="small text-danger" v-if="!$v.middlename.minLength">El apellido debe contener 4 letras mínimo</div>
@@ -55,7 +55,7 @@
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
-                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.lastname.$error }" type="text" id="name" v-model="$v.lastname.$model" placeholder="Apellido Materno"></b-form-input>
+                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.lastname.$error }" type="text" id="lastname" v-model="$v.lastname.$model" placeholder="Apellido Materno"></b-form-input>
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.lastname.required">Campo requerido</div>
                   <div class="small text-danger" v-if="!$v.lastname.minLength">El apellido debe contener 4 letras mínimo</div>
@@ -123,19 +123,6 @@ export default {
       default: 'Modificar usuario'
     },
   },
-  /*data: () => {
-    return {
-      items: (id) => {
-        const user = usersData.find( user => user.id.toString() === id)
-        const userDetails = user ? Object.entries(user) : [['id', 'Not found','','']]
-        return userDetails.map(([key, value]) => {return {key: key, value: value}})
-      },
-      fields: [
-        {key: 'key'},
-        {key: 'value'}
-      ],*/
-
-
   data: () => {
     return {
       user: '',
@@ -187,7 +174,7 @@ export default {
   validations: {
     names: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(3),
       maxLength: maxLength(64)
     },
     middlename: {
@@ -228,6 +215,7 @@ export default {
       } else {
         this.submitStatus = 'PENDING';
         const usr = {
+          "id": parseInt(this.$route.params.id,10),
           "role": this.role,
           "user": this.user,
           "companyAccountID": this.$session.get('companyAccountId'),
