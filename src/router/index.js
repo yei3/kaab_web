@@ -59,6 +59,16 @@ const Users = () => import('@/views/users/Users')
 const User = () => import('@/views/users/User')
 const AddUser = () => import('@/views/users/AddUser')
 
+// Cost Centers *
+const CostCenters = () => import('@/views/cost_centers/CostCenters')
+const CostCenter = () => import('@/views/cost_centers/CostCenter')
+const AddCostCenter = () => import('@/views/cost_centers/AddCostCenter')
+
+// Accounting Account *
+const AccountingAccounts = () => import('@/views/accounting_accounts/AccountingAccounts')
+const AccountingAccount = () => import('@/views/accounting_accounts/AccountingAccount')
+const AddAccountingAccount = () => import('@/views/accounting_accounts/AddAccountingAccount')
+
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
 const Session = () => import('@/views/sessions/Session')
@@ -135,6 +145,56 @@ export default new Router({
               meta: { label: 'Agregar usuario' },
               name: 'AddUser',
               component: AddUser
+            },
+          ]
+        },
+        {
+          path: 'costcenters',
+          meta: { label: 'Centros de Costo' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: CostCenters
+            },
+            {
+              path: 'costcenter/:id',
+              meta: { label: 'Detalle de centro de costo' },
+              name: 'CostCenter',
+              component: CostCenter
+            },
+            {
+              path: 'addcostcenter',
+              meta: { label: 'Agregar centro de costo' },
+              name: 'AddCostCenter',
+              component: AddCostCenter
+            },
+          ]
+        },
+        {
+          path: 'accountingaccounts',
+          meta: { label: 'Cuentas Contables' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: AccountingAccounts
+            },
+            {
+              path: 'accountingaccount/:id',
+              meta: { label: 'Detalle de cuenta contable' },
+              name: 'AccountingAccount',
+              component: AccountingAccount
+            },
+            {
+              path: 'addaccountingaccount',
+              meta: { label: 'Agregar cuenta contable' },
+              name: 'AddAccountingAccount',
+              component: AddAccountingAccount
             },
           ]
         },
