@@ -13,19 +13,6 @@
             <strong>{{caption}}</strong><small> ID: {{$route.params.id }}</small>
           </div>
           <form @submit.prevent="submit">
-            <b-form-group>
-              <b-input-group>
-                <b-input-group-prepend>
-                  <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                </b-input-group-prepend>
-                <b-form-select id="companyID"
-                               v-model.trim="$v.companyID.$model"
-                               class="form-control" :class="{ 'form-group--error': $v.companyID.$error }"
-                               :options="companyIDOptions">
-                </b-form-select>
-              </b-input-group>
-              <div class="small text-danger" v-if="!$v.phoneType.required">Campo requerido</div>
-            </b-form-group>
             <b-row>
               <b-col lg="6">
                 <b-form-group>

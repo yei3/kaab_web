@@ -52,6 +52,7 @@ const Modals = () => import('@/views/notifications/Modals')
 const Page404 = () => import('@/views/pages/Page404')
 const Page500 = () => import('@/views/pages/Page500')
 const Login = () => import('@/views/pages/Login')
+const RecoverPassword = () => import('@/views/pages/RecoverPassword')
 const Register = () => import('@/views/pages/Register')
 
 // Users *
@@ -68,6 +69,11 @@ const AddCompany = () => import('@/views/companies/AddCompany')
 const Contacts = () => import('@/views/contacts/Contacts')
 const Contact = () => import('@/views/contacts/Contact')
 const AddContact = () => import('@/views/contacts/AddContact')
+
+// Departments *
+const Departments = () => import('@/views/departments/Departments')
+const Department = () => import('@/views/departments/Department')
+const AddDepartment = () => import('@/views/departments/AddDepartment')
 
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
@@ -195,6 +201,31 @@ export default new Router({
               meta: { label: 'Agregar contacto' },
               name: 'AddContact',
               component: AddContact
+            },
+          ]
+        },
+        {
+          path: 'departments',
+          meta: { label: 'Departamentos' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Departments
+            },
+            {
+              path: 'department/:id',
+              meta: { label: 'Detalle de departamento' },
+              name: 'Department',
+              component: Department
+            },
+            {
+              path: 'addDepartment',
+              meta: { label: 'Agregar departamento' },
+              name: 'AddDepartment',
+              component: AddDepartment
             },
           ]
         },
@@ -428,6 +459,11 @@ export default new Router({
           path: 'login',
           name: 'Login',
           component: Login
+        },
+        {
+          path: 'recoverPassword',
+          name: 'RecoverPassword',
+          component: RecoverPassword
         },
         {
           path: 'register',

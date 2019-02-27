@@ -13,19 +13,6 @@
             <strong>{{caption}}</strong><small> ID: {{$route.params.id }}</small>
           </div>
           <form @submit.prevent="submit">
-            <b-form-group>
-              <b-input-group>
-                <b-input-group-prepend>
-                  <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                </b-input-group-prepend>
-                <b-form-select id="companyID"
-                               v-model.trim="$v.companyID.$model"
-                               class="form-control" :class="{ 'form-group--error': $v.companyID.$error }"
-                               :options="companyIDOptions">
-                </b-form-select>
-              </b-input-group>
-              <div class="small text-danger" v-if="!$v.phoneType.required">Campo requerido</div>
-            </b-form-group>
             <b-row>
               <b-col lg="6">
                 <b-form-group>
@@ -234,7 +221,7 @@
     props: {
       caption: {
         type: String,
-        default: 'Modificar contacto'
+        default: 'Crear contacto'
       },
     },
     /*data: () => {
@@ -252,7 +239,6 @@
 
     data: () => {
       return {
-        companyID:null,
         names: '',
         lastname: '',
         middlename: null,
@@ -292,8 +278,7 @@
           {value: null, text: 'Estatus...'},
           {value: 2, text: 'Activo'},
           {value: 3, text: 'Inactivo'}
-        ],
-        companyIDOptions: []
+        ]
       }
     },
     components: {
@@ -303,17 +288,6 @@
       if (!this.$session.exists()) {
         this.$router.push('/pages/login')
       }
-    },
-    async mounted() {
-      const cmpns = await getAll.getAllCompanies();
-      let tmp = [
-        {value: null, text: 'Empresa...'}
-      ];
-      cmpns.data.companies.map(function(value, key) {
-        let dt = {value: value.id, text: value.name};
-        tmp.push(dt);
-      });
-      this.companyIDOptions = tmp;
     },
     validations: {
       names: {
@@ -357,9 +331,6 @@
       email2: {
         email
       },
-      companyID:{
-        required
-      },
       status: {
         required
       }
@@ -380,7 +351,7 @@
         } else {
           this.submitStatus = 'PENDING';
           const cntct = {
-            "companyID": this.companyID,
+            "companyID": this.$session.get('companyID'),
             "names": this.names,
             "lastname": this.lastname,
             "middlename": this.middlename,

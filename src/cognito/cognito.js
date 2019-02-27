@@ -123,4 +123,30 @@ export default class CognitoAuth {
       cb(Error('Session is invalid'))
     })
   }
+
+  recoverPassword(user, pass, cb){
+    let userData = { Username: user, Pool: this.userPool }
+    let cognitoUser = new CognitoUser(userData)
+    cognitoUser.forgotPassword({
+      onSuccess: function (data) {
+        // successfully initiated reset password request
+        console.log('CodeDeliveryData from forgotPassword: ' + data);
+      },
+      onFailure: function(err) {
+        alert(err.message || JSON.stringify(err));
+      },
+      //Optional automatic callback
+      inputVerificationCode: function(data) {
+        var verificationCode = prompt('Por favor introduce el código de verificación enviado: ' ,'');
+        cognitoUser.confirmPassword(verificationCode, pass, {
+          onSuccess() {
+            cb(true);
+          },
+          onFailure(err) {
+            cb(err);
+          }
+        });
+      }
+    });
+  }
 }

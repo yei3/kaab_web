@@ -17,14 +17,14 @@
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
+            <template slot="departmentType" slot-scope="data">
+              {{data.item.departmentType}}
+            </template>
             <template slot="name" slot-scope="data">
-              {{data.item.names}}
+              {{data.item.name}}
             </template>
-            <template slot="fiscalID" slot-scope="data">
-              {{data.item.lastname}}
-            </template>
-            <template slot="fiscalID" slot-scope="data">
-              {{data.item.position}}
+            <template slot="headDepartment" slot-scope="data">
+              {{data.item.headDepartment}}
             </template>
             <template slot="status" slot-scope="data">
               <b-badge :variant="getBadge(data.item.statusID)">{{data.item.statusID}}</b-badge>
@@ -43,12 +43,13 @@
 <script>
   import gets from '../../services/Gets'
   import { CodeLoader } from 'vue-content-loader';
+  //import usersData from './UsersData'
   export default {
-    name: 'Contacts',
+    name: 'Users',
     props: {
       caption: {
         type: String,
-        default: 'Contactos'
+        default: 'Usuarios'
       },
       hover: {
         type: Boolean,
@@ -77,12 +78,13 @@
     data: () => {
       return {
         items: [],
+        flag: false,
         fields: [
           {label: 'ID', key: 'id', sortable: true},
-          {label: 'Nombre', key: 'names', sortable: true},
-          {label: 'Apellido', key: 'lastname', sortable: true},
-          {label: 'Puesto', key: 'position', sortable: true},
-          {label: 'Estatus', key: 'statusID', sortable: true}
+          {label: 'Tipo de Departamento', key: 'departmentType', sortable: true},
+          {label: 'Nombre', key: 'name', sortable: true},
+          {label: 'Jefe de Departamento', key: 'headDepartment', sortable: true},
+          {label: 'Estatus', key: 'status', sortable: true}
         ],
         currentPage: 1,
         perPage: 10,
@@ -95,8 +97,8 @@
       }
     },
     async mounted() {
-      const cntcts = await gets.getContactsByCompany(this.$session.get('companyID'));
-      this.items = cntcts.data.contacts;
+      const dprtmnts = await gets.getAllDepartmentsByCompany(this.$session.get('companyID'));
+      this.items = dprtmnts.data.departments;
     },
     computed: {
     },
@@ -111,14 +113,14 @@
         return items.length
       },
       regLink (id) {
-        return `contacts/contact/${id.toString()}`
+        return `departments/department/${id.toString()}`
       },
       rowClicked (item) {
         const regLink = this.regLink(item.id)
         this.$router.push({path: regLink})
       },
       addClick () {
-        this.$router.push({path: `contacts/addContact`})
+        this.$router.push({path: `departments/addDepartment`})
       }
     }
   }
