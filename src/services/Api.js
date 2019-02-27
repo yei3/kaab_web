@@ -5,8 +5,8 @@ export default{
       baseURL: `https://n64ifi6mkf.execute-api.us-west-2.amazonaws.com/Prod`,
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
   },
   updateCatalog(){
@@ -21,7 +21,6 @@ export default{
   deleteCatalog(){
     return axios.create({
       baseURL: `https://dnaii63t6l.execute-api.us-west-2.amazonaws.com/Prod`,
-      withCredentials: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -31,7 +30,6 @@ export default{
   getCatalogById(){
     return axios.create({
       baseURL: `https://0oigmx0bsf.execute-api.us-west-2.amazonaws.com/Prod`,
-      withCredentials: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -41,7 +39,6 @@ export default{
   getCatalogByFilters(){
     return axios.create({
       baseURL: `https://8k4fyetwz4.execute-api.us-west-2.amazonaws.com/Prod`,
-      withCredentials: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -51,7 +48,6 @@ export default{
   getAllCatalog(){
     return axios.create({
       baseURL: `https://aioc5f98di.execute-api.us-west-2.amazonaws.com/Prod`,
-      withCredentials: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -61,7 +57,6 @@ export default{
   gets(){
     return axios.create({
       baseURL: `https://rygs86wbo4.execute-api.us-west-2.amazonaws.com/Prod`,
-      withCredentials: false,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

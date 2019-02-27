@@ -27,7 +27,7 @@
                       <b-button type="submit" variant="secondary bg-primary" class="px-4">Login</b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="link" class="px-0">Reestablecer</b-button>
+                      <b-button variant="link" @click="recover" class="px-0">Reestablecer</b-button>
                     </b-col>
                   </b-row>
                   <b-row class="justify-content-center text-muted" style="position:absolute; left:1.25rem; right:1.25rem; bottom:1rem; height:1rem; ">
@@ -113,6 +113,9 @@
             //this.$router.replace('/profile')
           }*/
         });
+      },
+      recover(){
+        this.$router.push({path: '/pages/recoverPassword'})
       }
     }
   }

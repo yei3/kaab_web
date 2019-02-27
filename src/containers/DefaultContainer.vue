@@ -8,15 +8,24 @@
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
       <b-navbar-nav>
-        <!--<b-nav-item class="px-3" to="/dashboard">Dashboard</b-nav-item>
-        <b-nav-text class="px-3">Proyecto:</b-nav-text>
+        <b-nav-text class="px-3">Empresa:</b-nav-text>
         <b-nav-form class="px-0">
-          <b-form-select id="basicSelect"
-            :plain="true"
-            :options="['HGM-2019','INAPESCA-2019', 'VINCOURT-2019']"
-            value="HGM-2019">
+          <b-form-select id="role"
+                         v-model.trim="companyID"
+                         class="form-control"
+                         :options="companyIDOptions"
+                         @change="changeCompany($event)">
           </b-form-select>
-        </b-nav-form>-->
+        </b-nav-form>
+        <b-nav-form class="px-0">
+          <b-nav-text class="px-3">Proyecto:</b-nav-text>
+          <b-form-select id="role"
+                         v-model.trim="projectID"
+                         class="form-control"
+                         :options="projectIDOptions"
+                         @change="changeProject($event)">
+          </b-form-select>
+        </b-nav-form>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <DefaultHeaderDropdownAccnt/>
@@ -61,6 +70,8 @@ import nav from '@/_nav'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
 import DefaultAside from './DefaultAside'
 import DefaultHeaderDropdownAccnt from './DefaultHeaderDropdownAccnt'
+import gets from '../services/Gets'
+import getAll from '../services/GetAllCatalog'
 
 export default {
   name: 'DefaultContainer',
@@ -82,7 +93,64 @@ export default {
   },
   data () {
     return {
-      nav: nav.items
+      nav: nav.items,
+      companyID:null,
+      projectID:null,
+      projectIDOptions: [],
+      companyIDOptions: []
+    }
+  },
+  async mounted() {
+    const cmpns = await getAll.getAllCompanies();
+    let tmp = [
+      {value: null, text: 'Empresa...'}
+    ];
+    cmpns.data.companies.map(function(value, key) {
+      let dt = {value: value.id, text: value.name};
+      tmp.push(dt);
+    });
+    this.companyIDOptions = tmp;
+    if (this.$session.has('companyID')){
+      this.companyID = this.$session.get('companyID');
+    } else{
+      this.$session.set('companyID', this.companyIDOptions[1].value);
+      this.companyID = this.companyIDOptions[1].value;
+    }
+
+
+    const prycts = await gets.getProjectsByCompany(this.companyID);
+    let tmp2 = [
+      {value: null, text: 'Proyecto...'}
+    ];
+    prycts.data.projects.map(function(value, key) {
+      let dt = {value: value.id, text: value.name};
+      tmp2.push(dt);
+    });
+    this.projectIDOptions = tmp2;
+    this.projectID = this.projectIDOptions[1].value;
+    this.$session.set('projectID', this.projectID);
+  },
+  methods:{
+    async changeCompany(event){
+      this.companyID = event;
+      if (event != null)
+        this.$session.set('companyID', event);
+      const prycts2 = await gets.getProjectsByCompany(this.companyID);
+      let tmp2 = [
+        {value: null, text: 'Proyecto...'}
+      ];
+      prycts2.data.projects.map(function(value, key) {
+        let dt = {value: value.id, text: value.name};
+        tmp2.push(dt);
+      });
+      this.projectIDOptions = tmp2;
+      this.projectID = this.projectIDOptions[1].value;
+      this.$session.set('projectID', this.projectID);
+    },
+    changeProject(event){
+      this.projectID = event
+      if (event != null)
+        this.$session.set('projectID', event);
     }
   },
   computed: {
