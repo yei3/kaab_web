@@ -17,11 +17,17 @@
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
+            <template slot="companyID" slot-scope="data">
+              {{data.item.companyID}}
+            </template>
+            <template slot="key" slot-scope="data">
+              {{data.item.key}}
+            </template>
             <template slot="name" slot-scope="data">
               {{data.item.name}}
             </template>
-            <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.status)">{{getStatus(data.item.statusID)}}</b-badge>
+            <template slot="statusID" slot-scope="data">
+              <b-badge :variant="getBadge(data.item.statusID)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
@@ -37,13 +43,12 @@
 <script>
   import getAll from '../../services/GetAllCatalog'
   import { CodeLoader } from 'vue-content-loader';
-  //import usersData from './UsersData'
   export default {
-    name: 'Users',
+    name: 'AccountingAccounts',
     props: {
       caption: {
         type: String,
-        default: 'Usuarios'
+        default: 'Cuentas Contables'
       },
       hover: {
         type: Boolean,
@@ -75,9 +80,10 @@
         flag: false,
         fields: [
           {label: 'ID', key: 'id', sortable: true},
-          {label: 'Nombre', key: 'names', sortable: true},
-          {label: 'Rol', key: 'role', sortable: true},
-          {label: 'Estatus', key: 'status', sortable: true}
+          {label: 'Empresa', key: 'companyID', sortable: true},
+          {label: 'Clave', key: 'key', sortable: true},
+          {label: 'Nombre', key: 'name', sortable: true},
+          {label: 'Estatus', key: 'statusID', sortable: true}
         ],
         currentPage: 1,
         perPage: 10,
@@ -90,8 +96,8 @@
       }
     },
     async mounted() {
-      const usrs = await getAll.getAllUsers();
-      this.items = usrs.data.users;
+      const accacc = await getAll.getAllAccountingAccounts();
+      this.items = accacc.data.accountingAccounts;
       this.flag = true;
     },
     computed: {
@@ -113,14 +119,14 @@
         return items ? items.length : 0
       },
       regLink (id) {
-        return `users/user/${id.toString()}`
+        return `accountingaccounts/accountingaccount/${id.toString()}`
       },
       rowClicked (item) {
         const regLink = this.regLink(item.id)
         this.$router.push({path: regLink})
       },
       addClick () {
-        this.$router.push({path: `users/adduser`})
+        this.$router.push({path: `accountingaccounts/addaccountingaccount`})
       }
     }
   }

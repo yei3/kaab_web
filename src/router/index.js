@@ -75,6 +75,16 @@ const Departments = () => import('@/views/departments/Departments')
 const Department = () => import('@/views/departments/Department')
 const AddDepartment = () => import('@/views/departments/AddDepartment')
 
+// Cost Centers *
+const CostCenters = () => import('@/views/cost_centers/CostCenters')
+const CostCenter = () => import('@/views/cost_centers/CostCenter')
+const AddCostCenter = () => import('@/views/cost_centers/AddCostCenter')
+
+// Accounting Account *
+const AccountingAccounts = () => import('@/views/accounting_accounts/AccountingAccounts')
+const AccountingAccount = () => import('@/views/accounting_accounts/AccountingAccount')
+const AddAccountingAccount = () => import('@/views/accounting_accounts/AddAccountingAccount')
+
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
 const Session = () => import('@/views/sessions/Session')
@@ -154,323 +164,374 @@ export default new Router({
             },
           ]
         },
+
         {
-          path: 'companies',
-          meta: { label: 'Empresas' },
+          path: 'costcenters',
+          meta: { label: 'Centros de Costo' },
           component: {
             render (c) { return c('router-view') }
           },
           children: [
             {
               path: '',
-              component: Companies
+              component: CostCenters
             },
             {
-              path: 'company/:id',
+              path: 'costcenter/:id',
+              meta: { label: 'Detalle de centro de costo' },
+              name: 'CostCenter',
+              component: CostCenter
+            },
+            {
+              path: 'addcostcenter',
+              meta: { label: 'Agregar centro de costo' },
+              name: 'AddCostCenter',
+              component: AddCostCenter
+            }
+          ]
+        },
+        {
+        path: 'companies',
+        meta: { label: 'Empresas' },
+        component: {
+          render (c) { return c('router-view') }
+        },
+        children: [
+          {
+            path: '',
+            component: Companies
+          },
+          {
+            path: 'company/:id',
               meta: { label: 'Detalle de empresa' },
-              name: 'Company',
+            name: 'Company',
               component: Company
+          },
+          {
+            path: 'addCompany',
+              meta: { label: 'Agregar empresa' },
+            name: 'AddCompany',
+              component: AddCompany
+          },
+        ]
+        },
+        {
+          path: 'accountingAccounts',
+          meta: { label: 'Cuentas Contables' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: AccountingAccounts
             },
             {
-              path: 'addCompany',
-              meta: { label: 'Agregar empresa' },
-              name: 'AddCompany',
-              component: AddCompany
+              path: 'accountingaccount/:id',
+              meta: { label: 'Detalle de cuenta contable' },
+              name: 'AccountingAccount',
+              component: AccountingAccount
             },
+            {
+              path: 'addaccountingaccount',
+              meta: {label: 'Agregar cuenta contable'},
+              name: 'AddAccountingAccount',
+              component: AddAccountingAccount
+            }
           ]
         },
         {
           path: 'contacts',
-          meta: { label: 'Contactos' },
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: '',
-              component: Contacts
-            },
-            {
-              path: 'contact/:id',
-              meta: { label: 'Detalle de contacto' },
-              name: 'Contact',
-              component: Contact
-            },
-            {
-              path: 'addContact',
-              meta: { label: 'Agregar contacto' },
-              name: 'AddContact',
-              component: AddContact
-            },
-          ]
-        },
-        {
-          path: 'departments',
-          meta: { label: 'Departamentos' },
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: '',
-              component: Departments
-            },
-            {
-              path: 'department/:id',
-              meta: { label: 'Detalle de departamento' },
-              name: 'Department',
-              component: Department
-            },
-            {
-              path: 'addDepartment',
-              meta: { label: 'Agregar departamento' },
-              name: 'AddDepartment',
-              component: AddDepartment
-            },
-          ]
-        },
-        {
-          path: 'sessions',
-          meta: { label: 'Sesiones de registro' },
+            meta: { label: 'Contactos' },
             component: {
-            render (c) { return c('router-view') }
+              render (c) { return c('router-view') }
             },
-          children: [
-            {
-              path: '',
-              component: Sessions
+            children: [
+              {
+                path: '',
+                component: Contacts
             },
-            {
-              path: 'addsession',
-              meta: { label: 'Nueva sesión de registro' },
-              name: 'AddSession',
-              component: AddSession
-            },
-            {
-              path: 'session/:idsession',
-              meta: { label: 'Detalle de sesión' },
-              name: 'Session',
-              component: Session
-            },  
-            {
-              path: 'session/:idsession/asset/:idasset',
-              meta: { label: 'Detalle de activo' },
-              name: 'Asset',
-              component: Asset 
-            }
-          ],
-        },
-        {
-          path: 'base',
-          redirect: '/base/cards',
-          name: 'Base',
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'cards',
-              name: 'Cards',
-              component: Cards
+              {
+                path: 'contact/:id',
+                  meta: { label: 'Detalle de contacto' },
+                name: 'Contact',
+                  component: Contact
+              },
+              {
+                path: 'addContact',
+                  meta: { label: 'Agregar contacto' },
+                name: 'AddContact',
+                  component: AddContact
+              },
+            ]
             },
             {
-              path: 'forms',
-              name: 'Forms',
-              component: Forms
+              path: 'departments',
+                meta: { label: 'Departamentos' },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: '',
+                  component: Departments
+                },
+                {
+                  path: 'department/:id',
+                  meta: { label: 'Detalle de departamento' },
+                  name: 'Department',
+                  component: Department
+                },
+                {
+                  path: 'addDepartment',
+                  meta: { label: 'Agregar departamento' },
+                  name: 'AddDepartment',
+                  component: AddDepartment
+                },
+              ]
             },
             {
-              path: 'switches',
-              name: 'Switches',
-              component: Switches
+              path: 'sessions',
+                meta: { label: 'Sesiones de registro' },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: '',
+                  component: Sessions
+                },
+                {
+                  path: 'addsession',
+                  meta: { label: 'Nueva sesión de registro' },
+                  name: 'AddSession',
+                  component: AddSession
+                },
+                {
+                  path: 'session/:idsession',
+                  meta: { label: 'Detalle de sesión' },
+                  name: 'Session',
+                  component: Session
+                },
+                {
+                  path: 'session/:idsession/asset/:idasset',
+                  meta: { label: 'Detalle de activo' },
+                  name: 'Asset',
+                  component: Asset
+                }
+              ],
             },
             {
-              path: 'tables',
-              name: 'Tables',
-              component: Tables
+              path: 'base',
+                redirect: '/base/cards',
+              name: 'Base',
+              component: {
+              render (c) { return c('router-view') }
+            },
+              children: [
+                {
+                  path: 'cards',
+                  name: 'Cards',
+                  component: Cards
+                },
+                {
+                  path: 'forms',
+                  name: 'Forms',
+                  component: Forms
+                },
+                {
+                  path: 'switches',
+                  name: 'Switches',
+                  component: Switches
+                },
+                {
+                  path: 'tables',
+                  name: 'Tables',
+                  component: Tables
+                },
+                {
+                  path: 'tabs',
+                  name: 'Tabs',
+                  component: Tabs
+                },
+                {
+                  path: 'breadcrumbs',
+                  name: 'Breadcrumbs',
+                  component: Breadcrumbs
+                },
+                {
+                  path: 'carousels',
+                  name: 'Carousels',
+                  component: Carousels
+                },
+                {
+                  path: 'collapses',
+                  name: 'Collapses',
+                  component: Collapses
+                },
+                {
+                  path: 'jumbotrons',
+                  name: 'Jumbotrons',
+                  component: Jumbotrons
+                },
+                {
+                  path: 'list-groups',
+                  name: 'List Groups',
+                  component: ListGroups
+                },
+                {
+                  path: 'navs',
+                  name: 'Navs',
+                  component: Navs
+                },
+                {
+                  path: 'navbars',
+                  name: 'Navbars',
+                  component: Navbars
+                },
+                {
+                  path: 'paginations',
+                  name: 'Paginations',
+                  component: Paginations
+                },
+                {
+                  path: 'popovers',
+                  name: 'Popovers',
+                  component: Popovers
+                },
+                {
+                  path: 'progress-bars',
+                  name: 'Progress Bars',
+                  component: ProgressBars
+                },
+                {
+                  path: 'tooltips',
+                  name: 'Tooltips',
+                  component: Tooltips
+                }
+              ]
             },
             {
-              path: 'tabs',
-              name: 'Tabs',
-              component: Tabs
+              path: 'buttons',
+                redirect: '/buttons/standard-buttons',
+              name: 'Buttons',
+              component: {
+              render (c) { return c('router-view') }
+            },
+              children: [
+                {
+                  path: 'standard-buttons',
+                  name: 'Standard Buttons',
+                  component: StandardButtons
+                },
+                {
+                  path: 'button-groups',
+                  name: 'Button Groups',
+                  component: ButtonGroups
+                },
+                {
+                  path: 'dropdowns',
+                  name: 'Dropdowns',
+                  component: Dropdowns
+                },
+                {
+                  path: 'brand-buttons',
+                  name: 'Brand Buttons',
+                  component: BrandButtons
+                }
+              ]
             },
             {
-              path: 'breadcrumbs',
-              name: 'Breadcrumbs',
-              component: Breadcrumbs
+              path: 'icons',
+                redirect: '/icons/font-awesome',
+              name: 'Icons',
+              component: {
+              render (c) { return c('router-view') }
+            },
+              children: [
+                {
+                  path: 'coreui-icons',
+                  name: 'CoreUI Icons',
+                  component: CoreUIIcons
+                },
+                {
+                  path: 'flags',
+                  name: 'Flags',
+                  component: Flags
+                },
+                {
+                  path: 'font-awesome',
+                  name: 'Font Awesome',
+                  component: FontAwesome
+                },
+                {
+                  path: 'simple-line-icons',
+                  name: 'Simple Line Icons',
+                  component: SimpleLineIcons
+                }
+              ]
             },
             {
-              path: 'carousels',
-              name: 'Carousels',
-              component: Carousels
+              path: 'notifications',
+                redirect: '/notifications/alerts',
+              name: 'Notifications',
+              component: {
+              render (c) { return c('router-view') }
             },
-            {
-              path: 'collapses',
-              name: 'Collapses',
-              component: Collapses
-            },
-            {
-              path: 'jumbotrons',
-              name: 'Jumbotrons',
-              component: Jumbotrons
-            },
-            {
-              path: 'list-groups',
-              name: 'List Groups',
-              component: ListGroups
-            },
-            {
-              path: 'navs',
-              name: 'Navs',
-              component: Navs
-            },
-            {
-              path: 'navbars',
-              name: 'Navbars',
-              component: Navbars
-            },
-            {
-              path: 'paginations',
-              name: 'Paginations',
-              component: Paginations
-            },
-            {
-              path: 'popovers',
-              name: 'Popovers',
-              component: Popovers
-            },
-            {
-              path: 'progress-bars',
-              name: 'Progress Bars',
-              component: ProgressBars
-            },
-            {
-              path: 'tooltips',
-              name: 'Tooltips',
-              component: Tooltips
+              children: [
+                {
+                  path: 'alerts',
+                  name: 'Alerts',
+                  component: Alerts
+                },
+                {
+                  path: 'badges',
+                  name: 'Badges',
+                  component: Badges
+                },
+                {
+                  path: 'modals',
+                  name: 'Modals',
+                  component: Modals
+                }
+              ]
             }
           ]
         },
         {
-          path: 'buttons',
-          redirect: '/buttons/standard-buttons',
-          name: 'Buttons',
+          path: '/pages',
+            redirect: '/pages/404',
+          name: 'Pages',
           component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'standard-buttons',
-              name: 'Standard Buttons',
-              component: StandardButtons
-            },
-            {
-              path: 'button-groups',
-              name: 'Button Groups',
-              component: ButtonGroups
-            },
-            {
-              path: 'dropdowns',
-              name: 'Dropdowns',
-              component: Dropdowns
-            },
-            {
-              path: 'brand-buttons',
-              name: 'Brand Buttons',
-              component: BrandButtons
-            }
-          ]
+          render (c) { return c('router-view') }
         },
-        {
-          path: 'icons',
-          redirect: '/icons/font-awesome',
-          name: 'Icons',
-          component: {
-            render (c) { return c('router-view') }
-          },
           children: [
             {
-              path: 'coreui-icons',
-              name: 'CoreUI Icons',
-              component: CoreUIIcons
+              path: '404',
+              name: 'Page404',
+              component: Page404
             },
             {
-              path: 'flags',
-              name: 'Flags',
-              component: Flags
+              path: '500',
+              name: 'Page500',
+              component: Page500
             },
             {
-              path: 'font-awesome',
-              name: 'Font Awesome',
-              component: FontAwesome
+              path: 'login',
+              name: 'Login',
+              component: Login
             },
             {
-              path: 'simple-line-icons',
-              name: 'Simple Line Icons',
-              component: SimpleLineIcons
-            }
-          ]
-        },
-        {
-          path: 'notifications',
-          redirect: '/notifications/alerts',
-          name: 'Notifications',
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'alerts',
-              name: 'Alerts',
-              component: Alerts
+              path: 'recoverPassword',
+              name: 'RecoverPassword',
+              component: RecoverPassword
             },
             {
-              path: 'badges',
-              name: 'Badges',
-              component: Badges
-            },
-            {
-              path: 'modals',
-              name: 'Modals',
-              component: Modals
+              path: 'register',
+              name: 'Register',
+              component: Register
             }
           ]
         }
       ]
-    },
-    {
-      path: '/pages',
-      redirect: '/pages/404',
-      name: 'Pages',
-      component: {
-        render (c) { return c('router-view') }
-      },
-      children: [
-        {
-          path: '404',
-          name: 'Page404',
-          component: Page404
-        },
-        {
-          path: '500',
-          name: 'Page500',
-          component: Page500
-        },
-        {
-          path: 'login',
-          name: 'Login',
-          component: Login
-        },
-        {
-          path: 'recoverPassword',
-          name: 'RecoverPassword',
-          component: RecoverPassword
-        },
-        {
-          path: 'register',
-          name: 'Register',
-          component: Register
-        }
-      ]
-    }
-  ]
-})
+    })
