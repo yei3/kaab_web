@@ -14,19 +14,6 @@
           </div>
           <form @submit.prevent="submit">
             <b-form-group>
-              <b-input-group>
-                <b-input-group-prepend>
-                  <b-input-group-text><i class="fa fa-industry"></i></b-input-group-text>
-                </b-input-group-prepend>
-                <b-form-select id="companyID"
-                  v-model.trim="$v.companyID.$model"
-                  class="form-control" :class="{ 'form-group--error': $v.companyID.$error }"
-                  :options="companyIDOptions">
-                </b-form-select>
-              </b-input-group>
-              <div class="small text-danger" v-if="!$v.companyID.required">Campo requerido</div>
-            </b-form-group>
-            <b-form-group>
               <label class="small muted" for="key">Clave</label>
               <b-input-group>
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.key.$error }" type="text" id="key" v-model="$v.key.$model" placeholder="Clave"></b-form-input>
@@ -105,7 +92,6 @@ export default {
     return {
       name: '',
       description: '',
-      companyID: null,
       status: null,
       submitStatus: null,
       fields: [
@@ -147,13 +133,9 @@ export default {
     this.key = accacc.data.accountingAccount.key;
     this.name = accacc.data.accountingAccount.name;
     this.description = accacc.data.accountingAccount.description;
-    this.companyID = accacc.data.accountingAccount.companyID;
     this.status = accacc.data.accountingAccount.statusID;
   },
   validations: {
-    companyID: {
-      required
-    },
     key: {
       required,
       minLength: minLength(4),
@@ -190,7 +172,7 @@ export default {
         this.submitStatus = 'PENDING';
         const accacc = {
           "id": parseInt(this.$route.params.id,10),
-          "companyID": this.companyID,
+          "companyID": this.$session.get('companyID'),
           "key": this.key,
           "name": this.name,
           "description": this.description,

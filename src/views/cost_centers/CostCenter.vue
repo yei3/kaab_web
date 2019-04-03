@@ -16,19 +16,6 @@
             <b-form-group>
               <b-input-group>
                 <b-input-group-prepend>
-                  <b-input-group-text><i class="fa fa-industry"></i></b-input-group-text>
-                </b-input-group-prepend>
-                <b-form-select id="companyID"
-                  v-model.trim="$v.companyID.$model"
-                  class="form-control" :class="{ 'form-group--error': $v.companyID.$error }"
-                  :options="companyIDOptions">
-                </b-form-select>
-              </b-input-group>
-              <div class="small text-danger" v-if="!$v.companyID.required">Campo requerido</div>
-            </b-form-group>
-            <b-form-group>
-              <b-input-group>
-                <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-cc"></i></b-input-group-text>
                 </b-input-group-prepend>
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre"></b-form-input>
@@ -96,7 +83,6 @@ export default {
     return {
       name: '',
       description: '',
-      companyID: null,
       status: null,
       submitStatus: null,
       fields: [
@@ -110,8 +96,7 @@ export default {
         {value: null, text: 'Estatus...'},
         {value: 2, text: 'Activo'},
         {value: 3, text: 'Inactivo'}
-      ],
-      companyIDOptions: []
+      ]
     }
   },
   components: {
@@ -123,15 +108,7 @@ export default {
     }
   },
   async mounted() {
-    const cmpns = await getAll.getAllCompanies();
-    let tmp = [
-      {value: null, text: 'Empresa...'}
-    ];
-    cmpns.data.companies.map(function(value, key) {
-      let dt = {value: value.id, text: value.name};
-      tmp.push(dt);
-    });
-    this.companyIDOptions = tmp;
+
     //
     const cstcntr = await getById.getCostCenterById(this.$route.params.id);
     this.name = cstcntr.data.costCenter.name;
@@ -140,9 +117,6 @@ export default {
     this.status = cstcntr.data.costCenter.statusID;
   },
   validations: {
-    companyID: {
-      required
-    },
     name: {
       required,
       minLength: minLength(4),
@@ -174,7 +148,7 @@ export default {
         this.submitStatus = 'PENDING';
         const cstcntr = {
           "id": parseInt(this.$route.params.id,10),
-          "companyID": this.companyID,
+          "companyID": this.$session.get('companyID'),
           "name": this.name,
           "description": this.description,
           "statusID": this.status,

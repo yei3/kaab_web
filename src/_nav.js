@@ -122,8 +122,8 @@ export default {
           icon: 'fa fa-file-text'
         },
         {
-          name: 'C. de activo',
-          url: '/reports/assetchanges',
+          name: 'C. de Departamento',
+          url: '/reports/departmentChanges',
           icon: 'fa fa-file-text'
         },
         {

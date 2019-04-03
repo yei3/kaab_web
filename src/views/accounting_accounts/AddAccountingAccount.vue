@@ -8,19 +8,6 @@
           </div>
           <form @submit.prevent="submit">
             <b-form-group>
-              <b-input-group>
-                <b-input-group-prepend>
-                  <b-input-group-text><i class="fa fa-industry"></i></b-input-group-text>
-                </b-input-group-prepend>
-                <b-form-select id="companyID"
-                  v-model.trim="$v.companyID.$model"
-                  class="form-control" :class="{ 'form-group--error': $v.companyID.$error }"
-                  :options="companyIDOptions">
-                </b-form-select>
-              </b-input-group>
-              <div class="small text-danger" v-if="!$v.companyID.required">Campo requerido</div>
-            </b-form-group>
-            <b-form-group>
               <label class="small muted" for="key">Clave</label>
               <b-input-group>
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.key.$error }" type="text" id="key" v-model="$v.key.$model" placeholder="Clave"></b-form-input>
@@ -119,9 +106,6 @@ export default {
     this.companyIDOptions = tmp;
   },
   validations: {
-    companyID: {
-      required
-    },
     key: {
       required,
       minLength: minLength(4),
@@ -156,7 +140,7 @@ export default {
       } else {
         this.submitStatus = 'PENDING';
         const accacc = {
-        "companyID": this.companyID,
+        "companyID": this.$session.get('companyID'),
         "key": this.key,
         "name": this.name,
         "description": this.description,

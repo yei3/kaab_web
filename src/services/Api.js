@@ -62,5 +62,23 @@ export default{
         'Content-Type': 'application/json'
       }
     })
+  },
+  posts(){
+    return axios.create({
+      baseURL: `https://7q8zhqbmch.execute-api.us-west-2.amazonaws.com/Prod`,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+  },
+  reports(){
+    return axios.create({
+      baseURL: `https://5bae3uqj1i.execute-api.us-west-2.amazonaws.com/Prod`,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
   }
 }

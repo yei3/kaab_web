@@ -31,7 +31,7 @@
 
 
 <script>
-import sessionsData from './SessionsData'
+import gets from '../../services/Gets'
 import { URLSearchParams } from 'url';
 export default {
   name: 'Sessions',
@@ -60,17 +60,20 @@ export default {
       type: Boolean,
       default: false
     }
+  },beforeCreate: function () {
+    if (!this.$session.exists()) {
+      this.$router.push('/pages/login')
+    }
   },
   data: () => {
     return {
-      items: sessionsData.filter((session) => session.id > 0),
+      items: [],
       fields: [
         {label: 'ID', key: 'id', sortable: true},
         {label: 'Inicio', key: 'creationDateTime', sortable: true},
-        {label: 'Usuario', key: 'userName', sortable: true},
         {label: 'Departamento', key: 'sessionDepartmentName', sortable: true},
         {label: 'Ubicación', key: 'sessionLocationName', sortable: true},
-        {label: 'Estatus', key: 'status', sortable: true}
+        {label: 'Fin', key: 'finalDateTime', sortable: true}
       ],
       currentPage: 1,
       perPage: 10,
@@ -78,6 +81,12 @@ export default {
     }
   },
   computed: {
+  },
+  async mounted() {
+    const rgsSssns = await gets.getRegistrationSessionsByUser(this.$session.get('userId'));
+    console.info(rgsSssns)
+    this.items = rgsSssns.data.registrationSessions;
+    this.flag = true;
   },
   methods: {
     getBadge (status) {
@@ -87,7 +96,7 @@ export default {
             : status === 'Eliminado' ? 'danger' : 'primary'
     },
     getRowCount (items) {
-      return items.length
+      return items ? items.length : 0
     },
     regLink (id) {
       return `sessions/session/${id.toString()}`
