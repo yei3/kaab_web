@@ -41,7 +41,7 @@
 
 
 <script>
-  import getAll from '../../services/GetAllCatalog'
+  import gets from '../../services/Gets'
   import { CodeLoader } from 'vue-content-loader';
   export default {
     name: 'AccountingAccounts',
@@ -96,7 +96,7 @@
       }
     },
     async mounted() {
-      const accacc = await getAll.getAllAccountingAccounts();
+      const accacc = await gets.getAccountingAccountsByCompany(this.$session.get('companyID'));
       this.items = accacc.data.accountingAccounts;
       this.flag = true;
     },

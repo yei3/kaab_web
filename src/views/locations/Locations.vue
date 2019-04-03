@@ -10,21 +10,21 @@
             </div>
           </div>
           <code-loader v-if="!flag"
-                          :speed="2"
-                          :animate="true"
+                       :speed="2"
+                       :animate="true"
           ></code-loader>
           <b-table v-else :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
-            <template slot="companyID" slot-scope="data">
-              {{data.item.companyID}}
-            </template>
             <template slot="name" slot-scope="data">
               {{data.item.name}}
             </template>
-            <template slot="statusID" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.statusID)">{{getStatus(data.item.statusID)}}</b-badge>
+            <template slot="locationType" slot-scope="data">
+              {{data.item.locationType}}
+            </template>
+            <template slot="status" slot-scope="data">
+              <b-badge :variant="getBadge(data.item.status)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
@@ -40,12 +40,13 @@
 <script>
   import gets from '../../services/Gets'
   import { CodeLoader } from 'vue-content-loader';
+  //import usersData from './UsersData'
   export default {
-    name: 'CostCenters',
+    name: 'Locations',
     props: {
       caption: {
         type: String,
-        default: 'Centros de Costo'
+        default: 'Ubicaciones'
       },
       hover: {
         type: Boolean,
@@ -77,7 +78,7 @@
         flag: false,
         fields: [
           {label: 'ID', key: 'id', sortable: true},
-          {label: 'Empresa', key: 'companyID', sortable: true},
+          {label: 'Tipo de ubicación', key: 'locationType', sortable: true},
           {label: 'Nombre', key: 'name', sortable: true},
           {label: 'Estatus', key: 'statusID', sortable: true}
         ],
@@ -92,8 +93,8 @@
       }
     },
     async mounted() {
-      const cstcntrs = await gets.getCostCentersByCompany(this.$session.get('companyID'));
-      this.items = cstcntrs.data.costCenters;
+      const lctns = await gets.getLocationsByCompany(this.$session.get('companyID'));
+      this.items = lctns.data.locations;
       this.flag = true;
     },
     computed: {
@@ -115,14 +116,14 @@
         return items ? items.length : 0
       },
       regLink (id) {
-        return `costcenters/costcenter/${id.toString()}`
+        return `locations/location/${id.toString()}`
       },
       rowClicked (item) {
         const regLink = this.regLink(item.id)
         this.$router.push({path: regLink})
       },
       addClick () {
-        this.$router.push({path: `costcenters/addcostcenter`})
+        this.$router.push({path: `locations/addLocation`})
       }
     }
   }

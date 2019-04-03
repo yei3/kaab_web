@@ -88,6 +88,7 @@
               if (response.data.error.errorCode === 0){
                 this.$session.start();
                 this.$session.set('jwt', result.getAccessToken().getJwtToken());
+                this.$session.set('name', response.data.user.names + ' ' + response.data.user.middlename + ' ' + response.data.user.lastname);
                 this.$session.set('userId', response.data.user.id);
                 this.$session.set('companyAccountId', response.data.user.companyAccountID);
                 //this.Vue.http.headers.common['Authorization'] = 'Bearer ' + result.getAccessToken().getJwtToken();

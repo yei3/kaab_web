@@ -3,25 +3,27 @@ import { Line } from 'vue-chartjs'
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips'
 import { random } from '@/shared/utils'
+import gets from '../../services/Gets'
 
 export default {
   extends: Line,
   props: ['height'],
-  mounted () {
+  async mounted () {
     const assetsInitial = getStyle('--dark') || '#2f353a'
     const assetsRegistered = getStyle('--secondary') || '#c8ced3'
-    
-    let elements = 14
+    const chartData = await gets.getDashboardDataChart(this.$session.get('projectID'));
+    console.info(chartData);
+    let elements = chartData.data.dashboardChart.chartData.length;
     const data1 = []
-    const data2 = []
-
-    data2.push(0, 213, 1423, 2736, 4023, 4536, 4836, 5432, 6239, 6469, 7439, 8011, 8365, 8687)
-    for (let i = 0; i <= elements; i++) {
-      
-      data1.push(9823)
+    const data2 = chartData.data.dashboardChart.chartData
+    var labels = ['Inicio'];
+    for (let i = 0; i < elements; i++) {
+      if (i > 0)
+        labels.push('S' + i);
+      data1.push(chartData.data.dashboardChart.initCount)
     }
     this.renderChart({
-      labels: ['Inicio','S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08', 'S09', 'S10', 'S11', 'S12', 'S13'],
+      labels: labels,
       datasets: [
         {
           label: 'Activos de base inicial',
@@ -67,8 +69,8 @@ export default {
           ticks: {
             beginAtZero: true,
             maxTicksLimit: 100,
-            stepSize: Math.ceil(12000/ 6),
-            max: 12000
+            stepSize: Math.ceil(((Math.max(...data2) > chartData.data.dashboardChart.initCount) ? Math.max(...data2) : chartData.data.dashboardChart.initCount)/ 6),
+            max: (Math.max(...data2) > chartData.data.dashboardChart.initCount) ? Math.max(...data2) : chartData.data.dashboardChart.initCount
           },
           gridLines: {
             display: true

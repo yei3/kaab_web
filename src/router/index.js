@@ -85,11 +85,36 @@ const AccountingAccounts = () => import('@/views/accounting_accounts/AccountingA
 const AccountingAccount = () => import('@/views/accounting_accounts/AccountingAccount')
 const AddAccountingAccount = () => import('@/views/accounting_accounts/AddAccountingAccount')
 
+// Projects *
+const Projects = () => import('@/views/projects/Projects')
+const Project = () => import('@/views/projects/Project')
+const AddProject = () => import('@/views/projects/AddProject')
+
+// Locations *
+const Locations = () => import('@/views/locations/Locations')
+const Location = () => import('@/views/locations/Location')
+const AddLocation = () => import('@/views/locations/AddLocation')
+
+// Assets *
+const Assets = () => import('@/views/assets/Assets')
+
+// Final Assets *
+//const FinalAssets = () => import('@/views/finalAssets/FinalAssets')
+
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
 const Session = () => import('@/views/sessions/Session')
-const Asset = () => import('@/views/sessions/Asset')
+const SessionAsset = () => import('@/views/sessions/Asset')
 const AddSession = () => import('@/views/sessions/AddSession')
+
+//Reports
+const GetConcealedFinalAssetsReport = () => import('@/views/reports/GetConcealedFinalAssetsReport')
+const GetDepartmentChangedFinalAssetsReport = () => import('@/views/reports/GetDepartmentChangedFinalAssetsReport')
+const GetExceededFinalAssetsReport = () => import('@/views/reports/GetExceededFinalAssetsReport')
+const GetInventoriedFinalAssetsReport = () => import('@/views/reports/GetInventoriedFinalAssetsReport')
+const GetLocationChangedFinalAssetsReport = () => import('@/views/reports/GetLocationChangedFinalAssetsReport')
+const GetNoDataLabelFinalAssetsReport = () => import('@/views/reports/GetNoDataLabelFinalAssetsReport')
+const GetNonInventoriedFinalAssetsReport = () => import('@/views/reports/GetNonInventoriedFinalAssetsReport')
 
 Vue.use(Router)
 
@@ -164,7 +189,6 @@ export default new Router({
             },
           ]
         },
-
         {
           path: 'costcenters',
           meta: { label: 'Centros de Costo' },
@@ -291,6 +315,69 @@ export default new Router({
               ]
             },
             {
+              path: 'projects',
+              meta: { label: 'Proyectos' },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: '',
+                  component: Projects
+                },
+                {
+                  path: 'project/:id',
+                  meta: { label: 'Detalle de proyecto' },
+                  name: 'Project',
+                  component: Project
+                },
+                {
+                  path: 'addProject',
+                  meta: { label: 'Agregar proyecto' },
+                  name: 'AddProject',
+                  component: AddProject
+                },
+              ]
+            },
+            {
+              path: 'assets',
+              meta: { label: 'Activos' },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: '',
+                  component: Assets
+                }
+              ]
+            },
+            {
+              path: 'locations',
+              meta: { label: 'Ubicaciones' },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: '',
+                  component: Locations
+                },
+                {
+                  path: 'location/:id',
+                  meta: { label: 'Detalle de ubicación' },
+                  name: 'Location',
+                  component: Location
+                },
+                {
+                  path: 'addLocation',
+                  meta: { label: 'Agregar ubicación' },
+                  name: 'AddLocation',
+                  component: AddLocation
+                },
+              ]
+            },
+            {
               path: 'sessions',
                 meta: { label: 'Sesiones de registro' },
               component: {
@@ -317,7 +404,58 @@ export default new Router({
                   path: 'session/:idsession/asset/:idasset',
                   meta: { label: 'Detalle de activo' },
                   name: 'Asset',
-                  component: Asset
+                  component: SessionAsset
+                }
+              ],
+            },
+            {
+              path: 'reports',
+              meta: { label: 'Reportes' },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: 'reconciled',
+                  meta: { label: 'Reporte de Activos Conciliados' },
+                  name: 'GetConcealedFinalAssetsReport',
+                  component: GetConcealedFinalAssetsReport
+                },
+                {
+                  path: 'departmentChanges',
+                  meta: { label: 'Reporte de Activos con Cambio de Departamento' },
+                  name: 'GetDepartmentChangedFinalAssetsReport',
+                  component: GetDepartmentChangedFinalAssetsReport
+                },
+                {
+                  path: 'excess',
+                  meta: { label: 'Reporte de Activos en Demasía' },
+                  name: 'GetExceededFinalAssetsReport',
+                  component: GetExceededFinalAssetsReport
+                },
+                {
+                  path: 'registered',
+                  meta: { label: 'Reporte de Activos Inventariados' },
+                  name: 'GetInventoriedFinalAssetsReport',
+                  component: GetInventoriedFinalAssetsReport
+                },
+                {
+                  path: 'locationchanges',
+                  meta: { label: 'Reporte de Activos con Cambio de Ubicación' },
+                  name: 'GetLocationChangedFinalAssetsReport',
+                  component: GetLocationChangedFinalAssetsReport
+                },
+                {
+                  path: 'wronglabel',
+                  meta: { label: 'Reporte de Activos sin Etiqueta' },
+                  name: 'GetNoDataLabelFinalAssetsReport',
+                  component: GetNoDataLabelFinalAssetsReport
+                },
+                {
+                  path: 'notregistered',
+                  meta: { label: 'Reporte de Activos no Inventariados' },
+                  name: 'GetNonInventoriedFinalAssetsReport',
+                  component: GetNonInventoriedFinalAssetsReport
                 }
               ],
             },
