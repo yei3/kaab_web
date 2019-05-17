@@ -83,7 +83,7 @@
           <div slot="footer" v-show="addSessionVar">
             <div class="pull-right">
               <b-button type="reset" size="sm" variant="secondary" @click="goBack" class="mr-1"><i class="fa fa-chevron-left"></i> Atras</b-button>
-              <b-button v-show="addSessionVar" type="button" size="sm" variant="primary" @click="closeSession" :disabled="!formValidated"><i class="fa fa-stop"></i> Terminar</b-button>
+              <b-button v-show="addSessionVar" type="button" size="sm" variant="primary" @click="closeSession" ><i class="fa fa-stop"></i> Terminar</b-button>
             </div>
           </div>
         </b-card>
@@ -94,11 +94,6 @@
     <b-modal  :title="titleMod" v-model="scanModal" @ok="saveAsset" ok-variant="primary" @cancel="cancelScan" cancel-title="Cancelar" ok-title="Guardar" ref="scanModal" @hide="cancelScan">
       <div>
         <b-row>
-          <b-col>
-            <div class="text-center mb-4">
-              <b-button v-show="!scanBarcode" type="button" variant="primary" @click="scaner" ><i class="fa fa-camera"></i> Cámara para scanear código de barras </b-button>
-            </div>
-          </b-col>
         </b-row>
         <b-row>
           <b-col>
@@ -202,12 +197,11 @@
                     </b-input-group-prepend>
                     <b-form-select id="sessionLocation"
                                    v-model="$v.locationIDsel.$model"
-                                   class="form-control" :class="{ 'is-invalid': locationValidationError }"
+                                   class="form-control"
                                    @change="changeLoc"
                                    :options="locationOptions">
                     </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!locationValidationRequired">Campo requerido</div>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
@@ -337,7 +331,7 @@
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                      <treeselect  :multiple="false" :options="options" id="departmentID"   required/>
+                      <treeselect  :multiple="false" :options="options" id="departmentID"   v-model="$v.departmentIDsel.$model" required/>
                     </b-input-group-prepend>
                   </b-input-group>
                 </b-form-group>
@@ -347,12 +341,11 @@
                       <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="sessionLocation"
-                                   v-model="nuevo.location"
-                                   class="form-control" :class="{ 'is-invalid': locationValidationError }"
+                                   v-model="$v.locationIDsel.$model"
+                                   class="form-control"
                                    :options="locationOptions">
                     </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!locationValidationRequired">Campo requerido</div>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
@@ -587,6 +580,7 @@
     },
     data: () => {
       return {
+        statusID: 8,
         scanModal: false,   //Modal para escanear
         addModal: false,    //Modal para agregar sin etiqueta
         assetModal: false,  //Modal para detalle de activo
@@ -693,6 +687,8 @@
 
       },locationIDsel: {
         required
+      },sessionLocation: {
+        required
       },locationDetail: {
 
       },comments: {
@@ -720,6 +716,8 @@
       console.info(ssn);
       this.userName = this.$session.get('name');
       this.locationID = ssn.data.registrationSession.sessionLocationId;
+      this.departmentIDsel = ssn.data.registrationSession.sessionDepartmentID;
+      this.locationIDsel = ssn.data.registrationSession.sessionLocationId;
       this.sessionLocationName = ssn.data.registrationSession.locationName;
       this.sessionDepartmentName = ssn.data.registrationSession.departmentName;
       this.departmentID = ssn.data.registrationSession.sessionDepartmentID;
@@ -751,6 +749,7 @@
         this.updateStatus();
       },
       async saveAsset(){
+        console.info("Status:  " + this.statusID)
         const nwAsst = {
           "projectID": this.$session.get('projectID'),
           "registrationSessionID": this.$session.get('activeSessionID'),
@@ -797,48 +796,53 @@
           if (response.data.error.errorCode === 0){
             let s3Cli = new S3();
             let files = document.getElementById('inputfile').files;
-            for (var i = 0; i < files.length; i++){
-              this.assetID = response.data.id;
-              var self = this;
-              let key = 'projects/'+this.$session.get('projectID')+'/assets/'+response.data.id+'/assetFile_'+ (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) + '.' + files[i].name.substr((files[i].name.lastIndexOf('.') + 1));
-              await s3Cli.uploadAssetFile(files[i],key, async function (err, data) {
-                console.info(data)
-                const fl = {
-                  "mime": data.Location.substr(data.Location.lastIndexOf('.') + 1),
-                  "url": data.Location,
-                  "statusID": 2,
-                  "userId": self.$session.get('userId')
-                };
-                await createCatalog.createFile(fl).then(async response => {
-                  console.info(response);
-                  if (response.data.error.errorCode === 0){
-                    const asstFl = {
-                      "isFinal": true,
-                      "assetID": self.assetID,
-                      "fileID": response.data.id,
-                      "statusID": 2
-                    };
-                    await createCatalog.createAssetFile(asstFl).then(async response => {
-                      console.info(response);
-                      /*if (response.data.error.errorCode === 0){
+            if (files.length == 0){
+              this.$router.go(`/sessions/session/` + this.$session.get('activeSessionID'))
+            } else{
+              for (var i = 0; i < files.length; i++){
+                this.assetID = response.data.id;
+                var self = this;
+                let key = 'projects/'+this.$session.get('projectID')+'/assets/'+response.data.id+'/assetFile_'+ (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) + '.' + files[i].name.substr((files[i].name.lastIndexOf('.') + 1));
+                await s3Cli.uploadAssetFile(files[i],key, async function (err, data) {
+                  console.info(data)
+                  const fl = {
+                    "mime": data.Location.substr(data.Location.lastIndexOf('.') + 1),
+                    "url": data.Location,
+                    "statusID": 2,
+                    "userId": self.$session.get('userId')
+                  };
+                  await createCatalog.createFile(fl).then(async response => {
+                    console.info(response);
+                    if (response.data.error.errorCode === 0){
+                      const asstFl = {
+                        "isFinal": true,
+                        "assetID": self.assetID,
+                        "fileID": response.data.id,
+                        "statusID": 2
+                      };
+                      await createCatalog.createAssetFile(asstFl).then(async response => {
+                        this.$router.go(`/sessions/session/` + this.$session.get('activeSessionID'))
+                        console.info(response);
+                        /*if (response.data.error.errorCode === 0){
 
-                      }else{
-                        this.$toaster.error(response.data.error.message);
-                        this.submitStatus = 'ERROR';
-                      }*/
-                    });
-                  }else{
-                    this.$toaster.error(response.data.error.message);
-                    this.submitStatus = 'ERROR';
-                  }
+                        }else{
+                          this.$toaster.error(response.data.error.message);
+                          this.submitStatus = 'ERROR';
+                        }*/
+                      });
+                    }else{
+                      this.$toaster.error(response.data.error.message);
+                      this.submitStatus = 'ERROR';
+                    }
+                  });
                 });
-              });
-        }
+              }
+            }
+
           }else{
             this.$toaster.error(response.data.error.message);
             this.submitStatus = 'ERROR';
           }
-          alert("Finished :V")
         });
 
 
@@ -919,7 +923,9 @@
       async scaner () {
        let assetFound = await gets.getAssetByKeyField(this.$session.get('projectID'),document.getElementById('keyfield').value);
        console.info(assetFound);
-       if (assetFound.data.error.errorCode == 0){//  id: null, keyfield: '', asset: '', description: '', brand: '', model: '', serial:'', cost: '', assetType: '', locationDetail: '', comments: '', status: ''
+       if (assetFound.data.error.errorCode == 0){
+         this.statusID = 4;
+         this.statusName = 'COINCILIADO';//  id: null, keyfield: '', asset: '', description: '', brand: '', model: '', serial:'', cost: '', assetType: '', locationDetail: '', comments: '', status: ''
         this.keyField = assetFound.data.asset.keyField;
         this.sessionID = this.$route.params.idsession;
         this.asset = assetFound.data.asset.asset;
@@ -932,8 +938,8 @@
         this.locationDetail = assetFound.data.asset.locationDetail;
         this.comments = assetFound.data.asset.comments;
         this.status = assetFound.data.asset.statusID;
-        this.departmentIDsel = assetFound.data.asset.currentDepartmentID;
-        this.locationIDsel = assetFound.data.asset.locationID;
+        //this.departmentIDsel = assetFound.data.asset.currentDepartmentID;
+        //this.locationIDsel = assetFound.data.asset.locationID;
          this.scanBarcode = true;
          if (this.departmentIDsel === this.departmentID){
            this.sameDep = true
@@ -1034,8 +1040,14 @@
       cancelAdd () {
 
       },
-      closeSession () {
-
+      async closeSession () {
+        const params = {
+          "userID": this.$session.get('userId')
+        };
+        await posts.postClearActiveSessions(params).then(async response => {
+          console.log(response);
+          this.$router.go(`/sessions/`)
+        });
       },
       onSlideStart (slide) {
         console.log('onSlideStart', slide)

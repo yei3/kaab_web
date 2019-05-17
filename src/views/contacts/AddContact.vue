@@ -4,11 +4,8 @@
 
     <b-row>
       <b-col lg="6">
-        <code-loader v-if="!companyIDOptions"
-                     :speed="2"
-                     :animate="true"
-        ></code-loader>
-        <b-card v-else>
+
+        <b-card>
           <div slot="header">
             <strong>{{caption}}</strong><small> ID: {{$route.params.id }}</small>
           </div>
@@ -282,7 +279,6 @@
       }
     },
     components: {
-      CodeLoader
     },
     beforeCreate: function () {
       if (!this.$session.exists()) {

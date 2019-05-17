@@ -15,7 +15,7 @@
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                      <treeselect  :multiple="false" :options="options" id="departmentID" v-model="$v.departmentID.$model" required/>
+                      <treeselect  :multiple="false" :options="options" id="departmentID" v-model="$v.departmentID.$model"/>
                     </b-input-group-prepend>
                   </b-input-group>
                 </b-form-group>

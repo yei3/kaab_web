@@ -99,7 +99,8 @@ const AddLocation = () => import('@/views/locations/AddLocation')
 const Assets = () => import('@/views/assets/Assets')
 
 // Final Assets *
-//const FinalAssets = () => import('@/views/finalAssets/FinalAssets')
+const FinalAssets = () => import('@/views/finalAssets/FinalAssets')
+const FinalAsset = () => import('@/views/finalAssets/FinalAsset')
 
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
@@ -375,6 +376,25 @@ export default new Router({
                   name: 'AddLocation',
                   component: AddLocation
                 },
+              ]
+            },
+            {
+              path: 'finalAssets',
+              meta: { label: 'Activos Finales' },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: '',
+                  component: FinalAssets
+                },
+                {
+                  path: 'finalAsset/:id',
+                  meta: { label: 'Detalle de activo final' },
+                  name: 'Activo final',
+                  component: FinalAsset
+                }
               ]
             },
             {
