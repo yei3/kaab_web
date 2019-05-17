@@ -37,6 +37,9 @@ export default {
   getFinalAssetsBySession (sessionID) {
     return Api.gets().get('/getFinalAssetsBySession?sessionID=' + sessionID);
   },
+  getFinalAssetsByProject (projectID) {
+    return Api.gets().get('/getFinalAssetsByProject?projectID=' + projectID);
+  },
   getImagesByAsset (assetID,isFinal) {
     return Api.gets().get('/getImagesByAsset?assetID=' + assetID + '&isFinal=' + isFinal);
   },

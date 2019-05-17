@@ -16,7 +16,7 @@
               </b-input-group>
               <div class="small text-danger" v-if="!$v.user.required">Campo requerido</div>
               <div class="small text-danger" v-if="!$v.user.email">El correo electrónico debe ser válido.</div>
-              <div class="small text-danger" v-if="!$v.user.maxLength">El campo debe contener 16 letras máximo</div>
+              <div class="small text-danger" v-if="!$v.user.maxLength">El campo debe contener 100 letras máximo</div>
             </b-form-group>
             <b-form-group>
               <b-input-group>
@@ -157,7 +157,7 @@ export default {
     user: {
       required,
       email,
-      maxLength: maxLength(16)
+      maxLength: maxLength(100)
     },
     role: {
       required

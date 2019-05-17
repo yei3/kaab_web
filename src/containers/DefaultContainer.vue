@@ -127,8 +127,13 @@ export default {
       tmp2.push(dt);
     });
     this.projectIDOptions = tmp2;
-    this.projectID = this.projectIDOptions[1].value;
-    this.$session.set('projectID', this.projectID);
+    if (!this.$session.has('companyID')){
+      this.projectID = this.projectIDOptions[1].value;
+      this.$session.set('projectID', this.projectID);
+    }else{
+      this.projectID = this.$session.get('projectID');
+    }
+
   },
   methods:{
     async changeCompany(event){
@@ -139,18 +144,30 @@ export default {
       let tmp2 = [
         {value: null, text: 'Proyecto...'}
       ];
-      prycts2.data.projects.map(function(value, key) {
-        let dt = {value: value.id, text: value.name};
-        tmp2.push(dt);
-      });
-      this.projectIDOptions = tmp2;
-      this.projectID = this.projectIDOptions[1].value;
-      this.$session.set('projectID', this.projectID);
+      if (prycts2.data.projects.length !== 0){
+        prycts2.data.projects.map(function(value, key) {
+          let dt = {value: value.id, text: value.name};
+          tmp2.push(dt);
+        });
+        this.projectIDOptions = tmp2;
+        this.projectID = this.projectIDOptions[1].value;
+        this.$session.set('projectID', this.projectID);
+        this.$router.go();
+      } else {
+        this.$router.go('/projects');
+      }
+
+
     },
     changeProject(event){
-      this.projectID = event
-      if (event != null)
-        this.$session.set('projectID', event);
+      this.projectID = event;
+      //console.info(event);
+      if (event != null){
+        //console.info("entra al if")
+        this.$session.set('projectID', this.projectID);
+        this.$router.go();
+      }
+
     }
   },
   computed: {
