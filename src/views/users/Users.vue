@@ -21,11 +21,11 @@
               {{data.item.name}}
             </template>
             <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.status)">{{getStatus(data.item.statusID)}}</b-badge>
+              <b-badge :variant="getBadge(data.item.statusID)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
-            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" />
           </nav>
         </b-card>
       </transition>

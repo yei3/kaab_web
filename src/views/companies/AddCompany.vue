@@ -12,9 +12,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Tipo de empresa</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-industry"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="companyType"
                                    v-model.trim="$v.companyType.$model"
@@ -27,9 +28,10 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Tipo de industria</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-industry"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="industryType"
                                    v-model.trim="$v.industryType.$model"
@@ -44,9 +46,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Nombre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-industry"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre"></b-form-input>
                   </b-input-group>
@@ -56,9 +59,10 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">RFC</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-industry"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.fiscalID.$error }" type="text" id="fiscalID" v-model="$v.fiscalID.$model" placeholder="RFC"></b-form-input>
                   </b-input-group>
@@ -72,9 +76,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Tipo de dirección</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="addressType"
                                    v-model.trim="$v.addressType.$model"
@@ -87,9 +92,10 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Tipo de vialidad</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="roadType"
                                    v-model.trim="$v.roadType.$model"
@@ -102,11 +108,12 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col lg="4">
+              <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Calle</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.roadName.$error }" type="text" id="roadName" v-model="$v.roadName.$model" placeholder="Calle"></b-form-input>
                   </b-input-group>
@@ -114,34 +121,37 @@
                   <div class="small text-danger" v-if="!$v.roadName.minLength">El nombre debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
-              <b-col lg="4">
+              <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Número exterior</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.outdoorNumber.$error }" type="text" id="outdoorNumber" v-model="$v.outdoorNumber.$model" placeholder="Número exterior"></b-form-input>
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.outdoorNumber.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
-              <b-col lg="4">
+            </b-row>
+            <b-row>
+            <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Número interior</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.indoorNumber.$error }" type="text" id="indoorNumber" v-model="$v.indoorNumber.$model" placeholder="Número interior"></b-form-input>
                   </b-input-group>
                 </b-form-group>
               </b-col>
-            </b-row>
-            <b-row>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Colonia</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.colony.$error }" type="text" id="colony" v-model="$v.colony.$model" placeholder="Colonia"></b-form-input>
                   </b-input-group>
@@ -149,11 +159,15 @@
                   <div class="small text-danger" v-if="!$v.colony.minLength">El nombre debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
-              <b-col lg="6">
+
+            </b-row>
+            <b-row>
+            <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Ubicación</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.location.$error }" type="text" id="location" v-model="$v.location.$model" placeholder="Localidad"></b-form-input>
                   </b-input-group>
@@ -161,13 +175,12 @@
                   <div class="small text-danger" v-if="!$v.location.minLength">El nombre debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
-            </b-row>
-            <b-row>
-               <b-col lg="4">
+               <b-col lg="6">
                  <b-form-group>
+                 <label class="small muted">Municipio</label>
                    <b-input-group>
                      <b-input-group-prepend>
-                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                       <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                      </b-input-group-prepend>
                      <b-form-input class="form-control" :class="{ 'form-group--error': $v.municipality.$error }" type="text" id="municipality" v-model="$v.municipality.$model" placeholder="Municipio"></b-form-input>
                    </b-input-group>
@@ -175,40 +188,46 @@
                    <div class="small text-danger" v-if="!$v.municipality.minLength">El nombre debe contener 3 letras mínimo</div>
                  </b-form-group>
                </b-col>
-               <b-col lg="4">
-                 <b-form-group>
-                   <b-input-group>
-                     <b-input-group-prepend>
-                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
-                     </b-input-group-prepend>
-                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.cp.$error }" type="text" id="cp" v-model="$v.cp.$model" placeholder="Código postal"></b-form-input>
-                   </b-input-group>
-                   <div class="small text-danger" v-if="!$v.cp.required">Campo requerido</div>
-                   <div class="small text-danger" v-if="!$v.cp.minLength">El nombre debe contener 3 letras mínimo</div>
-                 </b-form-group>
-               </b-col>
-               <b-col lg="4">
-                 <b-form-group>
-                   <b-input-group>
-                     <b-input-group-prepend>
-                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                     </b-input-group-prepend>
-                     <b-form-select id="state"
-                                    v-model.trim="$v.state.$model"
-                                    class="form-control" :class="{ 'form-group--error': $v.state.$error }"
-                                    :options="stateOptions">
-                     </b-form-select>
-                   </b-input-group>
-                   <div class="small text-danger" v-if="!$v.state.required">Campo requerido</div>
-                 </b-form-group>
-               </b-col>
+             </b-row>
+             <b-row>
+               <b-col lg="6">
+                <b-form-group>
+                <label class="small muted">Código postal</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input class="form-control" :class="{ 'form-group--error': $v.cp.$error }" type="text" id="cp" v-model="$v.cp.$model" placeholder="Código postal"></b-form-input>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.cp.required">Campo requerido</div>
+                  <div class="small text-danger" v-if="!$v.cp.minLength">El codigo  debe contener 5 dígitos</div>
+                  <div class="small text-danger" v-if="!$v.cp.maxLength">El codigo  debe contener 5 dígitos</div>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group>
+                <label class="small muted">Estado</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="state"
+                                   v-model.trim="$v.state.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.state.$error }"
+                                   :options="stateOptions">
+                    </b-form-select>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.state.required">Campo requerido</div>
+                </b-form-group>
+              </b-col>
              </b-row>
              <b-row>
                <b-col lg="6">
                  <b-form-group>
+                 <label class="small muted">Tipo de teléfono</label>
                    <b-input-group>
                      <b-input-group-prepend>
-                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                       <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                      </b-input-group-prepend>
                      <b-form-select id="phoneType"
                                     v-model.trim="$v.phoneType.$model"
@@ -221,9 +240,10 @@
                </b-col>
                <b-col lg="6">
                  <b-form-group>
+                 <label class="small muted">Número de teléfono</label>
                    <b-input-group>
                      <b-input-group-prepend>
-                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                       <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                      </b-input-group-prepend>
                      <b-form-input class="form-control" :class="{ 'form-group--error': $v.phoneNumber.$error }" type="text" id="phoneNumber" v-model="$v.phoneNumber.$model" placeholder="Número de teléfono"></b-form-input>
                    </b-input-group>
@@ -235,9 +255,10 @@
              <b-row>
                <b-col lg="6">
                  <b-form-group>
+                 <label class="small muted">Tipo de teléfono 2</label>
                    <b-input-group>
                      <b-input-group-prepend>
-                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                       <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                      </b-input-group-prepend>
                      <b-form-select id="phoneType2"
                                     v-model.trim="$v.phoneType2.$model"
@@ -249,9 +270,10 @@
                </b-col>
                <b-col lg="6">
                  <b-form-group>
+                 <label class="small muted">Número de teléfono 2</label>
                    <b-input-group>
                      <b-input-group-prepend>
-                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                       <b-input-group-text><i class="fa fa-pencil-square"></i></b-input-group-text>
                      </b-input-group-prepend>
                      <b-form-input class="form-control" :class="{ 'form-group--error': $v.phoneNumber2.$error }" type="text" id="phoneNumber2" v-model="$v.phoneNumber2.$model" placeholder="Número de teléfono 2"></b-form-input>
                    </b-input-group>
@@ -263,6 +285,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -280,7 +303,7 @@
             <div slot="footer" class="pull-right">
               <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
               <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="submitStatus === 'PENDING'"><i class="fa fa-save"></i> Guardar</b-button>
-              <p class="small text-success" v-if="submitStatus === 'OK'">Usuario actualizado satisfactoriamente.</p>
+              <p class="small text-success" v-if="submitStatus === 'OK'">Empresa creada satisfactoriamente.</p>
               <p class="small text-danger" v-if="submitStatus === 'ERROR'">Por favor revisa que los datos sean correctos.</p>
               <p class="small text-dark" v-if="submitStatus === 'PENDING'">Guardando...</p>
             </div>
@@ -294,13 +317,13 @@
 
 <script>
   import createCatalog from '../../services/CreateCatalogService'
-  import { required, minLength } from 'vuelidate/lib/validators'
+  import { required, minLength,maxLength } from 'vuelidate/lib/validators'
   export default {
     name: 'Company',
     props: {
       caption: {
         type: String,
-        default: 'Modificar empresa'
+        default: 'Crear empresa'
       },
     },
     /*data: () => {
@@ -364,7 +387,7 @@
           {value: 'Otro', text: 'Otro'}
         ],
         phoneTypeOptions: [
-          {value: null, text: 'Tipo de dirección...'},
+          {value: null, text: 'Tipo de teléfono...'},
           {value: 'Celular', text: 'Celular'},
           {value: 'Casa', text: 'Casa'},
           {value: 'Trabajo', text: 'Trabajo'},
@@ -450,11 +473,11 @@
     validations: {
       name: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       fiscalID: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       companyType: {
         required
@@ -470,7 +493,7 @@
       },
       roadName: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       outdoorNumber: {
         required
@@ -480,19 +503,20 @@
       },
       colony: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       location: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       municipality: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       cp: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(5),
+        maxLength: maxLength(5)
       },
       state: {
         required
@@ -502,13 +526,13 @@
       },
       phoneNumber: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       phoneType2: {
 
       },
       phoneNumber2: {
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       status: {
         required
@@ -565,6 +589,8 @@
                 if (response.data.error.errorCode === 0){
                   this.$toaster.success(response.data.error.message);
                   this.submitStatus = 'OK';
+                  this.$session.set('refresh', true);
+                  this.$router.push('/companies');
                 }else{
                   this.$toaster.error(response.data.error.message);
                   this.submitStatus = 'ERROR';

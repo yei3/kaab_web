@@ -7,26 +7,88 @@
           <div slot="header">
             {{caption}}
             <div class="card-header-actions">
-              <b-button type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
+              <b-button type="button" variant="primary" class="float-right" size="sm" @click="exportEx"><i class="fa fa-file-excel-o"></i></b-button>
             </div>
           </div>
+
+          <b-row>
+            <b-col md="2" class="my-1">
+              <b-form-group label-cols-sm="1"  class="mb-0">
+                <b-input-group>
+                  <b-form-input type="search" v-on:keyup.13="search" v-model="filter" placeholder="Teclea para buscar..."></b-form-input>
+                  <b-input-group-append>
+                    <b-button  @click="search">Buscar</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="2" class="my-1">
+              <b-form-group class="mb-0">
+                <b-input-group>
+                  <b-input-group-append>
+                    <b-form-checkbox v-model="deptTree" name="check-button" switch>
+                      Usar jerarquía de departamentos
+                    </b-form-checkbox>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="4" class="my-1">
+              <b-form-group  class="mb-0">
+                <b-input-group>
+                  <treeselect  :multiple="false" :options="options" id="departmentIDSearch"  v-model="departmentID" placeholder="Departamento..." @change="filter = true"/>
+                </b-input-group>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="4" class="my-1">
+              <b-form-group label-cols-sm="1"  class="mb-0">
+                <b-input-group>
+                  <b-form-select id="location"
+                                 v-model="locationID"
+                                 class="form-control"
+                                 :disabled="false"
+                                 :options="locationOptions"
+                                 @change="filter = true">
+                  </b-form-select>
+
+                </b-input-group>
+              </b-form-group>
+            </b-col>
+
+
+
+          </b-row>
           <code-loader v-if="!flag"
                        :speed="2"
                        :animate="true"
           ></code-loader>
-          <b-table v-else :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
+          <b-table v-else
+                   :hover="hover"
+                   :striped="striped"
+                   :bordered="bordered"
+                   :small="small"
+                   :fixed="fixed"
+                   responsive="lg"
+                   :items="items"
+                   :fields="fields"
+                   :current-page="currentPage"
+                   :per-page="perPage"
+                   @row-clicked="rowClicked">
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
             <template slot="name" slot-scope="data">
               {{data.item.name}}
             </template>
-            <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.status)">{{getStatus(data.item.statusID)}}</b-badge>
+            <template slot="statusID" slot-scope="data">
+              <b-badge :variant="getBadge(data.item.statusID)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
-            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" />
           </nav>
         </b-card>
       </transition>
@@ -105,7 +167,7 @@
                 <b-form-group>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa fa-sitemap"></i></b-input-group-text>
                       <treeselect  :multiple="false" :options="options" id="departmentID"  v-model="current.currentDepartmentID" disabled/>
                     </b-input-group-prepend>
                   </b-input-group>
@@ -147,13 +209,14 @@
   import Treeselect from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import { CodeLoader } from 'vue-content-loader';
+  import XLSXjs from 'xlsx/xlsx'
   //import usersData from './UsersData'
   export default {
-    name: 'Projects',
+    name: 'InitBase',
     props: {
       caption: {
         type: String,
-        default: 'Proyectos'
+        default: 'Base Inicial'
       },
       hover: {
         type: Boolean,
@@ -183,6 +246,11 @@
     data: () => {
       return {
         items: [],
+        filter: null,
+        locationID: null,
+        departmentID: null,
+        deptTree: false,
+        deps:[],
         current: {
           id: 0, keyfield: '', asset: '', description: '', brand: '', model: '', serial:'', cost: '', assetType: '', locationDetail: '', comments: '', status: ''
         },
@@ -212,6 +280,10 @@
       const dprtmnts = await gets.getDepartmentsByCompany(this.$session.get('companyID'));
       this.options = dprtmnts.data.departments;
       const lctns = await gets.getLocationsByCompany(this.$session.get('companyID'));
+
+      const depsful = await gets.getAllDepartmentsByCompany(this.$session.get('companyID'));
+      this.deps = depsful.data.departments;
+
       let tmp2 = [
         {value: null, text: 'Ubicaciones...'}
       ];
@@ -220,8 +292,7 @@
         tmp2.push(dt);
       });
       this.locationOptions = tmp2;
-      const assts = await gets.getAssetByProjectId(this.$session.get('projectID'));
-      this.items = assts.data.assets;
+
       this.flag = true;
     },
     computed: {
@@ -266,6 +337,62 @@
       },
       addClick () {
 
+      },
+      onFiltered(filteredItems) {
+        // Trigger pagination to update the number of buttons/pages due to filtering
+        this.totalRows = filteredItems.length
+        this.currentPage = 1
+      },
+      async search(){
+        const assts = await gets.getAssetBySearch(this.$session.get('projectID'), this.filter,this.locationID, this.departmentID,this.deptTree);
+        this.items = assts.data.assets;
+
+        var localitems = [];
+        let localDeps = this.deps;
+        this.items.forEach(function(finalAsset){
+          localitems.push({
+            asset: finalAsset.asset,
+            assetType: finalAsset.assetType,
+            brand: finalAsset.brand,
+            currentDepartment: localDeps.find(dp => dp.id === finalAsset.currentDepartmentID) === undefined ? "" : localDeps.find(dp => dp.id === finalAsset.currentDepartmentID).name,
+            currentDepartmentID:finalAsset.currentDepartmentID,
+            description: finalAsset.description,
+            locationID:finalAsset.locationID,
+            locationDetail:finalAsset.locationDetail,
+            comments:finalAsset.comments,
+            id: finalAsset.id,
+            keyField: finalAsset.keyField,
+            model:finalAsset.model,
+            personalString02: finalAsset.personalString02,
+            price: finalAsset.price,
+            cost: finalAsset.cost,
+            serial: finalAsset.serial,
+            statusID: finalAsset.statusID,
+          });
+        });
+        console.info(localitems);
+        this.items = localitems;
+        this.currentPage = 1;
+        this.flag = true;
+      },
+      exportEx(){
+        var expData = [];
+        this.items.forEach(function (item) {
+          expData.push({
+            Inventario: item.keyField,
+            Inentario_Anterior: item.personalString02,
+            Bien: item.asset,
+            Descripcion: item.description,
+            Marca: item.brand,
+            Modelo: item.model,
+            Serie: item.serial,
+            Nombre_Unidad: item.currentDepartment
+          });
+        });
+        var report = XLSXjs.utils.json_to_sheet(expData);
+        var wb = XLSXjs.utils.book_new();
+        XLSXjs.utils.book_append_sheet(wb, report, 'Base inicial')
+        XLSXjs.writeFile(wb, 'reporte_base_inicial.xlsx')
       }
     }
   }

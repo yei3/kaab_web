@@ -137,6 +137,11 @@ export default {
           icon: 'fa fa-file-text'
         },
         {
+          name: 'Etiqueta duplicada',
+          url: '/reports/doubledlabel',
+          icon: 'fa fa-file-text'
+        },
+        {
           name: 'Activos cambiados',
           url: '/reports/changed',
           icon: 'fa fa-file-text'

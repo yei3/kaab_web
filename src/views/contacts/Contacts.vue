@@ -9,7 +9,7 @@
               <b-button type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
             </div>
           </div>
-          <code-loader v-if="!items.length"
+          <code-loader v-if="!flag"
                        :speed="2"
                        :animate="true"
           ></code-loader>
@@ -26,12 +26,12 @@
             <template slot="fiscalID" slot-scope="data">
               {{data.item.position}}
             </template>
-            <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.statusID)">{{data.item.statusID}}</b-badge>
+            <template slot="statusID" slot-scope="data">
+              <b-badge :variant="getBadge(data.item.statusID)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
-            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" />
           </nav>
         </b-card>
       </transition>
@@ -77,6 +77,7 @@
     data: () => {
       return {
         items: [],
+        flag: false,
         fields: [
           {label: 'ID', key: 'id', sortable: true},
           {label: 'Nombre', key: 'names', sortable: true},
@@ -97,15 +98,22 @@
     async mounted() {
       const cntcts = await gets.getContactsByCompany(this.$session.get('companyID'));
       this.items = cntcts.data.contacts;
+      this.flag = true;
     },
     computed: {
     },
     methods: {
-      getBadge (status) {
-        return status === 'Activo' ? 'success'
-          : status === 'Inactivo' ? 'secondary'
-            : status === 'Pendiente' ? 'warning'
-              : status === 'Eliminado' ? 'danger' : 'primary'
+      getBadge (statusID) {
+        return statusID === 2 ? 'success' //activo
+          : statusID === 3 ? 'secondary' //inactivo
+            : statusID === 'Pendiente' ? 'warning'
+              : statusID === 'Eliminado' ? 'danger' : 'primary'
+      },
+      getStatus (statusID) {
+        return statusID === 2 ? 'Activo'
+          : statusID === 3 ? 'Inactivo' //
+            : statusID === 'Pendiente' ? 'Pendiente'
+              : statusID === 'Eliminado' ? 'Eliminado' : 'primary'
       },
       getRowCount (items) {
         return items.length

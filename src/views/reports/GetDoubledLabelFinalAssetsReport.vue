@@ -7,6 +7,10 @@
             {{caption}}
             <div class="card-header-actions">
               <b-button type="button" variant="primary" class="float-right" size="sm" @click="exportEx"><i class="fa fa-file-excel-o"></i></b-button>
+              <form action="http://34.215.35.107/kaab/s3Downloader/example/index.php" method="post">
+                <input type="hidden" id="imagesInput" value="" name="fileData">
+                <button type="submit" variant="primary" class="float-right"><i class="fa fa-file-image-o"></i></button>
+              </form>
             </div>
           </div>
           <b-row>
@@ -31,18 +35,10 @@
               </b-form-group>
             </b-col>
 
-            <b-col md="4" class="my-1">
+            <b-col md="8" class="my-1">
               <b-form-group label-cols-sm="3" class="mb-0">
                 <b-input-group>
                   <treeselect  :multiple="false" :options="options" id="departmentIDSearch"  v-model="departmentID" placeholder="Departamento..." @change="search"/>
-                </b-input-group>
-              </b-form-group>
-            </b-col>
-
-            <b-col md="4" class="my-1">
-              <b-form-group label-cols-sm="1"  class="mb-0">
-                <b-input-group>
-                  <b-form-input type="search" v-on:keyup.13="search" v-model="filter" placeholder="Teclea para buscar..."></b-form-input>
                 </b-input-group>
               </b-form-group>
             </b-col>
@@ -80,6 +76,9 @@
             </template>
             <template slot="location" slot-scope="data">
               {{data.item.location}}
+            </template>
+            <template slot="locationDetail" slot-scope="data">
+              {{data.item.locationDetail}}
             </template>
             <!--<template slot="id" slot-scope="data">
               {{data.item.id}}
@@ -196,7 +195,7 @@
   import getById from '../../services/GetCatalogById'
   import reports from '../../services/Reports'
   import gets from '../../services/Gets'
-  import getAll from '../../services/GetAllCatalog'
+  import posts from '../../services/Posts'
   import { CodeLoader } from 'vue-content-loader';
   import XLSXjs from 'xlsx/xlsx'
   import Treeselect from '@riophae/vue-treeselect'
@@ -208,7 +207,7 @@
     props: {
       caption: {
         type: String,
-        default: 'Reporte de activos no inventariados'
+        default: 'Reporte de activos con etiqueta duplicada'
       },
       hover: {
         type: Boolean,
@@ -245,7 +244,6 @@
         options:[],
         deptTree: false,
         departmentID: null,
-        filter: null,
         flag: false,
         fields: [
           // {label: 'ID', key: 'id', sortable: true},
@@ -257,6 +255,7 @@
           {label: 'Marca', key: 'brand', sortable: true},
           {label: 'Modelo', key: 'model', sortable: true},
           {label: 'Serie', key: 'serial', sortable: true},
+          {label: 'Detalle de Ubicación', key: 'locationDetail', sortable: true},
           // {label: 'Fecha de adquisicion', key: 'acquisitionDate', sortable: true},
           //  {label: 'Tipo de adquisicion', key: 'acquisitionType', sortable: true},
           //   {label: 'Factura', key: 'invoice', sortable: true},
@@ -298,7 +297,7 @@
       const csts = await gets.getCostCentersByCompany(this.$session.get('companyID'));
       const accs = await gets.getAccountingAccountsByCompany(this.$session.get('companyID'));
       const lctns = await gets.getLocationsByCompany(this.$session.get('companyID'));
-      //const assets = await reports.getNonInventoriedFinalAssetsReport(this.$session.get('projectID'),null,this.deptTree);
+      //const assets = await reports.getDoubledLabelFinalAssetsReport(this.$session.get('projectID'),null,this.deptTree);
 
       this.deptos = deps.data.departments;
       this.costs = csts.data.costCenters;
@@ -306,6 +305,8 @@
       this.locations = lctns.data.locations;
       const dprtmnts = await gets.getDepartmentsByCompany(this.$session.get('companyID'));
       this.options = dprtmnts.data.departments;
+
+
 
       this.flag = true;
     },
@@ -340,16 +341,12 @@
       },
       exportEx(){
         var expData = [];
-        expData.push(["Reporte de Activos no Inventariados","","","","","","","","","",""]);
-        expData.push([(this.deptos.find(dp => dp.id === this.departmentID) === undefined ? "" : this.deptos.find(dp => dp.id === this.departmentID).name),"","","","","","","","","",""]);
-        expData.push(["","","","","","","","","","","",""]);
-        expData.push(["","","","","","","","","","","",""]);
-        expData.push(["","","","","","","","","","","",""]);
+        expData.push(["Reporte de Activos con Etiqueta Duplicada","","","","","","","","",""]);
+        expData.push([(this.deptos.find(dp => dp.id === this.departmentID) === undefined ? "" : this.deptos.find(dp => dp.id === this.departmentID).name),"","","","","","","","",""]);
+        expData.push(["","","","","","","","","","",""]);
+        expData.push(["","","","","","","","","","",""]);
+        expData.push(["","","","","","","","","","",""]);
         expData.push([
-          "Fecha de Adquisición",
-          "Cuenta Contable",
-          "Porcentaje de Depreciación",
-          "Depreciacion_Contable",
           "Inventario",
           "Inventario_Anterior",
           "Bien",
@@ -363,10 +360,6 @@
         ]);
         this.items.forEach(function (item) {
           expData.push([
-            item.acquisitionDate,
-            item.accountingAccount,
-            item.dePercentage,
-            item.accountingDepreciation,
             item.keyField,
             item.personalString02,
             item.asset,
@@ -390,32 +383,57 @@
              Nombre_Unidad: item.currentDepartment
            });*/
         });
-        expData.push(["Total","","","","","","","","","",this.items.length]);
-        expData.push(["MISMO QUE DEVOLVERÉ CUANDO ME SEA REQUERIDO POR EL PERSONAL A CARGO, ME COMPROMETO A REPORTAR CUALQUIER CAMBIO DE UBICACIÓN, EXTRAVIÓ O MAL FUNCIONAMIENTO DEL EQUIPO.","","","","","","","","","","",""]);
-        expData.push(["Firmas","","","","","","","","","","",""]);
-        expData.push(["Datos de quien recibe","","","","","","","","","","",""]);
+        expData.push(["Total","","","","","","","","",this.items.length]);
+        expData.push(["MISMO QUE DEVOLVERÉ CUANDO ME SEA REQUERIDO POR EL PERSONAL A CARGO, ME COMPROMETO A REPORTAR CUALQUIER CAMBIO DE UBICACIÓN, EXTRAVIÓ O MAL FUNCIONAMIENTO DEL EQUIPO.","","","","","","","","","",""]);
+        expData.push(["Firmas","","","","","","","","","",""]);
+        expData.push(["Datos de quien recibe","","","","","","","","","",""]);
         if (this.departmentID != null) {
-          expData.push(["Departamento","Nombre/Cargo","","","","Tel","Firma","","","","",""]);
-          expData.push([(this.deptos.find(dp => dp.id === this.departmentID) === undefined ? "" : this.deptos.find(dp => dp.id === this.departmentID).name),(this.deptos.find(dp => dp.id === this.departmentID) === undefined ? "" : this.deptos.find(dp => dp.id === this.departmentID).headDepartment),"","","","","","","","","",""]);
+          expData.push(["Departamento","Nombre/Cargo","","","","Tel","Firma","","","",""]);
+          expData.push([(this.deptos.find(dp => dp.id === this.departmentID) === undefined ? "" : this.deptos.find(dp => dp.id === this.departmentID).name),(this.deptos.find(dp => dp.id === this.departmentID) === undefined ? "" : this.deptos.find(dp => dp.id === this.departmentID).headDepartment),"","","","","","","","",""]);
         }
         var report = XLSXjs.utils.json_to_sheet(expData);
         var wb = XLSXjs.utils.book_new();
-        XLSXjs.utils.book_append_sheet(wb, report, 'No inventariados')
-        XLSXjs.writeFile(wb, 'no_inventariados.xlsx')
+        XLSXjs.utils.book_append_sheet(wb, report, 'Etiqueta duplicada')
+        XLSXjs.writeFile(wb, 'etiqueta_duplicada.xlsx')
+      },
+      async downloadImages(){
+
+        var files = [];
+
+        for (var i = 0; i < this.items.length; i++){
+          for (var j = 0; j < this.items[i].files.length; j++){
+            files.push({
+              file: 'projects/' + this.$session.get('projectID') + '/assets/' + this.items[i].id + '/' + this.items[i].files[j],
+              name: 'projects/' + this.$session.get('projectID') + '/assets/' + (this.items[i].keyField == "" ? this.items[i].id : this.items[i].keyField) + '/' + this.items[i].files[j]
+            })
+          }
+        }
+
+        let formData = new FormData();
+        formData.append('fileData',JSON.stringify(files));
+        await posts.downloadImagesAssets(formData).then(async response => {
+          console.info(response)
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'imagenes.zip');
+          document.body.appendChild(link);
+          link.click();
+        });
       },
       async search(){
         this.flag = false;
-        const assets = await reports.getNonInventoriedFinalAssetsReport(this.$session.get('projectID'),this.departmentID,this.deptTree,this.filter);
+        const assets = await reports.getDoubledLabelFinalAssetsReport(this.$session.get('projectID'),this.departmentID,this.deptTree);
         var localitems = [];
         let localAccounts = this.accounts;
         let localCosts = this.costs;
         let localDeps = this.deptos;
         let localLocations = this.locations;
-        assets.data.assets.forEach(function(finalAsset){
+        assets.data.finalAssets.forEach(function(finalAsset){
           localitems.push({
+            files: finalAsset.files,
             accountingDepreciation: finalAsset.accountingDepreciation,
             accountingAccount: localAccounts.find(dp => dp.id === finalAsset.accountingAccountID) === undefined ? "" : localAccounts.find(dp => dp.id === finalAsset.accountingAccountID).name,//this.getAccountingAccountById(finalAsset.accountingAccountID),
-            dePercentage: localAccounts.find(dp => dp.id === finalAsset.accountingAccountID) === undefined ? "0" : localAccounts.find(dp => dp.id === finalAsset.accountingAccountID).depreciationPercentage,//this.getAccountingAccountById(finalAsset.accountingAccountID),
             acquisitionDate: finalAsset.acquisitionDate,
             acquisitionType: finalAsset.acquisitionType,
             asset: finalAsset.asset,
@@ -455,6 +473,18 @@
         });
         console.info(localitems);
         this.items = localitems;
+
+        var filesj = [];
+
+        for (var i = 0; i < localitems.length; i++){
+          for (var j = 0; j < localitems[i].files.length; j++){
+            filesj.push({
+              file: 'projects/' + this.$session.get('projectID') + '/assets/' + localitems[i].id + '/' + localitems[i].files[j],
+              name: '/activos/' + (localitems[i].keyField == "" ? localitems[i].id : localitems[i].keyField) + '/' + localitems[i].files[j]
+            })
+          }
+        }
+        document.querySelector('#imagesInput').value = JSON.stringify(filesj);
         this.currentPage = 1;
         this.flag = true;
         //this.filter = this.deptos.find(dp => dp.id === this.departmentID) === undefined ? "" :this.deptos.find(dp => dp.id === this.departmentID).name

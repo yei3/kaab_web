@@ -14,21 +14,25 @@
           </div>
           <form @submit.prevent="submit">
             <b-row>
-              <b-col lg="6">
+              <b-col lg="12">
                 <b-form-group>
+                  <label class="small muted">Departamento padre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-sitemap"></i></b-input-group-text>
                       <treeselect  :multiple="false" :options="options" id="departmentID" v-model="$v.departmentID.$model" required/>
                     </b-input-group-prepend>
                   </b-input-group>
                 </b-form-group>
               </b-col>
+            </b-row>
+            <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de departamento</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-sitemap"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="departmentType"
                                    v-model.trim="$v.departmentType.$model"
@@ -39,13 +43,12 @@
                   <div class="small text-danger" v-if="!$v.departmentType.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
-            </b-row>
-            <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Nombre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-sitemap"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Departamento"></b-form-input>
                   </b-input-group>
@@ -53,8 +56,12 @@
                   <div class="small text-danger" v-if="!$v.name.minLength">El nombre debe contener 4 letras mínimo</div>
                 </b-form-group>
               </b-col>
+
+            </b-row>
+            <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Jefe de departamento</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -65,10 +72,33 @@
                   <div class="small text-danger" v-if="!$v.headDepartment.minLength">El nombre debe contener 4 letras mínimo</div>
                 </b-form-group>
               </b-col>
+              <b-col lg="6">
+                <b-form-group>
+                  <label class="small muted">Encargado A</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input class="form-control" type="text" id="attendantA" v-model="attendantA" placeholder="Encargado A"></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
             </b-row>
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Encargado B</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input class="form-control" type="text" id="attendantB" v-model="attendantB" placeholder="Encargado B"></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -104,7 +134,7 @@
   import Treeselect from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import updateCatalog from '../../services/UpdateCatalogService'
-  import { required, minLength } from 'vuelidate/lib/validators'
+  import { required, minLength,maxLength } from 'vuelidate/lib/validators'
   import { CodeLoader } from 'vue-content-loader';
   export default {
     name: 'Department',
@@ -133,6 +163,8 @@
         departmentType: '',
         name: '',
         headDepartment: '',
+        attendantA: '',
+        attendantB: '',
         status: null,
         submitStatus: null,
         companyID: null,
@@ -163,6 +195,11 @@
           {value: 'Área', text: 'Área'},
           {value: 'Departamento', text: 'Departamento'},
           {value: 'Adjunto', text: 'Adjunto'},
+          {value: 'Sub-departamento', text: 'Sub-departamento'},
+          {value: 'Jefatura', text: 'Jefatura'},
+          {value: 'Unidad', text: 'Unidad'},
+          {value: 'Servicio', text: 'Servicio'},
+          {value: 'Subdirección', text: 'Subdirección'},
           {value: 'Otro', text: 'Otro'}
         ]
       }
@@ -184,6 +221,8 @@
       this.departmentType = dprtmnt.data.department.departmentType;
       this.name = dprtmnt.data.department.name;
       this.headDepartment = dprtmnt.data.department.headDepartment;
+      this.attendantA = dprtmnt.data.department.attendantA;
+      this.attendantB = dprtmnt.data.department.attendantB;
       this.status = dprtmnt.data.department.statusID;
       this.companyID = dprtmnt.data.department.companyID;
     },
@@ -196,7 +235,8 @@
       },
       name: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(4),
+        maxLength: maxLength(128)
       },
       headDepartment: {
         required,
@@ -228,6 +268,8 @@
             "departmentID": this.departmentID,
             "name": this.name,
             "headDepartment": this.headDepartment,
+            "attendantA": this.attendantA,
+            "attendantB": this.attendantB,
             "statusID": this.status,
             "userId": this.$session.get('userId')
           };

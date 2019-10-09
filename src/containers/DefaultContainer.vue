@@ -66,7 +66,11 @@
 </template>
 
 <script>
-import nav from '@/_nav'
+import navAdmin from '@/_navAdmin'
+import navGerente from '@/_navGerente'
+import navCoordinador from '@/_navCoordinador'
+import navOperativo from '@/_navOperativo'
+import navAuditor from '@/_navAuditor'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
 import DefaultAside from './DefaultAside'
 import DefaultHeaderDropdownAccnt from './DefaultHeaderDropdownAccnt'
@@ -93,7 +97,7 @@ export default {
   },
   data () {
     return {
-      nav: nav.items,
+      nav: null,
       companyID:null,
       projectID:null,
       projectIDOptions: [],
@@ -133,7 +137,26 @@ export default {
     }else{
       this.projectID = this.$session.get('projectID');
     }
-
+    if (this.$session.has('userRole')){
+      console.info(this.$session.get('userRole'))
+      switch (this.$session.get('userRole')) {
+        case 'Admin':
+          this.nav = navAdmin.items;
+          break;
+        case 'Gerente':
+          this.nav = navGerente.items;
+          break;
+        case 'Operativo':
+          this.nav = navOperativo.items;
+          break;
+        case 'Auditor':
+          this.nav = navAuditor.items;
+          break;
+        case 'Coordinador':
+          this.nav = navCoordinador.items;
+          break;
+      }
+    }
   },
   methods:{
     async changeCompany(event){

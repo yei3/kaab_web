@@ -13,10 +13,11 @@
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.key.$error }" type="text" id="key" v-model="$v.key.$model" placeholder="Clave"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.key.required">Campo requerido</div>
-              <div class="small text-danger" v-if="!$v.key.minLength">El campo debe contener 4 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.key.minLength">El campo debe contener 3 letras mínimo</div>
               <div class="small text-danger" v-if="!$v.key.maxLength">El campo debe contener 16 letras máximo</div>
             </b-form-group>
             <b-form-group>
+              <label class="small muted">Nombre</label>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-usd"></i></b-input-group-text>
@@ -24,8 +25,8 @@
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.name.required">Campo requerido</div>
-              <div class="small text-danger" v-if="!$v.name.minLength">El campo debe contener 4 letras mínimo</div>
-              <div class="small text-danger" v-if="!$v.name.maxLength">El campo debe contener 32 letras máximo</div>
+              <div class="small text-danger" v-if="!$v.name.minLength">El campo debe contener 3 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.name.maxLength">El campo debe contener 64 letras máximo</div>
             </b-form-group>
             <b-form-group>
               <label class="small muted" for="description">Descripción</label>
@@ -33,20 +34,32 @@
                 <b-form-input class="form-control" :class="{ 'form-group--error': $v.description.$error }" type="text" id="description" v-model="$v.description.$model" placeholder="Descripción"></b-form-input>
               </b-input-group>
               <div class="small text-danger" v-if="!$v.description.required">Campo requerido</div>
-              <div class="small text-danger" v-if="!$v.description.minLength">El campo debe contener 4 letras mínimo</div>
+              <div class="small text-danger" v-if="!$v.description.minLength">El campo debe contener 3 letras mínimo</div>
               <div class="small text-danger" v-if="!$v.description.maxLength">El campo debe contener 128 letras máximo</div>
             </b-form-group>
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Porcentaje de depreciación</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input type="number" min="0" max="1" step="0.1" v-model="depreciationPercentage"></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="status"
-                      v-model.trim="$v.status.$model"
-                      class="form-control" :class="{ 'form-group--error': $v.status.$error }"
-                      :options="statusOptions">
+                                   v-model.trim="$v.status.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.status.$error }"
+                                   :options="statusOptions">
                     </b-form-select>
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.status.required">Campo requerido</div>
@@ -71,14 +84,17 @@
   import getAll from '../../services/GetAllCatalog'
   import createCatalog from '../../services/CreateCatalogService'
   import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+  import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
 export default {
   name: 'AddAccountingAccount',
+  components: {BFormInput},
   data: () => {
     return {
       key: '',
       name: '',
       description: '',
       companyID: null,
+      depreciationPercentage:0.0,
       status: null,
       submitStatus: null,
       statusOptions: [
@@ -108,17 +124,17 @@ export default {
   validations: {
     key: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(3),
       maxLength: maxLength(16)
     },
     name: {
       required,
-      minLength: minLength(4),
-      maxLength: maxLength(32)
+      minLength: minLength(3),
+      maxLength: maxLength(64)
     },
     description: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(3),
       maxLength: maxLength(128)
     },
     status: {
@@ -145,6 +161,7 @@ export default {
         "name": this.name,
         "description": this.description,
         "statusID": this.status,
+        "depreciationPercentage": this.depreciationPercentage,
         "userId": this.$session.get('userId')
       };
         await createCatalog.createAccountingAccount(accacc).then(response => {

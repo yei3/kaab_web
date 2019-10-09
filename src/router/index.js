@@ -101,6 +101,7 @@ const Assets = () => import('@/views/assets/Assets')
 // Final Assets *
 const FinalAssets = () => import('@/views/finalAssets/FinalAssets')
 const FinalAsset = () => import('@/views/finalAssets/FinalAsset')
+const FinalAssetGroup = () => import('@/views/finalAssets/FinalAssetGroup')
 
 // Sessions *
 const Sessions = () => import('@/views/sessions/Sessions')
@@ -116,6 +117,8 @@ const GetInventoriedFinalAssetsReport = () => import('@/views/reports/GetInvento
 const GetLocationChangedFinalAssetsReport = () => import('@/views/reports/GetLocationChangedFinalAssetsReport')
 const GetNoDataLabelFinalAssetsReport = () => import('@/views/reports/GetNoDataLabelFinalAssetsReport')
 const GetNonInventoriedFinalAssetsReport = () => import('@/views/reports/GetNonInventoriedFinalAssetsReport')
+const GetDoubledLabelFinalAssetsReport = () => import('@/views/reports/GetDoubledLabelFinalAssetsReport')
+const GetFinalAssetsChangedReport = () => import('@/views/reports/GetFinalAssetsChangedReport')
 
 Vue.use(Router)
 
@@ -342,7 +345,7 @@ export default new Router({
             },
             {
               path: 'assets',
-              meta: { label: 'Activos' },
+              meta: { label: 'Base inicial' },
               component: {
                 render (c) { return c('router-view') }
               },
@@ -394,6 +397,12 @@ export default new Router({
                   meta: { label: 'Detalle de activo final' },
                   name: 'Activo final',
                   component: FinalAsset
+                },
+                {
+                  path: 'finalAssetGroup/:key',
+                  meta: { label: 'Activos del grupo' },
+                  name: 'Grupo de activo final',
+                  component: FinalAssetGroup
                 }
               ]
             },
@@ -476,6 +485,19 @@ export default new Router({
                   meta: { label: 'Reporte de Activos no Inventariados' },
                   name: 'GetNonInventoriedFinalAssetsReport',
                   component: GetNonInventoriedFinalAssetsReport
+                },
+                {
+                  path: 'doubledlabel',
+                  meta: { label: 'Reporte de Activos con etiqueta duplicada' },
+                  name: 'GetDoubledLabelFinalAssetsReport',
+                  component: GetDoubledLabelFinalAssetsReport
+                }
+                ,
+                {
+                  path: 'changed',
+                  meta: { label: 'Reporte de Activos cambiados' },
+                  name: 'GetFinalAssetsChangedReport',
+                  component: GetFinalAssetsChangedReport
                 }
               ],
             },

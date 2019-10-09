@@ -28,8 +28,8 @@ export default {
   getLocationAddressByLocation (locationID) {
     return Api.gets().get('/getLocationAddressByLocation?locationID=' + locationID);
   },
-  getRegistrationSessionsByUser (userID) {
-    return Api.gets().get('/getRegistrationSessionsByUser?userID=' + userID);
+  getRegistrationSessionsByUser (userID,projectID) {
+    return Api.gets().get('/getRegistrationSessionsByUser?userID=' + userID + '&projectID=' + projectID);
   },
   getAssetByKeyField (projectID,keyField) {
     return Api.gets().get('/getAssetByKeyField?projectID=' + projectID + '&keyField=' + keyField);
@@ -37,14 +37,20 @@ export default {
   getFinalAssetsBySession (sessionID) {
     return Api.gets().get('/getFinalAssetsBySession?sessionID=' + sessionID);
   },
-  getFinalAssetsByProject (projectID) {
-    return Api.gets().get('/getFinalAssetsByProject?projectID=' + projectID);
+  getFinalAssetsByProject (projectID,departmentID, locationID, sessionID, userID, startDate, endDate, statusID, isRep, deptTree) {
+    return Api.gets().get('/getFinalAssetsByProject?projectID=' + projectID + '&departmentID=' + departmentID + '&locationID=' + locationID + '&sessionID=' + sessionID + '&userID=' + userID + '&startDate=' + startDate + '&endDate=' + endDate + '&statusID=' + statusID + '&reps=' + isRep + '&deptTree=' + deptTree);
+  },
+  getFinalAssetsGroup (keyField, projectID) {
+    return Api.gets().get('/getFinalAssetsGroup?keyField=' + keyField + '&projectID=' + projectID);
   },
   getImagesByAsset (assetID,isFinal) {
     return Api.gets().get('/getImagesByAsset?assetID=' + assetID + '&isFinal=' + isFinal);
   },
   getAssetByProjectId (projectID) {
     return Api.gets().get('/getAssetByProjectId?projectID=' + projectID);
+  },
+  getAssetBySearch (projectID,query,locationID,departmentID,deptTree) {
+    return Api.gets().get('/getAssetBySearch?projectID=' + projectID + '&query=' + query + "&locationID=" + locationID + "&departmentID=" + departmentID + "&deptTree=" + deptTree);
   },
   getDashboardData (projectID,companyAccountID) {
     return Api.gets().get('/getDashboardData?projectID=' + projectID + "&companyAccountID=" + companyAccountID);

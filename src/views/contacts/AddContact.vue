@@ -13,9 +13,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Nombre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-address-book"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.names.$error }" type="text" id="name" v-model="$v.names.$model" placeholder="Nombre"></b-form-input>
                   </b-input-group>
@@ -25,9 +26,10 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Apellido paterno</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-address-book"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.lastname.$error }" type="text" id="lastname" v-model="$v.lastname.$model" placeholder="Apellido Paterno"></b-form-input>
                   </b-input-group>
@@ -39,9 +41,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Apellido materno</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-address-book"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.middlename.$error }" type="text" id="middlename" v-model="$v.middlename.$model" placeholder="Apellido Materno"></b-form-input>
                   </b-input-group>
@@ -51,6 +54,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Puesto</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
@@ -65,6 +69,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de teléfono</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -80,6 +85,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Número de teléfono</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -94,6 +100,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de teléfono 2</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -108,6 +115,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Número de teléfono 2</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -122,6 +130,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de correo</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -137,6 +146,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Correo</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -151,6 +161,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de correo 2</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -165,6 +176,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Correo 2</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -179,6 +191,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -288,19 +301,19 @@
     validations: {
       names: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       middlename: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       lastname: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       position: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       phoneType: {
         required
@@ -309,10 +322,10 @@
       },
       phoneNumber: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       phoneNumber2: {
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       emailType: {
         required

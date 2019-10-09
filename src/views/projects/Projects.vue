@@ -21,11 +21,11 @@
               {{data.item.name}}
             </template>
             <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.status)">{{getStatus(data.item.statusID)}}</b-badge>
+              <b-badge :variant="getBadge(data.item.statusID)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
-            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" />
           </nav>
         </b-card>
       </transition>
@@ -87,6 +87,10 @@
       if (!this.$session.exists()) {
         this.$router.push('/pages/login')
       }
+      if (this.$session.get('refresh')){
+        this.$session.set('refresh', false);
+        this.$router.go()
+      }
     },
     async mounted() {
       const usrs = await gets.getProjectsByCompany(this.$session.get('companyID'));
@@ -99,14 +103,14 @@
       getBadge (statusID) {
         return statusID === 2 ? 'success' //activo
           : statusID === 3 ? 'secondary' //inactivo
-            : statusID === 'Pendiente' ? 'warning'
+            : statusID === 10 ? 'danger'
               : statusID === 'Eliminado' ? 'danger' : 'primary'
       },
       getStatus (statusID) {
         return statusID === 2 ? 'Activo'
           : statusID === 3 ? 'Inactivo' //
-            : statusID === 'Pendiente' ? 'Pendiente'
-              : statusID === 'Eliminado' ? 'Eliminado' : 'primary'
+            : statusID === 10 ? 'Cerrado'
+              : statusID === 'Eliminado' ? 'Eliminado' : 'Cerrado'
       },
       getRowCount (items) {
         return items ? items.length : 0

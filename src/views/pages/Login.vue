@@ -86,13 +86,18 @@
             await gets.getUserByEmail(this.username).then(response => {
               console.info(response);
               if (response.data.error.errorCode === 0){
-                this.$session.start();
-                this.$session.set('jwt', result.getAccessToken().getJwtToken());
-                this.$session.set('name', response.data.user.names + ' ' + response.data.user.middlename + ' ' + response.data.user.lastname);
-                this.$session.set('userId', response.data.user.id);
-                this.$session.set('companyAccountId', response.data.user.companyAccountID);
-                //this.Vue.http.headers.common['Authorization'] = 'Bearer ' + result.getAccessToken().getJwtToken();
-                this.$router.push('/dashboard');
+                if (response.data.user.statusID == 2){
+                  this.$session.start();
+                  this.$session.set('jwt', result.getAccessToken().getJwtToken());
+                  this.$session.set('name', response.data.user.names + ' ' + response.data.user.middlename + ' ' + response.data.user.lastname);
+                  this.$session.set('userId', response.data.user.id);
+                  this.$session.set('userRole', response.data.user.role);
+                  this.$session.set('companyAccountId', response.data.user.companyAccountID);
+                  //this.Vue.http.headers.common['Authorization'] = 'Bearer ' + result.getAccessToken().getJwtToken();
+                  this.$router.push('/dashboard');
+                }else{
+                  this.$toaster.error("Login correcto pero el usuario se encuentra desactivado, favor de comunicarse con el administrador.");
+                }
               }else{
                 this.$toaster.error(response.data.error.message);
               }

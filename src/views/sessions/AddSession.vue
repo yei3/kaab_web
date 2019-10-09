@@ -162,6 +162,7 @@
             const rgSssn = {
               "sessionLocationId": this.locationID,
               "sessionDepartmentID": this.departmentID,
+              "projectID": this.$session.get('projectID'),
               "userId": this.$session.get('userId')
             };
             await createCatalog.createRegistrationSession(rgSssn).then(response => {

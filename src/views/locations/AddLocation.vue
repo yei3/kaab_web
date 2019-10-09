@@ -12,9 +12,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de ubicación</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-select id="locationType"
                                    v-model.trim="$v.locationType.$model"
@@ -27,34 +28,45 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Nombre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre"></b-form-input>
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.name.required">Campo requerido</div>
-                  <div class="small text-danger" v-if="!$v.name.minLength">El usuario debe contener 3 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.name.minLength">El nombre debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
-              <b-col lg="6">
+              <b-col lg="12">
                 <b-form-group>
+                  <label class="small muted">Ubicación madre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                      <treeselect  :multiple="false" :options="options" id="departmentID" v-model="$v.departmentID.$model" required/>
+                      <b-input-group-text><i class="fa fa-building"></i></b-input-group-text>
                     </b-input-group-prepend>
+                      <b-form-select id="locationID"
+                                     v-model.trim="$v.locationID.$model"
+                                     class="form-control" :class="{ 'form-group--error': $v.locationID.$error }"
+                                     :options="options">
+                      </b-form-select>
+
                   </b-input-group>
                 </b-form-group>
               </b-col>
+
             </b-row>
             <!--address-->
-            <label>Dirección</label>
+            <label style="margin-right: 25px; ">Dirección</label>
+            <b-button style="margin-bottom: 50px" v-b-toggle.collapse variant="primary">Mostrar/Ocultar</b-button>
+            <b-collapse id="collapse">
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de dirección</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -65,11 +77,11 @@
                                    :options="addressTypeOptions">
                     </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.addressType.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de vialidad</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -80,36 +92,36 @@
                                    :options="roadTypeOptions">
                     </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.roadType.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col lg="4">
                 <b-form-group>
+                  <label class="small muted">Calle</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.roadName.$error }" type="text" id="roadName" v-model="$v.roadName.$model" placeholder="Calle"></b-form-input>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.roadName.required">Campo requerido</div>
-                  <div class="small text-danger" v-if="!$v.roadName.minLength">El nombre debe contener 3 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.roadName.minLength">La calle debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
               <b-col lg="4">
                 <b-form-group>
+                  <label class="small muted">Número exterior</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.outdoorNumber.$error }" type="text" id="outdoorNumber" v-model="$v.outdoorNumber.$model" placeholder="Número exterior"></b-form-input>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.outdoorNumber.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
               <b-col lg="4">
                 <b-form-group>
+                  <label class="small muted">Número interior</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -122,56 +134,58 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Colonia</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.colony.$error }" type="text" id="colony" v-model="$v.colony.$model" placeholder="Colonia"></b-form-input>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.colony.required">Campo requerido</div>
-                  <div class="small text-danger" v-if="!$v.colony.minLength">El nombre debe contener 3 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.colony.minLength">La colonia debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Ubicación</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.location.$error }" type="text" id="location" v-model="$v.location.$model" placeholder="Localidad"></b-form-input>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.location.required">Campo requerido</div>
-                  <div class="small text-danger" v-if="!$v.location.minLength">El nombre debe contener 3 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.location.minLength">La localidad debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col lg="4">
                 <b-form-group>
+                  <label class="small muted">Municipio</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.municipality.$error }" type="text" id="municipality" v-model="$v.municipality.$model" placeholder="Municipio"></b-form-input>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.municipality.required">Campo requerido</div>
-                  <div class="small text-danger" v-if="!$v.municipality.minLength">El nombre debe contener 3 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.municipality.minLength">El municipio debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
               <b-col lg="4">
                 <b-form-group>
+                  <label class="small muted">Código postal</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.cp.$error }" type="text" id="cp" v-model="$v.cp.$model" placeholder="Código postal"></b-form-input>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.cp.required">Campo requerido</div>
-                  <div class="small text-danger" v-if="!$v.cp.minLength">El nombre debe contener 3 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.cp.minLength">El código postal debe contener 5 letras</div>
+                  <div class="small text-danger" v-if="!$v.cp.maxLength">El código postal debe contener 5 letras</div>
                 </b-form-group>
               </b-col>
               <b-col lg="4">
                 <b-form-group>
+                  <label class="small muted">Estado</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -182,13 +196,13 @@
                                    :options="stateOptions">
                     </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.state.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de teléfono</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -199,25 +213,25 @@
                                    :options="phoneTypeOptions">
                     </b-form-select>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.phoneType.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Número de teléfono</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.phoneNumber.$error }" type="text" id="phoneNumber" v-model="$v.phoneNumber.$model" placeholder="Número de teléfono"></b-form-input>
                   </b-input-group>
-                  <div class="small text-danger" v-if="!$v.phoneNumber.required">Campo requerido</div>
-                  <div class="small text-danger" v-if="!$v.phoneNumber.minLength">El nombre debe contener 3 letras mínimo</div>
+                  <div class="small text-danger" v-if="!$v.phoneNumber.minLength">El número debe contener 3 letras mínimo</div>
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Tipo de teléfono 2</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -232,6 +246,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Número de teléfono 2</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -242,10 +257,12 @@
                 </b-form-group>
               </b-col>
             </b-row>
+            </b-collapse>
             <!--address-->
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -281,7 +298,7 @@
   import gets from '../../services/Gets'
   import Treeselect from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-  import { required, minLength } from 'vuelidate/lib/validators'
+  import { required, minLength,maxLength } from 'vuelidate/lib/validators'
   import { CodeLoader } from 'vue-content-loader';
   export default {
     name: 'Location',
@@ -309,7 +326,7 @@
         name: '',
         fiscalID: '',
         locationType: null,
-        departmentID: null,
+        locationID: 0,
         locationAddressID:null,
         //address
         addressID:null,
@@ -339,7 +356,7 @@
           {label: 'Estatus', key: 'status'}
         ],
         locationTypeOptions: [
-          {value: null, text: 'Tipo de empresa...'},
+          {value: null, text: 'Tipo de ubicación...'},
           {value: 'Matriz', text: 'Matriz'},
           {value: 'Sede', text: 'Sede'},
           {value: 'Sucursal', text: 'Sucursal'},
@@ -430,7 +447,8 @@
           {value: 2, text: 'Activo'},
           {value: 3, text: 'Inactivo'}
         ],
-        options: []
+        options: [],
+        optionsDep: []
       }
     },
     components: {
@@ -443,64 +461,64 @@
       }
     },
     async mounted() {
-
       const dprtmnts = await gets.getDepartmentsByCompany(this.$session.get('companyID'));
-      this.options = dprtmnts.data.departments;
-      //address
+      this.optionsDep = dprtmnts.data.departments;
+
+      const lctns = await gets.getLocationsByCompany(this.$session.get('companyID'));
+      let tmp2 = [
+        {value: null, text: 'Ubicaciones...'}
+      ];
+      lctns.data.locations.map(function(value, key) {
+        let dt = {value: value.id, text: value.name};
+        tmp2.push(dt);
+      });
+      this.options = tmp2;
 
 
     },
     validations: {
       name: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(4),
+        maxLength: maxLength(128)
       },
-      departmentID: {
+      locationID: {
 
       },
       locationType: {
         required
       },
       addressType: {
-        required
+
       },
       roadType: {
-        required
       },
       roadName: {
-        required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       outdoorNumber: {
-        required
       },
       indoorNumber: {
 
       },
       colony: {
-        required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       location: {
-        required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       municipality: {
-        required,
-        minLength: minLength(4)
+        minLength: minLength(3)
       },
       cp: {
-        required,
-        minLength: minLength(4)
+        minLength: minLength(5),
+        maxLength: maxLength(5)
       },
       state: {
-        required
       },
       phoneType: {
-        required
       },
       phoneNumber: {
-        required,
         minLength: minLength(4)
       },
       phoneType2: {
@@ -555,7 +573,8 @@
               const lctn = {
                 "companyID": this.$session.get('companyID'),
                 "locationType": this.locationType,
-                "locationID": 0,
+                "locationID": this.locationID,
+                "addressID": this.addressID,
                 "name": this.name,
                 "statusID": this.status,
                 "userId": this.$session.get('userId')
@@ -563,23 +582,8 @@
                createCatallog.createLocation(lctn).then(response => {
                 console.info(response);
                 if (response.data.error.errorCode === 0){
-                  const lctnAddrss = {
-                    "locationID": response.data.id,
-                    "addressID": this.addressID,
-                    "departmentID": this.departmentID,
-                    "statusID": this.status,
-                    "userId": this.$session.get('userId')
-                  };
-                  createCatallog.createLocationAddress(lctnAddrss).then(response => {
-                    console.info(response);
-                    if (response.data.error.errorCode === 0){
-                      this.$toaster.success(response.data.error.message);
-                      this.submitStatus = 'OK';
-                    }else{
-                      this.$toaster.error(response.data.error.message);
-                      this.submitStatus = 'ERROR';
-                    }
-                  });
+                  this.$toaster.success(response.data.error.message);
+                  this.submitStatus = 'OK';
                 }else{
                   this.$toaster.error(response.data.error.message);
                   this.submitStatus = 'ERROR';

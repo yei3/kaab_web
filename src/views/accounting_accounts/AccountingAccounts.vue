@@ -17,9 +17,7 @@
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
-            <template slot="companyID" slot-scope="data">
-              {{data.item.companyID}}
-            </template>
+
             <template slot="key" slot-scope="data">
               {{data.item.key}}
             </template>
@@ -31,7 +29,7 @@
             </template>
           </b-table>
           <nav>
-            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+            <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" />
           </nav>
         </b-card>
       </transition>
@@ -80,7 +78,6 @@
         flag: false,
         fields: [
           {label: 'ID', key: 'id', sortable: true},
-          {label: 'Empresa', key: 'companyID', sortable: true},
           {label: 'Clave', key: 'key', sortable: true},
           {label: 'Nombre', key: 'name', sortable: true},
           {label: 'Estatus', key: 'statusID', sortable: true}

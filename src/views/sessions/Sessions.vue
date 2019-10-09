@@ -6,7 +6,7 @@
         <div slot="header">
           {{caption}}
           <div class="card-header-actions">
-            <b-button type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
+            <b-button v-if="projectStatus" type="button" variant="primary" class="float-right" size="sm" @click="addClick"><i class="fa fa-plus"></i></b-button>
           </div>
         </div>
         <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
@@ -21,7 +21,7 @@
           </template>
         </b-table>
         <nav>
-          <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+          <b-pagination size="sm" :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" />
         </nav>
       </b-card>
       </transition>
@@ -68,11 +68,13 @@ export default {
   data: () => {
     return {
       items: [],
+      projectStatus: false,
       fields: [
         {label: 'ID', key: 'id', sortable: true},
         {label: 'Inicio', key: 'creationDateTime', sortable: true},
         {label: 'Departamento', key: 'sessionDepartmentName', sortable: true},
         {label: 'Ubicación', key: 'sessionLocationName', sortable: true},
+        {label: 'Activos capturados', key: 'sessionAssetsCount', sortable: true},
         {label: 'Fin', key: 'finalDateTime', sortable: true}
       ],
       currentPage: 1,
@@ -83,10 +85,22 @@ export default {
   computed: {
   },
   async mounted() {
-    const rgsSssns = await gets.getRegistrationSessionsByUser(this.$session.get('userId'));
+    if (this.$session.get('userRole') == "Admin"){
+      this.fields.push(
+        {
+          label: 'Usuario',
+          key: 'sessionUser',
+          sortable: true
+        }
+      )
+    }
+    const rgsSssns = await gets.getRegistrationSessionsByUser(this.$session.get('userId'),this.$session.get('projectID'));
     console.info(rgsSssns)
     this.items = rgsSssns.data.registrationSessions;
     this.flag = true;
+    if (rgsSssns.data.projectStatus == 2){
+      this.projectStatus = true;
+    }
   },
   methods: {
     getBadge (status) {

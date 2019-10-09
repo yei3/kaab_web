@@ -5,42 +5,13 @@
     </template>
     <template slot="header">
       <img
-        src="img/avatars/6.jpg"
+        src="img/avatars/logo.png"
         class="img-avatar"
         alt="admin@bootstrapmaster.com" />
     </template>\
     <template slot="dropdown">
-      <b-dropdown-header tag="div" class="text-center"><strong>Account</strong></b-dropdown-header>
-      <b-dropdown-item><i class="fa fa-bell-o" /> Updates
-        <b-badge variant="info">{{ itemsCount }}</b-badge>
-      </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-envelope-o" /> Messages
-        <b-badge variant="success">{{ itemsCount }}</b-badge>
-      </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-tasks" /> Tasks
-        <b-badge variant="danger">{{ itemsCount }}</b-badge>
-      </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-comments" /> Comments
-        <b-badge variant="warning">{{ itemsCount }}</b-badge>
-      </b-dropdown-item>
-      <b-dropdown-header
-        tag="div"
-        class="text-center">
-        <strong>Sesión</strong>
-      </b-dropdown-header>
-      <b-dropdown-item><i class="fa fa-user" />
 
-      </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-wrench" /> Settings</b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-usd" /> Payments
-        <b-badge variant="secondary">{{ itemsCount }}</b-badge>
-      </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-file" /> Projects
-        <b-badge variant="primary">{{ itemsCount }}</b-badge>
-      </b-dropdown-item>
-      <b-dropdown-divider />
-      <b-dropdown-item><i class="fa fa-shield" /> Lock Account</b-dropdown-item>
-      <b-dropdown-item @click="logout"><i class="fa fa-lock" /> Logout</b-dropdown-item>
+      <b-dropdown-item @click="logout"><i class="fa fa-lock" /> Cerrar Sesión</b-dropdown-item>
     </template>
   </AppHeaderDropdown>
 </template>
@@ -48,6 +19,7 @@
 <script>
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import CognitoAuth from '../cognito/cognito'
+import posts from '../services/Posts'
 
 export default {
   name: 'DefaultHeaderDropdownAccnt',
@@ -60,11 +32,16 @@ export default {
     }
   },
   methods: {
-    logout: function () {
-      this.$session.destroy();
-      let cog = new CognitoAuth();
-      cog.logout();
-      this.$router.push('/pages/login');
+     logout: async function () {
+       const params = {
+         "userID": this.$session.get('userId')
+       };
+      await posts.postClearActiveSessions(params).then(async response => {
+        this.$session.destroy();
+        let cog = new CognitoAuth();
+        cog.logout();
+        this.$router.push('/pages/login');
+      });
     }
   }
 }

@@ -3,7 +3,6 @@
 import 'core-js/es6/promise'
 import 'core-js/es6/string'
 import 'core-js/es7/array'
-// import cssVars from 'css-vars-ponyfill'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
@@ -14,8 +13,7 @@ import Toaster from 'v-toaster'
 import 'v-toaster/dist/v-toaster.css'
 
 
-// todo
-// cssVars()
+
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(VueSession,{persist: true});

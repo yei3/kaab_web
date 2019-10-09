@@ -14,6 +14,7 @@
           </div>
           <form @submit.prevent="submit">
             <b-form-group>
+              <label class="small muted">Correo</label>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
@@ -25,6 +26,7 @@
               <div class="small text-danger" v-if="!$v.user.maxLength">El campo debe contener 16 letras máximo</div>
             </b-form-group>
             <b-form-group>
+              <label class="small muted">Nombres</label>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -38,6 +40,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Apellido paterno</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -51,6 +54,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Apellido materno</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -66,6 +70,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Rol</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -81,6 +86,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -92,6 +98,26 @@
                     </b-form-select>
                   </b-input-group>
                   <div class="small text-danger" v-if="!$v.status.required">Campo requerido</div>
+                </b-form-group>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col lg="6">
+                <b-form-group>
+                  <label class="small muted">Proyectos asociados</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-book"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="projects"
+                                   multiple
+                                   v-model.trim="$v.projects.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.projects.$error }"
+                                   :options="projectsOptions">
+                    </b-form-select>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.role.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -112,6 +138,7 @@
 
 <script>
 import getById from '../../services/GetCatalogById'
+import gets from '../../services/Gets'
 import updateCatalog from '../../services/UpdateCatalogService'
 import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
 import { CodeLoader } from 'vue-content-loader';
@@ -130,6 +157,7 @@ export default {
       middlename: '',
       lastname: '',
       role: null,
+      projects: null,
       status: null,
       submitStatus: null,
       fields: [
@@ -151,6 +179,8 @@ export default {
         {value: null, text: 'Estatus...'},
         {value: 2, text: 'Activo'},
         {value: 3, text: 'Inactivo'}
+      ],
+      projectsOptions: [
       ]
     }
   },
@@ -170,6 +200,17 @@ export default {
     this.lastname = usr.data.user.lastname;
     this.role = usr.data.user.role;
     this.status = usr.data.user.statusID;
+    this.projects = usr.data.user.activeProjects != null ? usr.data.user.activeProjects.split(",") : null;
+
+    const prycts = await gets.getProjectsByCompany(this.$session.get('companyID'));
+    let tmp2 = [
+
+    ];
+    prycts.data.projects.map(function(value, key) {
+      let dt = {value: value.id, text: value.name};
+      tmp2.push(dt);
+    });
+    this.projectsOptions = tmp2;
   },
   validations: {
     names: {
@@ -190,13 +231,16 @@ export default {
     user: {
       required,
       email,
-      maxLength: maxLength(16)
+      maxLength: maxLength(100)
     },
     role: {
       required
     },
     status: {
       required
+    },
+    projects: {
+
     }
   },
   computed: {
@@ -207,7 +251,7 @@ export default {
       this.$router.push('/users');
     },
     async submit() {
-      console.log('submit!');
+      console.log(this.projects);
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = 'ERROR';
@@ -222,6 +266,7 @@ export default {
           "names": this.names,
           "lastname": this.lastname,
           "middlename": this.middlename,
+          "activeProjects": this.projects.toString(),
           "statusID": this.status,
           "userId": this.$session.get('userId')
         };

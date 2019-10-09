@@ -1,7 +1,10 @@
 <template>
 
   <div class="animated fade-in">
-
+    <b-modal size="lg" v-model="showErr" id="errorsModal" title="Revisión del archivo" ok-only>
+      <h3>Se encontraron {{numErrs}} detalles en el archivo subido</h3>
+      <b-table striped hover :items="errors"></b-table>
+    </b-modal>
     <b-row>
       <b-col lg="6">
         <b-card >
@@ -12,9 +15,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Nombre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-book"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre del proyecto"></b-form-input>
                   </b-input-group>
@@ -23,20 +27,10 @@
                   <div class="small text-danger" v-if="!$v.name.maxLength">El nombre debe contener 64 letras máximo</div>
                 </b-form-group>
               </b-col>
-              <b-col lg="6">
-                <b-form-group
-                  label="Base inicial"
-                  label-for="fileInput"
-                  :label-cols="2"
-                  :horizontal="true">
-                  <b-form-file @change="upload" id="baseIn" :plain="false" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></b-form-file>
-                </b-form-group>
-              </b-col>
-            </b-row>
 
-            <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Contacto</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -50,8 +44,28 @@
                   <div class="small text-danger" v-if="!$v.contactID.required">Campo requerido</div>
                 </b-form-group>
               </b-col>
+
+
+            </b-row>
+
+            <b-row>
+              <b-col lg="12">
+                <b-form-group>
+                  <label class="small muted">Base inicial</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-database"></i> </b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-file @change="upload" id="baseIn" :plain="false" accept=".csv"></b-form-file>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -66,7 +80,24 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row><a href="https://s3-us-west-2.amazonaws.com/kaab-files/plantilla.xlsx">Descarga la plantilla de base de datos inicial</a></b-row>
+            <b-row>
+              <b-col lg="6">
+                <b-form-group>
+                  <label class="small muted">Iniciar desde proyecto anterior</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="preProject"
+                                   v-model.trim="$v.preProject.$model"
+                                   class="form-control"
+                                   :options="preProjectOptions">
+                    </b-form-select>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row><a href="https://s3-us-west-2.amazonaws.com/kaab-files/plantilla.csv">Descarga la plantilla de base de datos inicial</a></b-row>
             <b-row><a href="" id="uploadedLink" style="display: none;">Descarga lo que subiste</a></b-row>
 
             <div slot="footer" class="pull-right">
@@ -75,7 +106,7 @@
               <p class="small text-success" v-if="submitStatus === 'OK'">Registro actualizado satisfactoriamente</p>
               <p class="small text-danger" v-if="submitStatus === 'ERROR'">Por favor revisa que los datos sean correctos</p>
               <p class="small text-dark" v-if="submitStatus === 'PENDING'">Guardando...</p>
-              <p class="small text-dark" v-if="submitStatus === 'UPLOADING'">Subiendo...</p>
+              <p class="small text-dark" v-if="submitStatus === 'UPLOADING'">Validando archivo...</p>
             </div>
           </form>
         </b-card>
@@ -94,6 +125,9 @@
   import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
   import { CodeLoader } from 'vue-content-loader';
   import XLSXjs from 'xlsx/xlsx'
+  import BRow from "bootstrap-vue/src/components/layout/row";
+  import BInputGroup from "bootstrap-vue/src/components/input-group/input-group";
+  import BInputGroupPrepend from "bootstrap-vue/src/components/input-group/input-group-prepend";
   export default {
     name: 'Proyecto',
     props: {
@@ -108,7 +142,11 @@
         contactID: null,
         status: null,
         submitStatus: null,
+        showErr: null,
+        errors:[],
+        numErrs: 0,
         initDB: false,
+        preProject: null,
         xlsUrl:'',
         key:'',
         fields: [
@@ -119,14 +157,19 @@
           {label: 'Estatus', key: 'status'}
         ],
         contactIDOptions: [],
+        preProjectOptions: [],
         statusOptions: [
           {value: null, text: 'Estatus...'},
           {value: 2, text: 'Activo'},
-          {value: 3, text: 'Inactivo'}
+          {value: 3, text: 'Inactivo'},
+          {value: 10, text: 'Cerrado'}
         ]
       }
     },
     components: {
+      BInputGroupPrepend,
+      BInputGroup,
+      BRow,
       CodeLoader
     },
     beforeCreate: function () {
@@ -147,6 +190,16 @@
         tmp.push(dt);
       });
       this.contactIDOptions = tmp;
+
+      const prycts = await gets.getProjectsByCompany(this.$session.get('companyID'));
+      let tmp2 = [
+        {value: null, text: 'Proyecto Anterior...'}
+      ];
+      prycts.data.projects.map(function(value, key) {
+        let dt = {value: value.id, text: value.name};
+        tmp2.push(dt);
+      });
+      this.preProjectOptions = tmp2;
     },
     validations: {
       name: {
@@ -156,6 +209,8 @@
       },
       contactID: {
         required
+      },
+      preProject: {
       },
       status: {
         required
@@ -172,17 +227,25 @@
         this.$router.push('/projects');
       },
       async upload(){
-        this.submitStatus = 'UPLOADING';
+        this.initDB = true;
+       this.submitStatus = 'UPLOADING';
         this.initDB = true;
 
-        /*let s3Cli = new S3();
-        let files = document.getElementById('baseIn').files;
-        this.key = 'initialBaseProject_'+ (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) + '.xlsx';
-        await s3Cli.uploadInitialBase(files[0],this.key, function (err, data) {
-          console.info(data)
-          document.getElementById('uploadedLink').href = data.Location;
-        });*/
-        setTimeout(() => this.submitStatus = 'OK', 10000)
+
+        let formData = new FormData();
+        formData.append('companyID',this.$session.get('companyID'));
+        formData.append('plantilla', document.getElementById('baseIn').files[0]);
+        await posts.evaluateCSV(formData).then(async response => {
+          if (response.data.numErr != 0){
+            this.numErrs = response.data.numErr;
+            this.errors = response.data.errors;
+            this.showErr = true;
+          }else{
+            this.submitStatus = 'OK'
+          }
+
+        });
+        //setTimeout(() => this.submitStatus = 'OK', 10000)
         /*document.getElementById('uploadedLink').href = this.xlsUrl;*/
 
       },
@@ -195,56 +258,60 @@
           console.info(this.$v)
         } else {
           this.submitStatus = 'PENDING';
-          const usr = {
-            "key": this.key,
+          const params = {
             "companyID": this.$session.get('companyID'),
-            "contactID": this.contactID,
-            "name": this.name,
-            "statusID": this.status,
-            "userId": this.$session.get('userId')
+            "userID": this.$session.get('userId')
           };
-          await createCatalog.createProject(usr).then( async response => {
-            console.info(response);
-            var self = this;
-            if (response.data.error.errorCode === 0){
-              //Fill initial DB
-              if (this.initDB === true){
-                var file = document.querySelector('#baseIn').files[0];
-                var reader = new FileReader();
-                reader.onload = async function(e) {
-                  var data = e.target.result;
-                  var workbook = XLSXjs.read(data, {type: 'binary'});
-                  var sheet_name_list = workbook.SheetNames;
-                  console.info(sheet_name_list[0])
-                  let json =  XLSXjs.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-                  console.info(json)
-                  const initBase = {
-                    "assets": json,
-                    "projectID": response.data.id,
-                    "companyID": self.$session.get('companyID'),
-                    "userId": self.$session.get('userId')
-                  };
-                   await posts.postInitialDB(initBase).then(async response => {
+          await posts.postClearActiveProjects(params).then(async response => {
+            console.log(response);
+            const usr = {
+              "key": this.key,
+              "companyID": this.$session.get('companyID'),
+              "contactID": this.contactID,
+              "name": this.name,
+              "statusID": this.status,
+              "userId": this.$session.get('userId')
+            };
+            await createCatalog.createProject(usr).then( async response => {
+              console.info(response);
+              var self = this;
+              if (response.data.error.errorCode === 0){
+                //Fill initial DB
+                if (this.initDB === true){
+                  let formData = new FormData();
+                  formData.append('projectID',response.data.id);
+                  formData.append('companyID',self.$session.get('companyID'));
+                  formData.append('userId',self.$session.get('userId'));
+                  formData.append('plantilla', document.getElementById('baseIn').files[0]);
+                  await posts.postInitialDBPHP(formData).then(async response => {
                     console.info(response);
-                    if (response.data.error.errorCode === 0){
-                      this.$toaster.success(response.data.error.message);
-                      this.submitStatus = 'OK';
-                    }else{
-                      this.$toaster.error(response.data.error.message);
-                      this.submitStatus = 'ERROR';
-                    }
+                    this.submitStatus = 'OK'
                   });
+                }else{
+                  if (this.preProject != null){
+                    let formData = new FormData();
+                    formData.append('projectID',response.data.id);
+                    formData.append('preProject',this.preProject);
+                    formData.append('userId',self.$session.get('userId'));
+                    await posts.postInitFromOldDB(formData).then(async response => {
+                      console.info(response);
+                      this.submitStatus = 'OK'
+                    });
+                  }
                 }
+                //fill initial DB
+                this.$toaster.success(response.data.error.message);
+                this.submitStatus = 'OK';
+                this.$router.go();
+              //  this.$session.set('refresh', true);
+                this.$router.push('/projects');
+              }else{
+                this.$toaster.error(response.data.error.message);
+                this.submitStatus = 'ERROR';
               }
-              reader.readAsBinaryString(file);
-              //fill initial DB
-              this.$toaster.success(response.data.error.message);
-              this.submitStatus = 'OK';
-            }else{
-              this.$toaster.error(response.data.error.message);
-              this.submitStatus = 'ERROR';
-            }
+            });
           });
+
         }
       },
       getBase64(file) {

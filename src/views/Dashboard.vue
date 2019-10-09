@@ -6,7 +6,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>100%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{initCount}}</a></div>
+            <div class="h2 mb-0"><a href="#/assets" class="text-white">{{initCount}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos de base inicial ({{new Date().getFullYear()}})</small>
         </b-card>
       </b-col>
@@ -15,7 +15,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalCountPercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalCount}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/registered" class="text-white">{{finalCount}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos inventariados</small>
         </b-card>
       </b-col>
@@ -24,7 +24,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalCountConcealedPercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalCountConcealed}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/reconciled" class="text-white">{{finalCountConcealed}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos conciliados</small>
         </b-card>
       </b-col>
@@ -33,7 +33,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalMissingPercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalMissing}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/nonregistered" class="text-white">{{finalMissing}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos no inventariados</small>
         </b-card>
       </b-col>
@@ -42,7 +42,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalCountDepChangePercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalCountDepChange}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/deparmentChanges" class="text-white">{{finalCountDepChange}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Cambios de departamento</small>
         </b-card>
       </b-col>
@@ -51,7 +51,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalCountLocChangePercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalCountLocChange}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/locationchanges" class="text-white">{{finalCountLocChange}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Cambios de ubicación</small>
         </b-card>
       </b-col>
@@ -60,7 +60,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalCountExcesPercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalCountExces}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/excess" class="text-white">{{finalCountExces}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos en demasía</small>
         </b-card>
       </b-col>
@@ -69,7 +69,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalCountDupLabelPercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalCountDupLabel}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/doubledlabel" class="text-white">{{finalCountDupLabel}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos con etiqueta duplicada</small>
         </b-card>
       </b-col>
@@ -78,7 +78,7 @@
             <div class="h4 text-muted text-right mb-4">
               <h4 class="float-right" right>{{finalCountNoDataPercent}}%</h4>
             </div>
-            <div class="h2 mb-0"><a href="#/users" class="text-white">{{finalCountNoData}}</a></div>
+            <div class="h2 mb-0"><a href="#/reports/wronglabel" class="text-white">{{finalCountNoData}}</a></div>
             <small class="text-muted text-uppercase font-weight-bold">Activos con etiqueta sin datos</small>
         </b-card>
       </b-col>
@@ -109,13 +109,13 @@
           </b-col>
           <b-col class="mb-sm-2 mb-2" sm="6" lg="3">
             <div class="text-muted">Cambios (Depto, Ubic)</div>
-            <strong>{{finalCountLocChange + finalCountDepChange}} ({{finalCountLocChangePercent + finalCountDepChangePercent}}%)</strong>
-            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="info" :value="finalCountLocChangePercent + finalCountDepChangePercent"></b-progress>
+            <strong>{{finalCountLocChange + finalCountDepChange}} ({{cambios}}%)</strong>
+            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="info" :value="cambios"></b-progress>
           </b-col>
           <b-col class="mb-sm-2 mb-2" sm="6" lg="3">
             <div class="text-muted">En demasía y otros</div>
-            <strong>{{finalCountExces + finalCountDupLabel + finalCountNoData}} ({{finalCountExcesPercent + finalCountDupLabelPercent + finalCountNoDataPercent}}%)</strong>
-            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="warning" :value="finalCountExcesPercent + finalCountDupLabelPercent + finalCountNoDataPercent"></b-progress>
+            <strong>{{finalCountExces + finalCountDupLabel + finalCountNoData}} ({{demasiaOthers}}%)</strong>
+            <b-progress height={} class="progress-xs mt-2" :precision="1" variant="warning" :value="demasiaOthers"></b-progress>
           </b-col>
         </b-row>
       </div>
@@ -136,7 +136,7 @@
                 <b-col sm="6">
                   <Callout variant="danger">
                     <small class="text-muted">Departamentos pendientes</small><br>
-                    <strong class="h4">{{pendDepartments > regDepartments ? 0 : (regDepartments - pendDepartments)}}</strong>
+                    <strong class="h4">{{pendDepartments > regDepartments ? 0 : pendDepartments}}</strong>
                   </Callout>
                 </b-col>
               </b-row>
@@ -164,7 +164,7 @@
                 <b-col sm="6">
                   <Callout variant="danger">
                     <small class="text-muted">Ubicaciones pendientes</small><br>
-                    <strong class="h4">{{pendLocations > regLocations ? 0 : (regLocations - pendLocations)}}</strong>
+                    <strong class="h4">{{pendLocations > regLocations ? 0 :pendLocations}}</strong>
                   </Callout>
                 </b-col>
               </b-row>
@@ -220,7 +220,7 @@
             <div slot="usage" slot-scope="item">
               <div class="clearfix">
                 <div class="float-left">
-                  <strong>{{item.value.value}}%</strong>
+                  <strong>{{(item.value.value).toFixed(2)}}%</strong>
                 </div>
                 <div class="float-right">
                   <small class="text-muted">{{item.value.assetsRegistered}}</small>
@@ -313,11 +313,15 @@ export default {
     this.pendLocations = dash1.data.dashboard.pendDLocations;
     this.countUsers = dash1.data.dashboard.countUsers;
     this.countUsersWithSessions = dash1.data.dashboard.countUsersWithSessions;
+    var assetsByUser = 0;
     for (var i = 0; i < dash1.data.dashboard.usersTable.length; i++){
+      assetsByUser += dash1.data.dashboard.usersTable[i].items;
+    }
+    for ( i = 0; i < dash1.data.dashboard.usersTable.length; i++){
     this.tableItems.push(
       {
         user: { name: dash1.data.dashboard.usersTable[i].name, role: dash1.data.dashboard.usersTable[i].role },
-        usage: { value: (100 / this.finalCount) * dash1.data.dashboard.usersTable[i].items, assetsRegistered: dash1.data.dashboard.usersTable[i].items },
+        usage: { value: (100 / assetsByUser) * dash1.data.dashboard.usersTable[i].items, assetsRegistered: dash1.data.dashboard.usersTable[i].items },
         activity: dash1.data.dashboard.usersTable[i].lastActivity
       }
     )
@@ -326,28 +330,33 @@ export default {
   },
   computed:{
     finalCountPercent : function() {
-      return (100/this.initCount) * this.finalCount;
+      return parseFloat((100/this.initCount) * this.finalCount).toFixed(2);
     },
     finalMissingPercent : function() {
-      return (100/this.initCount) * this.finalMissing;
+      return parseFloat((100/this.initCount) * this.finalMissing).toFixed(2);
     },
     finalCountConcealedPercent : function() {
-      return (100/this.finalCount) * this.finalCountConcealed;
+      return parseFloat((100/this.finalCount) * this.finalCountConcealed).toFixed(2);
     },
     finalCountDepChangePercent : function() {
-      return (100/this.finalCount) * this.finalCountDepChange;
+      return parseFloat((100/this.finalCount) * this.finalCountDepChange).toFixed(2);
     },
     finalCountLocChangePercent : function() {
-      return (100/this.finalCount) * this.finalCountLocChange;
+      return parseFloat((100/this.finalCount) * this.finalCountLocChange).toFixed(2);
     },
     finalCountDupLabelPercent : function() {
-      return (100/this.finalCount) * this.finalCountDupLabel;
+      return parseFloat((100/this.finalCount) * this.finalCountDupLabel).toFixed(2);
     },
     finalCountNoDataPercent : function() {
-      return (100/this.finalCount) * this.finalCountNoData;
+      return parseFloat((100/this.finalCount) * this.finalCountNoData).toFixed(2);
     },
     finalCountExcesPercent : function() {
-      return (100/this.finalCount) * this.finalCountExces;
+      return parseFloat((100/this.finalCount) * this.finalCountExces).toFixed(2);
+    },demasiaOthers: function(){
+      return (parseFloat((100/this.finalCount) * this.finalCountExces) + parseFloat((100/this.finalCount) * this.finalCountDupLabel) + parseFloat((100/this.finalCount) * this.finalCountNoData)).toFixed(2);
+    },
+    cambios: function(){
+      return (parseFloat((100/this.finalCount) * this.finalCountLocChange) + parseFloat((100/this.finalCount) * this.finalCountDepChange)).toFixed(2);
     }
   },
   methods: {

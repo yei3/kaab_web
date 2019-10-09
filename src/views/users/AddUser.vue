@@ -8,6 +8,7 @@
           </div>
           <form @submit.prevent="submit">
             <b-form-group>
+              <label class="small muted">Correo</label>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-at"></i></b-input-group-text>
@@ -19,6 +20,7 @@
               <div class="small text-danger" v-if="!$v.user.maxLength">El campo debe contener 100 letras máximo</div>
             </b-form-group>
             <b-form-group>
+              <label class="small muted">Nombres</label>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -32,6 +34,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Apellido paterno</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -45,6 +48,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Apellido materno</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
@@ -60,6 +64,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Rol</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -75,6 +80,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -89,6 +95,26 @@
                 </b-form-group>
               </b-col>
             </b-row>
+            <b-row>
+              <b-col lg="6">
+                <b-form-group>
+                  <label class="small muted">Proyectos asociados</label>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text><i class="fa fa-book"></i></b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-select id="projects"
+                                   multiple
+                                   v-model.trim="$v.projects.$model"
+                                   class="form-control" :class="{ 'form-group--error': $v.projects.$error }"
+                                   :options="projectsOptions">
+                    </b-form-select>
+                  </b-input-group>
+                  <div class="small text-danger" v-if="!$v.role.required">Campo requerido</div>
+                </b-form-group>
+              </b-col>
+            </b-row>
+
             <div slot="footer" class="pull-right">
               <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
               <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="submitStatus === 'PENDING'"><i class="fa fa-save"></i> Guardar</b-button>
@@ -105,6 +131,7 @@
 
 <script>
   import createCatalog from '../../services/CreateCatalogService'
+  import gets from '../../services/Gets'
   import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
   import CognitoAuth from '../../cognito/cognito'
 export default {
@@ -116,6 +143,7 @@ export default {
       middlename: '',
       lastname: '',
       role: null,
+      projects: null,
       status: null,
       submitStatus: null,
       roleOptions: [
@@ -130,13 +158,25 @@ export default {
         {value: null, text: 'Estatus...', disabled: true},
         {value: 2, text: 'Activo'},
         {value: 3, text: 'Inactivo'}
-      ]
+      ],
+      projectsOptions:[]
     }
   },
   beforeCreate: function () {
     if (!this.$session.exists()) {
       this.$router.push('/pages/login')
     }
+  },
+  async mounted(){
+    const prycts = await gets.getProjectsByCompany(this.$session.get('companyID'));
+    let tmp2 = [
+
+    ];
+    prycts.data.projects.map(function(value, key) {
+      let dt = {value: value.id, text: value.name};
+      tmp2.push(dt);
+    });
+    this.projectsOptions = tmp2;
   },
   validations: {
     names: {
@@ -164,6 +204,9 @@ export default {
     },
     status: {
       required
+    },
+    projects: {
+
     }
   },
   computed: {
@@ -188,6 +231,7 @@ export default {
           "names": this.names,
           "lastname": this.lastname,
           "middlename": this.middlename,
+          "activeProjects": this.projects.toString(),
           "statusID": this.status,
           "userId": this.$session.get('userId')
         };

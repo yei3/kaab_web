@@ -10,7 +10,7 @@
                 2019/01/09 11:12:06 - Vigente
               </small>
               <b-row class="mt-3">
-                <b-col sm="4">
+                <b-col sm="2">
                   <b-form-group>
                     <b-input-group>
                       <b-input-group-prepend>
@@ -20,7 +20,7 @@
                     </b-input-group>
                   </b-form-group>
                 </b-col>
-                <b-col sm="4">
+                <b-col sm="6">
                   <b-form-group>
                     <b-input-group>
                       <b-input-group-prepend>
@@ -55,29 +55,55 @@
           <b-row>
             <b-col>
               <div class="text-center mb-4">
-                <b-button v-show="addSessionVar" type="button" size="lg" variant="primary" @click="scanModal = true" ><i class="fa fa-barcode"></i> ESCANEAR </b-button>
+                <b-button v-show="addSessionVar" type="button" size="lg" variant="primary" @click="addModalFlag = false; scanModal = true; keyField = null;
+          asset = null;
+          description  = null;
+          brand = '';
+          model = '';
+          serial = '';
+          cost = 0;
+          assetType = null;
+
+          locationDetail = null;
+          statusName = null;
+          comments = null;
+          sameDep = null;
+          sameLoc = null;" ><i class="fa fa-barcode"></i> ESCANEAR </b-button>
               </div>
             </b-col>
             <b-col>
               <div class="text-center mb-4">
-                <b-button v-show="addSessionVar" type="button" size="lg" variant="primary" @click="addModalFlag = true; scanBarcode = true; scanModal = true; statusID = 9; statusName = 'EN DEMASÌA'" ><i class="fa fa-cube"></i> AGREGAR SIN ETIQUETA </b-button>
+                <b-button v-show="addSessionVar" type="button" size="lg" variant="primary" @click="addModalFlag = true; scanBarcode = true; scanModal = true; statusID = 9; statusName = 'EN DEMASÌA'; keyField = null;
+          asset = null;
+          description  = null;
+          brand = '';
+          model = '';
+          serial = '';
+          cost = 0;
+          assetType = null;
+
+          locationDetail = null;
+          statusName = null;
+          comments = null;
+          sameDep = null;
+          sameLoc = null;" ><i class="fa fa-cube"></i> AGREGAR SIN ETIQUETA </b-button>
               </div>
             </b-col>
           </b-row>
 
-          <b-table v-show="addSessionVar" :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="tableitems" :fields="tablefields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
+          <b-table  :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" responsive="lg" :items="tableitems" :fields="tablefields" :current-page="currentPage" :per-page="perPage" @row-clicked="rowClicked">
             <template slot="id" slot-scope="data">
               {{data.item.id}}
             </template>
             <template slot="keyfield" slot-scope="data">
               {{data.item.keyField}}
             </template>
-            <template slot="status" slot-scope="data">
-              <b-badge :variant="getBadge(data.item.statusID)">{{data.item.statusID}}</b-badge>
+            <template slot="statusID" slot-scope="data">
+              <b-badge :variant="getBadge(data.item.statusID)">{{getStatus(data.item.statusID)}}</b-badge>
             </template>
           </b-table>
           <nav>
-            <b-pagination v-show="addSessionVar" size="sm" :total-rows="getRowCount(tableitems)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" hide-goto-end-buttons/>
+            <b-pagination  size="sm" :total-rows="getRowCount(tableitems)" :per-page="perPage" v-model="currentPage" prev-text="Ant" next-text="Sig" />
           </nav>
 
           <div slot="footer" v-show="addSessionVar">
@@ -91,7 +117,7 @@
     </b-row>
 
     <!--MODAL-->
-    <b-modal  :title="titleMod" v-model="scanModal" @ok="saveAsset" ok-variant="primary" @cancel="cancelScan" cancel-title="Cancelar" ok-title="Guardar" ref="scanModal" @hide="cancelScan">
+    <b-modal  :title="titleMod" v-model="scanModal" @ok="saveAsset" ok-variant="primary" @cancel="cancelScan" cancel-title="Cancelar" ok-title="Guardar" ref="scanModal" @hide="cancelScan" id="modalScan">
       <div>
         <b-row>
         </b-row>
@@ -101,7 +127,7 @@
               <b-input-group-prepend>
                 <b-input-group-text><i class="fa fa-barcode" ></i></b-input-group-text>
               </b-input-group-prepend>
-              <b-form-input type="text" id="keyfield"  placeholder="Introduce la clave"></b-form-input>
+              <b-form-input type="search" id="keyfield"  v-model="keyField" placeholder="Introduce la clave"></b-form-input>
               <b-button type="button" variant="primary" @click="scaner" ><i class="fa fa-search"></i> Buscar </b-button>
             </b-input-group>
           </b-col>
@@ -135,6 +161,11 @@
                   <div class="small text-danger" v-if="!$v.asset.required">Campo requerido</div>
                 </b-form-group>
                 <b-form-group>
+                  <b-form-checkbox v-model="changeAsset" name="check-button" switch>
+                    Cambio de tipo de activo o descripción
+                  </b-form-checkbox>
+                </b-form-group>
+                <b-form-group>
                   <label class="small muted" for="description">Descripción</label>
                   <b-form-input type="text" id="description" v-model="$v.description.$model" placeholder="Introduce la descripción"></b-form-input>
                   <div class="small text-danger" v-if="!$v.description.required">Campo requerido</div>
@@ -144,14 +175,12 @@
                     <b-form-group>
                       <label class="small muted" for="brand">Marca</label>
                       <b-form-input type="text" id="brand" v-model="$v.brand.$model" placeholder="Introduce la marca"></b-form-input>
-                      <div class="small text-danger" v-if="!$v.brand.required">Campo requerido</div>
                     </b-form-group>
                   </b-col>
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="model">Modelo</label>
                       <b-form-input type="text" id="model" v-model="$v.model.$model" placeholder="Introduce el modelo"></b-form-input>
-                      <div class="small text-danger" v-if="!$v.model.required">Campo requerido</div>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -160,13 +189,12 @@
                     <b-form-group>
                       <label class="small muted" for="serial">Serie</label>
                       <b-form-input type="text" id="brand" v-model="$v.serial.$model" placeholder="Introduce el número de serie"></b-form-input>
-                      <div class="small text-danger" v-if="!$v.serial.required">Campo requerido</div>
                     </b-form-group>
                   </b-col>
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="cost">Costo</label>
-                      <b-form-input type="text" id="cost" v-model="$v.cost.$model" placeholder="Introduce el costo"></b-form-input>
+                      <b-form-input type="number" min="0" step="any" id="cost" v-model="$v.cost.$model" placeholder="Introduce el costo" :disabled="true"></b-form-input>
                       <div class="small text-danger" v-if="!$v.cost.required">Campo requerido</div>
                     </b-form-group>
                   </b-col>
@@ -185,8 +213,8 @@
                 <b-form-group>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                      <treeselect  :multiple="false" :options="options" id="departmentIDSel"  @input="changeDep" v-model="$v.departmentIDsel.$model" required/>
+                      <b-input-group-text><i class="fa fa fa-sitemap"></i></b-input-group-text>
+                      <treeselect  :multiple="false" :options="options" id="departmentIDSel"  @input="changeDep" v-model="$v.departmentIDsel.$model" disabled/>
                     </b-input-group-prepend>
                   </b-input-group>
                 </b-form-group>
@@ -199,13 +227,23 @@
                                    v-model="$v.locationIDsel.$model"
                                    class="form-control"
                                    @change="changeLoc"
-                                   :options="locationOptions">
+                                   :options="locationOptions"
+                                    disabled>
                     </b-form-select>
+                    <div class="small text-danger" v-if="!$v.locationIDsel.required">Campo requerido</div>
                   </b-input-group>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
                   <b-form-input type="text" id="locationDetail" v-model="$v.locationDetail.$model" placeholder="Introduce el detalle de la ubicación"></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group-text><i class="fa fa-angle-double-up"></i></b-input-group-text>
+                  <b-form-select
+                    v-model="locationDetail"
+                    class="form-control"
+                    :options="locationDetailOptions">
+                  </b-form-select>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="comments">Comentarios</label>
@@ -254,7 +292,7 @@
     </b-modal>
 
     <!--MODAL-->
-    <b-modal title="Agregar activo sin etiqueta" v-model="addModal" @ok="addAsset" ok-variant="primary" cancel-title="Cancelar" ok-title="Guardar" ref="addModal" @hide="cancelAdd">
+    <b-modal title="Agregar activo sin etiqueta" v-model="addModal" @ok="addAsset" ok-variant="primary" cancel-title="Cancelar" ok-title="Guardar" ref="addModal" @hide="cancelAdd" id="modalAdd">
       <div>
         <b-row>
           <b-col lg="12">
@@ -289,6 +327,11 @@
                   <label class="small muted" for="description">Descripción</label>
                   <b-form-input type="text" id="description" v-model="nuevo.description" placeholder="Introduce la descripción"></b-form-input>
                 </b-form-group>
+                <b-form-group>
+                  <b-form-checkbox v-model="changeAsset" name="check-button" switch>
+                    Cambio de tipo de activo o descripción
+                  </b-form-checkbox>
+                </b-form-group>
                 <b-row>
                   <b-col sm="6">
                     <b-form-group>
@@ -313,7 +356,7 @@
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="cost">Costo</label>
-                      <b-form-input type="text" id="cost" v-model="nuevo.cost" placeholder="Introduce el costo"></b-form-input>
+                      <b-form-input type="number" step="any" min="0" id="cost" v-model="nuevo.cost" placeholder="Introduce el costo" :disabled="true"></b-form-input>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -330,8 +373,8 @@
                 <b-form-group>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
-                      <treeselect  :multiple="false" :options="options" id="departmentID"   v-model="$v.departmentIDsel.$model" required/>
+                      <b-input-group-text><i class="fa fa fa-sitemap"></i></b-input-group-text>
+                      <treeselect  :multiple="false" :options="options" id="departmentID"   v-model="$v.departmentIDsel.$model" disabled/>
                     </b-input-group-prepend>
                   </b-input-group>
                 </b-form-group>
@@ -343,13 +386,22 @@
                     <b-form-select id="sessionLocation"
                                    v-model="$v.locationIDsel.$model"
                                    class="form-control"
-                                   :options="locationOptions">
+                                   :options="locationOptions"
+                                    disabled>
                     </b-form-select>
                   </b-input-group>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
                   <b-form-input type="text" id="locationDetail" v-model="nuevo.locationDetail" placeholder="Introduce el detalle de la ubicación"></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group-text><i class="fa fa-angle-double-up"></i></b-input-group-text>
+                  <b-form-select
+                    v-model="locationDetail"
+                    class="form-control"
+                    :options="locationDetailOptions">
+                  </b-form-select>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="comments">Comentarios</label>
@@ -430,6 +482,11 @@
                   <label class="small muted" for="description">Descripción</label>
                   <b-form-input type="text" id="description" v-model="current.description" :disabled="true"></b-form-input>
                 </b-form-group>
+                <b-form-group>
+                  <b-form-checkbox v-model="current.changeAsset" name="check-button" switch>
+                    Cambio de tipo de activo o descripción
+                  </b-form-checkbox>
+                </b-form-group>
                 <b-row>
                   <b-col sm="6">
                     <b-form-group>
@@ -454,7 +511,7 @@
                   <b-col sm="6">
                     <b-form-group>
                       <label class="small muted" for="cost">Costo</label>
-                      <b-form-input type="text" id="cost" v-model="current.cost" :disabled="true"></b-form-input>
+                      <b-form-input type="number" step="any" min="0" id="cost" v-model="current.cost" :disabled="true"></b-form-input>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -469,7 +526,7 @@
                 <b-form-group>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa fa-sitemap"></i></b-input-group-text>
                       <treeselect  :multiple="false" :options="options" id="departmentID"  v-model="current.currentDepartmentID" disabled/>
                     </b-input-group-prepend>
                   </b-input-group>
@@ -490,6 +547,14 @@
                 <b-form-group>
                   <label class="small muted" for="locationDetail">Detalles de la ubicación</label>
                   <b-form-input type="text" id="locationDetail" v-model="current.locationDetail" :disabled="true"></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group-text><i class="fa fa-angle-double-up"></i></b-input-group-text>
+                  <b-form-select
+                    v-model="locationDetail"
+                    class="form-control"
+                    :options="locationDetailOptions">
+                  </b-form-select>
                 </b-form-group>
                 <b-form-group>
                   <label class="small muted" for="comments">Comentarios</label>
@@ -580,6 +645,8 @@
     },
     data: () => {
       return {
+        isOver: false,
+        assetID: 0,
         statusID: 8,
         scanModal: false,   //Modal para escanear
         addModal: false,    //Modal para agregar sin etiqueta
@@ -587,6 +654,7 @@
         itemSelected: 0,
         sessionID: null,
         slide: 0,
+        changeAsset: false,
         addModalFlag: false,
         userName: null,
         addSessionVar: false,
@@ -597,14 +665,16 @@
         keyField:null,
         asset:null,
         description:null,
-        brand:null,
-        model:null,
-        serial:null,
-        cost:null,
+        brand:'',
+        model:'',
+        serial:'',
+        cost:0.0,
         assetType:null,
         departmentIDsel:null,
         departmentID:null,
+        departmentIDInitial:null,
         locationID:null,
+        locationIDInitial:null,
         locationIDsel:null,
         locationDetail:null,
         statusName:null,
@@ -612,17 +682,52 @@
         sameDep:null,
         sameLoc:null,
         locationOptions: [],
+        locationDetailOptions:[
+          {value: null, text: 'Tipo'},
+          {value: 'ALMACEN', text: 'ALMACEN'},
+          {value: 'ARCHIVO', text: 'ARCHIVO'},
+          {value: 'AREA', text: 'AREA'},
+          {value: 'AUDITORIO', text: 'AUDITORIO'},
+          {value: 'AULA', text: 'AULA'},
+          {value: 'BODDEGA', text: 'BODEGA'},
+          {value: 'CAMA', text: 'CAMA'},
+          {value: 'CEYE', text: 'CEYE'},
+          {value: 'COCINA', text: 'COCINA'},
+          {value: 'CONSULTORIO', text: 'CONSULTORIO'},
+          {value: 'CONTROL', text: 'CONTROL'},
+          {value: 'COORDINACION', text: 'COORDINACION'},
+          {value: 'CUARTO', text: 'CUARTO'},
+          {value: 'CUBICULO', text: 'CUBICULO'},
+          {value: 'GUARDA', text: 'GUARDA'},
+          {value: 'JEFATURA', text: 'JEFATURA'},
+          {value: 'LABORATORIO', text: 'LABORATORIO'},
+          {value: 'OFICINA', text: 'OFICINA'},
+          {value: 'PASILLO', text: 'PASILLO'},
+          {value: 'QUIROFANO', text: 'QUIROFANO'},
+          {value: 'RECEPCION', text: 'RECEPCION'},
+          {value: 'RECUPERACION', text: 'RECUPERACION'},
+          {value: 'SALA', text: 'SALA'},
+          {value: 'SANITARIO', text: 'SANITARIO'},
+          {value: 'SECRETARIA', text: 'SECRETARIA'},
+          {value: 'SEPTICO', text: 'SEPTICO'},
+          {value: 'SITE', text: 'SITE'},
+          {value: 'TRABAJO', text: 'TRABAJO'},
+          {value: 'UNIDAD', text: 'UNIDAD'},
+          {value: 'VESTIDOR', text: 'VESTIDOR'},
+          {value: 'VIGILANCIA', text: 'VIGILANCIA'},
+        ],
         assetTypeOptions: [
           {value: null, text: 'Tipo de activo...'},
-          {value: 'Mobiliario', text: 'Mobiliario'},
-          {value: 'Equipo', text: 'Equipo'},
-          {value: 'Maquinaria', text: 'Maquinaria'},
-          {value: 'Instrumental', text: 'Instrumental'},
-          {value: 'Vehículo', text: 'Vehículo'},
-          {value: 'Inmueble', text: 'Inmueble'},
-          {value: 'Terreno', text: 'Terreno'},
-          {value: 'Bien natural', text: 'Bien natural'},
-          {value: 'Otro', text: 'Otro'}
+          {value: 'MOBILIARIO', text: 'MOBILIARIO'},
+          {value: 'EQUIPO', text: 'EQUIPO'},
+          {value: 'EQUIPO MEDICO', text: 'EQUIPO MEDICO'},
+          {value: 'MAQUINARIA', text: 'MAQUINARIA'},
+          {value: 'INSTRUMENTAL', text: 'INSTRUMENTAL'},
+          {value: 'VEHICULO', text: 'VEHICULO'},
+          {value: 'INMUEBLE', text: 'INMUEBLE'},
+          {value: 'TERRENO', text: 'TERRENO'},
+          {value: 'BIEN NATURAL', text: 'BIEN NATURAL'},
+          {value: 'OTRO', text: 'OTRO'}
         ],
         items: (id) => {
           const session = sessionsData.find( session => session.id.toString() === id)
@@ -668,17 +773,17 @@
       departmentID: {
 
       },keyField: {
-        required
+
       },asset: {
         required
       },description: {
         required
       },brand: {
-        required
+
       },model: {
-        required
+
       },serial: {
-        required
+
       },cost: {
         required
       },assetType: {
@@ -686,8 +791,6 @@
       },departmentIDsel: {
 
       },locationIDsel: {
-        required
-      },sessionLocation: {
         required
       },locationDetail: {
 
@@ -703,7 +806,11 @@
     async mounted() {
       const dprtmnts = await gets.getDepartmentsByCompany(this.$session.get('companyID'));
       this.options = dprtmnts.data.departments;
+
+      const deps = await gets.getAllDepartmentsByCompany(this.$session.get('companyID'));
+      this.deptors = deps.data.departments;
       const lctns = await gets.getLocationsByCompany(this.$session.get('companyID'));
+      this.locs = lctns.data.locations;
       let tmp2 = [
         {value: null, text: 'Ubicaciones...'}
       ];
@@ -714,7 +821,7 @@
       this.locationOptions = tmp2;
       const ssn = await getById.getRegistrationSessionById(this.$route.params.idsession);
       console.info(ssn);
-      this.userName = this.$session.get('name');
+      this.userName = ssn.data.registrationSession.sessionUser;
       this.locationID = ssn.data.registrationSession.sessionLocationId;
       this.departmentIDsel = ssn.data.registrationSession.sessionDepartmentID;
       this.locationIDsel = ssn.data.registrationSession.sessionLocationId;
@@ -722,6 +829,9 @@
       this.sessionDepartmentName = ssn.data.registrationSession.departmentName;
       this.departmentID = ssn.data.registrationSession.sessionDepartmentID;
       this.addSessionVar = true
+      if (ssn.data.registrationSession.finalDateTime !== ""){
+        this.addSessionVar = false;
+      }
       const assets = await gets.getFinalAssetsBySession(this.$route.params.idsession);
       this.tableitems = assets.data.finalAssets;
       console.info(assets.data.finalAssets)
@@ -733,7 +843,12 @@
     },
     methods: {
       changeDep(){
-        if (this.departmentIDsel === this.departmentID){
+        let selParent = this.deptors.find(dp => dp.id === this.departmentIDsel).departmentID;
+        let thisDepParent = this.deptors.find(dp => dp.id === this.departmentID).departmentID
+        console.info("depto selected:" + this.departmentIDsel);
+        console.info("selParent: " +selParent);
+        if ((this.departmentIDsel === this.departmentID) ||
+          ((selParent === this.departmentID) && (selParent > 0) && this.deptors.find(dp => dp.id === this.departmentIDSel).departmentType === 'Sub-departamento')){
           this.sameDep = true;
         }else{
           this.sameDep = false;
@@ -741,7 +856,13 @@
         this.updateStatus();
       },
       changeLoc(){
-        if (this.locationIDsel === this.locationID){
+        let selParent = this.locs.find(dp => dp.id === this.locationIDsel).locationID;
+        let thisDepParent = this.locs.find(dp => dp.id === this.locationID).locationID;
+        console.info("location selected:" + this.locationIDsel);
+        console.info("selParent: " +selParent);
+        console.info("thisDepParent: " +thisDepParent);
+        if ((this.locationIDsel === this.locationID) ||
+          ((selParent === this.locationID) && (selParent > 0) && this.locs.find(dp => dp.id === this.locationIDsel).locationType === 'Piso')){
           this.sameLoc = true;
         }else{
           this.sameLoc = false;
@@ -749,103 +870,104 @@
         this.updateStatus();
       },
       async saveAsset(){
-        console.info("Status:  " + this.statusID)
-        const nwAsst = {
-          "projectID": this.$session.get('projectID'),
-          "registrationSessionID": this.$session.get('activeSessionID'),
-          "lastRegistration": false,
-          "keyField": document.getElementById('keyfield').value,
-          "asset": this.asset,
-          "assetType": this.assetType,
-          "description": this.description,
-          "brand": this.brand,
-          "model": this.model,
-          "serial": this.serial,
-          "acquisitionDate": '0000-00-00',
-          "acquisitionType": '',
-          "invoice": '',
-          "price": '0.0',
-          "tax": '0.0',
-          "cost": "" + this.cost,
-          "currentValue": '0.0',
-          "accountingDepreciation": '0.0',
-          "fiscalDepreciation": '0.0',
-          "lastDepartmentID": 0,
-          "currentDepartmentID": this.departmentIDsel,
-          "costCenterID": 0,
-          "acountingAccountID": 0,
-          "locationID": this.locationIDsel,
-          "locationDetail": this.locationDetail,
-          "comments": this.comments,
-          "personalString01": '',
-          "personalString02": '',
-          "personalString03": '',
-          "personalString04": '',
-          "personalString05": '',
-          "personalInt01": 0,
-          "personalInt02": 0,
-          "personalInt03": 0,
-          "personalFloat01": '0.0',
-          "personalFloat02": '0.0',
-          "personalFloat03": '0.0',
-          "statusID": this.statusID,
-          "userId": this.$session.get('userId')
-        };
-        await createCatalog.createFinalAsset(nwAsst).then(async response => {
-          console.info(response);
-          if (response.data.error.errorCode === 0){
-            let s3Cli = new S3();
-            let files = document.getElementById('inputfile').files;
-            if (files.length == 0){
-              this.$router.go(`/sessions/session/` + this.$session.get('activeSessionID'))
-            } else{
-              for (var i = 0; i < files.length; i++){
-                this.assetID = response.data.id;
-                var self = this;
-                let key = 'projects/'+this.$session.get('projectID')+'/assets/'+response.data.id+'/assetFile_'+ (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) + '.' + files[i].name.substr((files[i].name.lastIndexOf('.') + 1));
-                await s3Cli.uploadAssetFile(files[i],key, async function (err, data) {
-                  console.info(data)
-                  const fl = {
-                    "mime": data.Location.substr(data.Location.lastIndexOf('.') + 1),
-                    "url": data.Location,
-                    "statusID": 2,
-                    "userId": self.$session.get('userId')
-                  };
-                  await createCatalog.createFile(fl).then(async response => {
-                    console.info(response);
-                    if (response.data.error.errorCode === 0){
-                      const asstFl = {
-                        "isFinal": true,
-                        "assetID": self.assetID,
-                        "fileID": response.data.id,
-                        "statusID": 2
-                      };
-                      await createCatalog.createAssetFile(asstFl).then(async response => {
-                        this.$router.go(`/sessions/session/` + this.$session.get('activeSessionID'))
-                        console.info(response);
-                        /*if (response.data.error.errorCode === 0){
+        if ((this.$v.$invalid)) {//this.asset == null && this.description == null && this.cost == null && this.assetType == null &&this.locationIDsel == null
+          this.$toaster.error("Favor de llenar los campos requeridos");
+          this.scanBarcode = true
+        }else {
 
-                        }else{
-                          this.$toaster.error(response.data.error.message);
-                          this.submitStatus = 'ERROR';
-                        }*/
-                      });
-                    }else{
-                      this.$toaster.error(response.data.error.message);
-                      this.submitStatus = 'ERROR';
-                    }
+
+          console.info("Status:  " + this.statusID)
+          const nwAsst = {
+            "projectID": this.$session.get('projectID'),
+            "assetID": this.assetID,
+            "registrationSessionID": this.$session.get('activeSessionID'),
+            "lastRegistration": false,
+            "keyField": document.getElementById('keyfield').value,
+            "asset": this.asset,
+            "assetType": this.assetType,
+            "description": this.description,
+            "brand": this.brand,
+            "model": this.model,
+            "serial": this.serial,
+            "acquisitionDate": '0000-00-00',
+            "acquisitionType": '',
+            "invoice": '',
+            "price": '0.0',
+            "tax": '0.0',
+            "cost": "" + this.cost,
+            "currentValue": '0.0',
+            "accountingDepreciation": '0.0',
+            "fiscalDepreciation": '0.0',
+            "lastDepartmentID": 0,
+            "currentDepartmentID": this.departmentIDsel,
+            "costCenterID": 0,
+            "acountingAccountID": 0,
+            "locationID": this.locationIDsel,
+            "locationDetail": this.locationDetail,
+            "comments": this.comments,
+            "personalString01": '',
+            "personalString02": '',
+            "personalString03": '',
+            "personalString04": '',
+            "personalString05": '',
+            "personalInt01": 0,
+            "personalInt02": this.changeAsset == true ? 1 : 0,
+            "personalInt03": 0,
+            "personalFloat01": '0.0',
+            "personalFloat02": '0.0',
+            "personalFloat03": '0.0',
+            "statusID": this.statusID,
+            "userId": this.$session.get('userId')
+          };
+          await createCatalog.createFinalAsset(nwAsst).then(async response => {
+            console.info(response);
+            if (response.data.error.errorCode === 0) {
+              let s3Cli = new S3();
+              let files = document.getElementById('inputfile').files;
+              if (files.length == 0) {
+                this.$router.go(`/sessions/session/` + this.$session.get('activeSessionID'))
+              } else {
+                for (var i = 0; i < files.length; i++) {
+                  this.assetID = response.data.id;
+                  var self = this;
+                  let key = 'projects/' + this.$session.get('projectID') + '/assets/' + response.data.id + '/assetFile_' + (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) + '.' + files[i].name.substr((files[i].name.lastIndexOf('.') + 1));
+                  await s3Cli.uploadAssetFile(files[i], key, async function (err, data) {
+                    console.info(data)
+                    const fl = {
+                      "mime": data.Location.substr(data.Location.lastIndexOf('.') + 1),
+                      "url": data.Location,
+                      "statusID": 2,
+                      "userId": self.$session.get('userId')
+                    };
+                    await createCatalog.createFile(fl).then(async response => {
+                      console.info(response);
+                      if (response.data.error.errorCode === 0) {
+                        const asstFl = {
+                          "isFinal": true,
+                          "assetID": self.assetID,
+                          "fileID": response.data.id,
+                          "statusID": 2
+                        };
+                        await createCatalog.createAssetFile(asstFl).then(async response => {
+                          this.$router.go(`/sessions/session/` + this.$session.get('activeSessionID'))
+                          console.info(response);
+
+                        });
+                      } else {
+                        this.$toaster.error(response.data.error.message);
+                        this.submitStatus = 'ERROR';
+                      }
+                    });
                   });
-                });
+                }
               }
+
+            } else {
+              this.$toaster.error(response.data.error.message);
+              this.submitStatus = 'ERROR';
             }
-
-          }else{
-            this.$toaster.error(response.data.error.message);
-            this.submitStatus = 'ERROR';
-          }
-        });
-
-
+          });
+        }
 
         //this.scanBarcode = false
       },
@@ -875,13 +997,18 @@
       goBack() {
         this.$router.go(-1)
       },
-      getBadge (status) {
-        return status === 'Conciliado' ? 'success'
-          : status === 'Cambio de despartamento' ? 'primary'
-            : status === 'Cambio de ubicación' ? 'primary'
-              : status === 'Cambio de activo' ? 'primary'
-                : status === 'En demasía' ? 'warning'
-                  : status === 'No inventariado' ? 'danger' : 'primary'
+      getBadge (statusID) {
+        return  'primary'
+      },
+      getStatus (statusID) {
+        return statusID === 2 ? 'Activo'
+          : statusID === 3 ? 'Inactivo' //
+            : statusID === 4 ? 'CONCILIADO'
+              : statusID === 5 ? 'CAMBIO DE DEPARTAMENTO'
+                : statusID === 6 ? 'CAMBIO DE UBICACION '
+                  : statusID === 7 ? 'ETIQUETA DUPLICADA'
+                    :statusID === 8 ? 'ETIQUETA SIN DATOS'
+                      :'EN DEMASÍA '
       },
       getRowCount (item) {
         return item.length
@@ -921,10 +1048,15 @@
         this.nuevo.location = this.location
       },
       async scaner () {
+
+
+
+
        let assetFound = await gets.getAssetByKeyField(this.$session.get('projectID'),document.getElementById('keyfield').value);
        console.info(assetFound);
        if (assetFound.data.error.errorCode == 0){
          this.statusID = 4;
+         this.assetID = assetFound.data.asset.id;
          this.statusName = 'COINCILIADO';//  id: null, keyfield: '', asset: '', description: '', brand: '', model: '', serial:'', cost: '', assetType: '', locationDetail: '', comments: '', status: ''
         this.keyField = assetFound.data.asset.keyField;
         this.sessionID = this.$route.params.idsession;
@@ -938,30 +1070,35 @@
         this.locationDetail = assetFound.data.asset.locationDetail;
         this.comments = assetFound.data.asset.comments;
         this.status = assetFound.data.asset.statusID;
+        this.departmentID = assetFound.data.asset.currentDepartmentID;
         //this.departmentIDsel = assetFound.data.asset.currentDepartmentID;
+        this.locationID = assetFound.data.asset.locationID;
         //this.locationIDsel = assetFound.data.asset.locationID;
          this.scanBarcode = true;
-         if (this.departmentIDsel === this.departmentID){
+         /*if (this.departmentIDInitial === this.departmentID){
            this.sameDep = true
          }else{
            this.sameDep = false
          }
-         if(this.locationIDsel === this.locationID){
+         if(this.locationIDInitial === this.locationID){
            this.sameLoc = true;
          }else{
            this.sameLoc = false;
-         }
+         }*/
+         this.changeDep();
+         this.changeLoc();
          this.updateStatus();
        }else{
          this.scanBarcode = true;
+         this.keyField = document.getElementById('keyfield').value;
          this.statusID = 8;
          this.statusName = 'ETIQUETA SIN DATOS';
        }
       },
       updateStatus(){
-        console.info('sessionDep: ' + this.departmentID + ' sessionLoc: ' + this.locationID + ' selectedDep: ' + this.departmentIDsel + ' selectedLoc: ' + this.locationIDsel)
+        console.info('selectedDep: ' + this.departmentID + ' selectedLoc: ' + this.locationID + ' initialDep: ' + this.departmentIDInitial + ' initialLoc: ' + this.locationIDInitial)
         if (this.statusID < 8){
-          if (this.sameDep === true === this.sameLoc){
+          if (this.sameDep === true &&  this.sameLoc === true){
             console.info("se concilia")
             this.statusID = 4;
             this.statusName = 'COINCILIADO';

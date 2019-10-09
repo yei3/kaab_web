@@ -80,5 +80,22 @@ export default{
         'Content-Type': 'application/json'
       }
     })
+  },
+  php(){
+    return axios.create({
+      baseURL: `http://34.215.35.107/kaab/`,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  },
+  phpFiles(){
+    return axios.create({
+      baseURL: `http://34.215.35.107/kaab/`,
+      responseType: 'arraybuffer',
+      headers: {
+        'Content-Type': 'application/zip; charset=utf-8'
+      }
+    })
   }
 }

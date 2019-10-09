@@ -1,25 +1,31 @@
 import Api from './Api'
 
 export default {
-  getConcealedFinalAssetsReport (projectID) {
-    return Api.reports().get('/getConcealedFinalAssetsReport?projectID=' + projectID);
+  getConcealedFinalAssetsReport (projectID, departmentID, deptTree) {
+    return Api.reports().get('/getConcealedFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree);
   },
-  getDepartmentChangedFinalAssetsReport (projectID) {
-    return Api.reports().get('/getDepartmentChangedFinalAssetsReport?projectID=' + projectID);
+  getDepartmentChangedFinalAssetsReport (projectID, departmentID, lastDepartmentID, deptTree) {
+    return Api.reports().get('/getDepartmentChangedFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree + '&lastDepartmentID=' + lastDepartmentID);
   },
-  getExceededFinalAssetsReport (projectID) {
-    return Api.reports().get('/getExceededFinalAssetsReport?projectID=' + projectID);
+  getExceededFinalAssetsReport (projectID, departmentID, deptTree) {
+    return Api.reports().get('/getExceededFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree);
   },
-  getInventoriedFinalAssetsReport (projectID) {
-    return Api.reports().get('/getInventoriedFinalAssetsReport?projectID=' + projectID);
+  getInventoriedFinalAssetsReport (projectID,departmentID, locationID, sessionID, userID, startDate, endDate, statusID, deptTree) {
+    return Api.reports().get('/getInventoriedFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&locationID=' + locationID + '&sessionID=' + sessionID + '&userID=' + userID + '&startDate=' + startDate + '&endDate=' + endDate + '&statusID=' + statusID + '&deptTree=' + deptTree);
   },
-  getLocationChangedFinalAssetsReport (projectID) {
-    return Api.reports().get('/getLocationChangedFinalAssetsReport?projectID=' + projectID);
+  getLocationChangedFinalAssetsReport (projectID, departmentID, deptTree) {
+    return Api.reports().get('/getLocationChangedFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree);
   },
-  getNoDataLabelFinalAssetsReport (projectID) {
-    return Api.reports().get('/getNoDataLabelFinalAssetsReport?projectID=' + projectID);
+  getNoDataLabelFinalAssetsReport (projectID, departmentID, deptTree) {
+    return Api.reports().get('/getNoDataLabelFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree);
   },
-  getNonInventoriedFinalAssetsReport (projectID) {
-    return Api.reports().get('/getNonInventoriedFinalAssetsReport?projectID=' + projectID);
+  getNonInventoriedFinalAssetsReport (projectID, departmentID, deptTree, filter) {
+    return Api.reports().get('/getNonInventoriedFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree + '&filter=' + filter);
+  },
+  getDoubledLabelFinalAssetsReport (projectID, departmentID, deptTree) {
+    return Api.reports().get('/getDoubledLabelFinalAssetsReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree);
+  },
+  getFinalAssetsChangedReport (projectID, departmentID, deptTree) {
+    return Api.reports().get('/getFinalAssetsChangedReport?projectID=' + projectID + '&departmentID=' + departmentID + '&deptTree=' + deptTree);
   }
 }

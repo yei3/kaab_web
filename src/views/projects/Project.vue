@@ -16,9 +16,10 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Nombre</label>
                   <b-input-group>
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="fa fa-user"></i></b-input-group-text>
+                      <b-input-group-text><i class="fa fa-book"></i></b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input class="form-control" :class="{ 'form-group--error': $v.name.$error }" type="text" id="name" v-model="$v.name.$model" placeholder="Nombre del proyecto"></b-form-input>
                   </b-input-group>
@@ -27,20 +28,13 @@
                   <div class="small text-danger" v-if="!$v.name.maxLength">El nombre debe contener 64 letras máximo</div>
                 </b-form-group>
               </b-col>
-              <b-col lg="6">
-                <b-form-group
-                  label="Base inicial"
-                  label-for="fileInput"
-                  :label-cols="2"
-                  :horizontal="true">
-                  <b-form-file id="baseIn" :plain="false" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></b-form-file>
-                </b-form-group>
-              </b-col>
+
             </b-row>
 
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Contacto</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-id-card"></i></b-input-group-text>
@@ -56,6 +50,7 @@
               </b-col>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
@@ -70,7 +65,6 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row><a href="https://s3-us-west-2.amazonaws.com/kaab-files/plantilla.xlsx">Descarga la plantilla de base de datos inicial</a></b-row>
             <div slot="footer" class="pull-right">
               <b-button id="btn-cancelar" type="reset" size="sm" variant="danger" @click="goBack" class="mr-1"><i class="fa fa-ban"></i> Cancelar</b-button>
               <b-button id="btn-guardar" type="submit" size="sm" variant="success" :disabled="submitStatus === 'PENDING'"><i class="fa fa-save"></i> Guardar</b-button>
@@ -121,7 +115,8 @@
         statusOptions: [
           {value: null, text: 'Estatus...'},
           {value: 2, text: 'Activo'},
-          {value: 3, text: 'Inactivo'}
+          {value: 3, text: 'Inactivo'},
+          {value: 10, text: 'Cerrado'}
         ]
       }
     },
@@ -173,11 +168,7 @@
         this.$router.push('/projects');
       },
       async submit() {
-        let s3Cli = new S3();
-        let files = document.getElementById('baseIn').files;
-        let xlsUrl = await s3Cli.uploadInitialBase(files[0],'initialBaseProject_'+ (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) + '.xlsx');
 
-        /*
         console.log('submit!');
         this.$v.$touch();
         if (this.$v.$invalid) {
@@ -193,17 +184,19 @@
             "statusID": this.status,
             "userId": this.$session.get('userId')
           };
-          await updateCatalog.updateUser(usr).then(response => {
+          await updateCatalog.updateProject(usr).then(response => {
             console.info(response);
             if (response.data.error.errorCode === 0){
               this.$toaster.success(response.data.error.message);
               this.submitStatus = 'OK';
+              this.$session.set('refresh', true);
+              this.$router.push('/projects');
             }else{
               this.$toaster.error(response.data.error.message);
               this.submitStatus = 'ERROR';
             }
           });
-        }*/
+        }
       }
     }
   }

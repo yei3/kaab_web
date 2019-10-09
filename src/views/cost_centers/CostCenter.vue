@@ -14,6 +14,7 @@
           </div>
           <form @submit.prevent="submit">
             <b-form-group>
+              <label class="small muted">Nombre</label>
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text><i class="fa fa-cc"></i></b-input-group-text>
@@ -36,6 +37,7 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group>
+                  <label class="small muted">Estatus</label>
                   <b-input-group>
                     <b-input-group-prepend>
                       <b-input-group-text><i class="fa fa-exclamation-circle"></i></b-input-group-text>
