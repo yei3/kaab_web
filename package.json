@@ -20,7 +20,7 @@
     "@coreui/icons": "0.3.0",
     "@coreui/vue": "^2.1.2",
     "@riophae/vue-treeselect": "0.0.38",
-    "ajv": "^5.5.2",
+    "ajv": "^6.12.3",
     "ajv-keywords": "^2.1.1",
     "amazon-cognito-identity-js": "^3.0.7",
     "aws-amplify": "^1.1.19",
